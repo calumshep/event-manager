@@ -43,4 +43,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the competitors belonging to the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function competitors()
+    {
+        return $this->hasMany(Competitor::class);
+    }
 }
