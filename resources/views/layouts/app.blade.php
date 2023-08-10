@@ -17,9 +17,9 @@
         @include('layouts.navigation')
 
         <!-- Page Content -->
-        <div class="@unless(Route::is('home')) container-xxl @endunless">
+        <div class="@unless(Route::is('home')) container-xxl @endunless mb-4">
             @if(Auth::check() && !Route::is('home'))
-                <div class="row">
+                <div class="row gx-4">
                     <div class="col-lg-3 border-end-lg d-none d-lg-block">
                         @include('layouts.sidebar')
                     </div>

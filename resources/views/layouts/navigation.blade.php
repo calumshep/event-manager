@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark @unless(Route::is('home')) mb-3 @endunless">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark @unless(Route::is('home')) mb-3 @endunless shadow">
     <div class="container-xl">
         <a href="{{ route('home') }}" class="navbar-brand">{{ config('app.name') }}</a>
 

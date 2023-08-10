@@ -2,8 +2,8 @@
     <a href="#"
         class="nav-link @if(Route::is('dashboard')) active @endif"
         @if(Route::is('dashboard')) aria-current="page" @endif>
-        <i class="fa-solid fa-gauge-high fa-fw me-2"></i>
-        Dashboard
+        <i class="fa-solid fa-calendar-week fa-fw me-2"></i>
+        Upcoming Events
     </a>
 </li>
 
