@@ -25,3 +25,4 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 Route::resource('competitors', CompetitorController::class)->middleware(['auth']);
+Route::resource('events', EventController::class)->middleware(['auth']);
