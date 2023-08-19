@@ -53,4 +53,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Competitor::class);
     }
+
+    /**
+     * Get the events belonging to the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }
