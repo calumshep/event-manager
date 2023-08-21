@@ -13,6 +13,13 @@ class Event extends Model
         'name',
         'start',
         'end',
+        'short_desc',
+        'long_desc',
+    ];
+
+    protected $casts = [
+        'start' => 'datetime',
+        'end'   => 'datetime',
     ];
 
     /**

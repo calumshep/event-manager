@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEventRequest extends FormRequest
+class UpdateEventRequest extends StoreEventRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,6 @@ class UpdateEventRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        return parent::rules();
     }
 }

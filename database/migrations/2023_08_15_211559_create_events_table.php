@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->string('name');
             $table->dateTime('start');
-            $table->dateTime('end');
+            $table->dateTime('end')->nullable();
 
             $table->text('short_desc');
             $table->text('long_desc');

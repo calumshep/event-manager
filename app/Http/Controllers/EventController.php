@@ -14,7 +14,7 @@ class EventController extends Controller
     public function index()
     {
         return view('events.index', [
-            'events' => auth()->user()->events(),
+            'events' => auth()->user()->events,
         ]);
     }
 
@@ -24,7 +24,9 @@ class EventController extends Controller
     public function create()
     {
         return view('events.form', [
-            'event' => new Event(),
+            'event'         => new Event(),
+            'readonly'      => false,
+            'creating'      => true,
         ]);
     }
 
@@ -36,9 +38,11 @@ class EventController extends Controller
         $input = $request->validated();
 
         $event = new Event([
-            'name'  => $input['name'],
-            'start' => $input['start'],
-            'end'   => $input['end'],
+            'name'          => $input['name'],
+            'start'         => $input['start'],
+            'end'           => $input['end'],
+            'short_desc'    => $input['short_desc'],
+            'long_desc'     => $input['long_desc'],
         ]);
 
         auth()->user()->events()->save($event);
@@ -54,7 +58,9 @@ class EventController extends Controller
     public function show(Event $event)
     {
         return view('events.form', [
-            'event' => $event,
+            'event'         => $event,
+            'readonly'      => true,
+            'creating'      => false,
         ]);
     }
 
@@ -64,7 +70,9 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         return view('events.form', [
-            'event' => $event,
+            'event'         => $event,
+            'readonly'      => false,
+            'creating'      => false,
         ]);
     }
 
@@ -75,10 +83,12 @@ class EventController extends Controller
     {
         $input = $request->validated();
 
-        $event = new Event([
-            'name'  => $input['name'],
-            'start' => $input['start'],
-            'end'   => $input['end'],
+        $event = $event->fill([
+            'name'          => $input['name'],
+            'start'         => $input['start'],
+            'end'           => $input['end'],
+            'short_desc'    => $input['short_desc'],
+            'long_desc'     => $input['long_desc'],
         ]);
 
         $event->save();

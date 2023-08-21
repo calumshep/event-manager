@@ -2,7 +2,7 @@
     <a href="{{ route(('dashboard')) }}"
        class="nav-link @if(Route::is('dashboard')) active @endif"
        @if(Route::is('dashboard')) aria-current="page" @endif>
-        <i class="fa-solid fa-calendar-week fa-fw me-2"></i>
+        <i class="fa-solid fa-calendar-days fa-fw me-2"></i>
         Upcoming Events
     </a>
 </li>

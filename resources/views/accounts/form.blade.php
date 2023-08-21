@@ -100,6 +100,7 @@
                                     <i class="fa-solid fa-close me-2"></i> Reset
                                 </button>
                             @else
+                                <div></div>
                                 <a href="{{ route('account.edit', $user) }}" class="btn btn-primary">
                                     <i class="fa-solid fa-pencil me-2"></i> Edit
                                 </a>

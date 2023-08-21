@@ -8,7 +8,7 @@
     <div class="d-flex align-items-start rounded shadow p-3 mb-3">
         <img src="https://placehold.co/50" class="rounded" alt="placeholder">
 
-        <div class="ms-3">
+        <div class="ms-3 flex-fill">
             <h5>
                 <a class="text-decoration-none" href="#">
                     {{ $event->name }} &middot;
@@ -28,7 +28,7 @@
                     <a href="#"><i class="fa-brands fa-square-facebook fa-fw"></i></a>
                 </div>
 
-                <a href="{{ route('events.show', $event) }}" class="btn btn-primary">
+                <a href="{{ route('dashboard.event', $event) }}" class="btn btn-primary">
                     Enter &raquo;
                 </a>
             </div>

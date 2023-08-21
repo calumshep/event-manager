@@ -11,7 +11,7 @@ class StoreEventRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'          => 'required|max:255',
+            'start'         => 'required|date|after:today',
+            'end'           => 'nullable|date|after:start',
+            'short_desc'    => 'string',
+            'long_desc'     => 'string',
         ];
     }
 }

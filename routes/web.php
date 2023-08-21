@@ -18,7 +18,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () { return view('welcome'); })->name('home');
-Route::get('/dashboard', DashboardController::class)->middleware(['auth'])->name('dashboard');
+Route::controller(DashboardController::class)
+    ->middleware(['auth'])
+    ->prefix('/dashboard')
+    ->name('dashboard')
+    ->group(function ()
+{
+    Route::get('/', 'dashboard');
+    Route::get('/{event}', 'event')->name('.event');
+});
 
 require __DIR__.'/auth.php';
 
@@ -27,7 +35,8 @@ Route::controller(AccountController::class)
     ->middleware(['auth'])
     ->prefix('/account')
     ->name('account.')
-    ->group(function () {
+    ->group(function ()
+    {
         Route::get('/', 'showOwn')->name('show-own');
         Route::get('/{user}', 'show')->name('show'); // TODO: apply admin check middleware
         Route::get('/{user}/edit', 'edit')->name('edit');
