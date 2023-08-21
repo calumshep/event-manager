@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CompetitorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\OrganisationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,3 +46,4 @@ Route::controller(AccountController::class)
 
 Route::resource('competitors', CompetitorController::class)->middleware(['auth']);
 Route::resource('events', EventController::class)->middleware(['auth']);
+Route::resource('organisations', OrganisationController::class)->middleware(['auth']);
