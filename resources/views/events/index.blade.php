@@ -10,6 +10,8 @@
         </a>
     </div>
 
+    @include('components.status')
+
     <table class="table table-hover table-striped border shadow">
         <thead class="table-light">
             <tr>

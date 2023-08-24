@@ -10,6 +10,8 @@
         </a>
     </div>
 
+    @include('components.status')
+
     <div class="row row-cols-1 row-cols-md-3 g-4 mb-3">
         @forelse($competitors as $competitor)
             <div class="col">

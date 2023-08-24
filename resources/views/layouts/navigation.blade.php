@@ -81,7 +81,7 @@
                     -->
 
                     <li class="nav-item me-2">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('account.show-own') }}">
                             <i class="fa-solid fa-user-lock me-2"></i>
                             Logged in as {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
                         </a>

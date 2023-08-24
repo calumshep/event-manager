@@ -127,24 +127,29 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="deleteModalLabel">
-                            Are you sure you want to delete this competitor?
+                            Delete Event
                         </h1>
 
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
-                        TODO
+                        Are you sure you want to delete this event?
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            <i class="fa-solid fa-close me-2"></i>Close
-                        </button>
+                        <form method="POST" action="{{ route('events.destroy', $event) }}">
+                            @csrf
+                            @method('DELETE')
 
-                        <button type="button" class="btn btn-danger">
-                            <i class="fa-solid fa-trash me-2"></i>Delete
-                        </button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                <i class="fa-solid fa-close me-2"></i>Close
+                            </button>
+
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa-solid fa-trash me-2"></i>Delete
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
