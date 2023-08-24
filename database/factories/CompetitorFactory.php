@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Gender;
+use App\Models\User;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,7 +21,7 @@ class CompetitorFactory extends Factory
     {
         return [
             'name'      => $this->faker->name(),
-            'dob'       => $this->faker->date('Y-m-d', new DateTime('-6 years')),
+            'dob'       => $this->faker->dateTimeBetween('-25 years', '-6 years'),
             'gender'    => $this->faker->randomElement(array_column(Gender::cases(), 'value')),
         ];
     }
