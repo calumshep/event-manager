@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @include('components.errors')
+    @include('components.status')
 
     <div class="row">
         <div class="col-md-6">
@@ -36,7 +36,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="dob">Date of birth<span class="text-danger">*</span></label>
+                                <label class="form-label" for="dob">Date of birth<span
+                                        class="text-danger">*</span></label>
                                 <input type="date"
                                        name="dob"
                                        id="dob"
@@ -50,7 +51,7 @@
                                 <select name="gender" id="gender" class="form-select">
                                     @foreach($genders as $gender)
                                         <option value="{{ $gender }}"
-                                                @selected(old('gender') ? old('gender') == $gender : $competitor->gender == $gender)>
+                                            @selected(old('gender') ? old('gender') == $gender : $competitor->gender == $gender)>
                                             {{ ucfirst($gender) }}
                                         </option>
                                     @endforeach
@@ -114,17 +115,22 @@
                     </div>
 
                     <div class="modal-body">
-                        TODO
+                        Are you sure you want to delete this competitor?
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            <i class="fa-solid fa-close me-2"></i>Close
-                        </button>
+                        <form method="POST" action="{{ route('competitors.destroy', $competitor) }}">
+                            @csrf
+                            @method('DELETE')
 
-                        <button type="button" class="btn btn-danger">
-                            <i class="fa-solid fa-trash me-2"></i>Delete
-                        </button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                <i class="fa-solid fa-close me-2"></i>Close
+                            </button>
+
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa-solid fa-trash me-2"></i>Delete
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @include('components.errors')
+    @include('components.status')
 
     <div class="card shadow mb-3">
         <div class="card-body">
@@ -30,7 +30,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label" for="name">Event name<span class="text-danger">*</span></label>
+                                <label class="form-label" for="name">Event name<span
+                                        class="text-danger">*</span></label>
                                 <input type="text"
                                        name="name"
                                        id="name"
@@ -40,7 +41,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="start">Start date<span class="text-danger">*</span></label>
+                                <label class="form-label" for="start">Start date<span
+                                        class="text-danger">*</span></label>
                                 <input type="date"
                                        name="start"
                                        id="start"
@@ -62,7 +64,8 @@
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label" for="short_desc">Short description<span class="text-danger">*</span></label>
+                                <label class="form-label" for="short_desc">Short description<span
+                                        class="text-danger">*</span></label>
                                 <textarea
                                     name="short_desc"
                                     id="short_desc"
@@ -72,7 +75,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="long_desc">Long description<span class="text-danger">*</span></label>
+                                <label class="form-label" for="long_desc">Long description<span
+                                        class="text-danger">*</span></label>
                                 <textarea
                                     name="long_desc"
                                     id="long_desc"

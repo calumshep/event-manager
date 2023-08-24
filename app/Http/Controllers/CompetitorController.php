@@ -102,6 +102,10 @@ class CompetitorController extends Controller
      */
     public function destroy(Competitor $competitor)
     {
-        //
+        $competitor->delete();
+
+        return redirect()->route('competitors.index')->with([
+            'warning' => 'Competitor deleted.'
+        ]);
     }
 }

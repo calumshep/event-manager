@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('reg_id')->nullable();
 
             $table->foreignIdFor(User::class);
+
+            $table->softDeletes();
         });
     }
 

@@ -11,7 +11,7 @@
         @endif
     </div>
 
-    @include('components.errors')
+    @include('components.status')
 
     <div class="row">
         <div class="col-md-6">
