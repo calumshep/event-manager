@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Organisation;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,19 +12,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('organisations', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
 
             $table->string('name');
-            $table->dateTime('start');
-            $table->dateTime('end')->nullable();
-
-            $table->text('short_desc');
-            $table->text('long_desc');
+            $table->text('description');
+            $table->string('website')->nullable();
 
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Organisation::class);
+
+            $table->softDeletes();
         });
     }
 
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('organisations');
     }
 };

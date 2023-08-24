@@ -63,4 +63,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Event::class);
     }
+
+    /**
+     * Get the organisations belonging to the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function organisations()
+    {
+        return $this->hasMany(Organisation::class);
+    }
 }

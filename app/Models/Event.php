@@ -31,4 +31,14 @@ class Event extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the organisation which owns this event.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function organisation()
+    {
+        return $this->belongsTo(Organisation::class);
+    }
 }
