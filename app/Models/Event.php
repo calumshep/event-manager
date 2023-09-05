@@ -41,4 +41,14 @@ class Event extends Model
     {
         return $this->belongsTo(Organisation::class);
     }
+
+    /**
+     * Get the tickets relevant to this event.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }
