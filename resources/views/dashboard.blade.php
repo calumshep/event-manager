@@ -10,7 +10,7 @@
 
         <div class="ms-3 flex-fill">
             <h5>
-                <a class="text-decoration-none" href="#">
+                <a class="text-decoration-none" href="{{ route('dashboard.event', $event) }}">
                     {{ $event->name }} &middot;
                     <span class="text-muted fs-6">
                         {{ $event->start->format('D j M Y') }}
