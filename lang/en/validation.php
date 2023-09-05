@@ -149,8 +149,8 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'org' => [
+            'required' => 'You must select a specific organisation. Perhaps you need to create one first.',
         ],
     ],
 

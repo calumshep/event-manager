@@ -41,6 +41,27 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label" for="org">Event organiser<span
+                                        class="text-danger">*</span></label>
+                                <select name="org" id="org" class="form-select" required>
+                                    @forelse($orgs as $org)
+                                        <option value="{{ $org }}"
+                                            @selected(old('org') ? old('org') == $org->id : $competitor->org == $org->id)>
+                                            {{ $org->name }}
+                                        </option>
+                                    @empty
+                                        <option selected disabled>No organisations</option>
+                                    @endforelse
+                                </select>
+
+                                @if($creating)
+                                    <small class="form-text text-muted">
+                                        If you have not already, you must create an organisation to assign this event to.
+                                    </small>
+                                @endif
+                            </div>
+
+                            <div class="mb-3">
                                 <label class="form-label" for="start">Start date<span
                                         class="text-danger">*</span></label>
                                 <input type="date"

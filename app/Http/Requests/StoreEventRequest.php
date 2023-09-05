@@ -23,6 +23,7 @@ class StoreEventRequest extends FormRequest
     {
         return [
             'name'          => 'required|max:255',
+            'org'           => 'required',
             'start'         => 'required|date|after:today',
             'end'           => 'nullable|date|after:start',
             'short_desc'    => 'string',

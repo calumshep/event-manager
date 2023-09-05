@@ -25,6 +25,7 @@ class EventController extends Controller
     {
         return view('events.form', [
             'event'         => new Event(),
+            'orgs'          => auth()->user()->organisations(),
             'readonly'      => false,
             'creating'      => true,
         ]);
@@ -59,6 +60,7 @@ class EventController extends Controller
     {
         return view('events.form', [
             'event'         => $event,
+            'orgs'          => $event->user->organisations(),
             'readonly'      => true,
             'creating'      => false,
         ]);
