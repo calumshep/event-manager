@@ -3,19 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Gender;
-use App\Http\Requests\StoreCompetitorRequest;
-use App\Http\Requests\UpdateCompetitorRequest;
-use App\Models\Competitor;
+use App\Http\Requests\StoreEntrantRequest;
+use App\Http\Requests\UpdateEntrantRequest;
+use App\Models\Entrant;
 
-class CompetitorController extends Controller
+class EntrantController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('competitors.index', [
-            'competitors' => auth()->user()->competitors
+        return view('entrants.index', [
+            'entrants' => auth()->user()->entrants
         ]);
     }
 
@@ -24,8 +29,8 @@ class CompetitorController extends Controller
      */
     public function create()
     {
-        return view('competitors.form', [
-            'competitor'    => new Competitor(),
+        return view('entrants.form', [
+            'entrant'    => new Entrant(),
             'genders'       => array_column(Gender::cases(), 'value'),
             'readonly'      => false,
             'creating'      => true,
@@ -35,30 +40,30 @@ class CompetitorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCompetitorRequest $request)
+    public function store(StoreEntrantRequest $request)
     {
         $input = $request->validated();
 
-        $competitor = new Competitor([
+        $entrant = new Entrant([
             'name'      => $input['name'],
             'dob'       => $input['dob'],
             'gender'    => $input['gender'],
             'reg_id'    => $input['reg_id'] ?: '',
         ]);
-        auth()->user()->competitors()->save($competitor);
+        auth()->user()->entrants()->save($entrant);
 
-        return redirect()->route('competitors.index', [
-            'competitor' => $competitor,
+        return redirect()->route('entrants.index', [
+            'entrant' => $entrant,
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Competitor $competitor)
+    public function show(Entrant $entrant)
     {
-        return view('competitors.form', [
-            'competitor'    => $competitor,
+        return view('entrants.form', [
+            'entrant'    => $entrant,
             'genders'       => array_column(Gender::cases(), 'value'),
             'readonly'      => true,
             'creating'      => false,
@@ -68,10 +73,10 @@ class CompetitorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Competitor $competitor)
+    public function edit(Entrant $entrant)
     {
-        return view('competitors.form', [
-            'competitor'    => $competitor,
+        return view('entrants.form', [
+            'entrant'    => $entrant,
             'genders'       => array_column(Gender::cases(), 'value'),
             'readonly'      => false,
             'creating'      => false,
@@ -81,31 +86,31 @@ class CompetitorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCompetitorRequest $request, Competitor $competitor)
+    public function update(UpdateEntrantRequest $request, Entrant $entrant)
     {
         $input = $request->validated();
 
-        $competitor->fill([
+        $entrant->fill([
             'name'      => $input['name'],
             'dob'       => $input['dob'],
             'gender'    => $input['gender'],
             'reg_id'    => $input['reg_id'] ?: '',
         ]);
 
-        auth()->user()->competitors()->save($competitor);
+        auth()->user()->entrants()->save($entrant);
 
-        return redirect()->route('competitors.show', $competitor);
+        return redirect()->route('entrants.show', $entrant);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Competitor $competitor)
+    public function destroy(Entrant $entrant)
     {
-        $competitor->delete();
+        $entrant->delete();
 
-        return redirect()->route('competitors.index')->with([
-            'warning' => 'Competitor deleted.'
+        return redirect()->route('entrants.index')->with([
+            'warning' => 'Entrant deleted.'
         ]);
     }
 }

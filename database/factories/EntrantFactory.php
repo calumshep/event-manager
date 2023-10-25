@@ -8,9 +8,9 @@ use DateTime;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Competitor>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Entrant>
  */
-class CompetitorFactory extends Factory
+class EntrantFactory extends Factory
 {
     /**
      * Define the model's default state.

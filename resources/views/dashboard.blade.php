@@ -13,7 +13,7 @@
                 <a class="text-decoration-none" href="{{ route('dashboard.event', $event) }}">
                     {{ $event->name }} &middot;
                     <span class="text-muted fs-6">
-                        {{ $event->start->format('D j M Y') }}
+                        {{ $event->start->format('D j M Y') }} {{ isset($event->end) ? 'to ' . $event->end->format('D j M Y') : null }}
                     </span>
                 </a>
             </h5>
@@ -39,5 +39,7 @@
         There are no upcoming events.
     </p>
 @endforelse
+
+{{ $events->links() }}
 
 @endsection

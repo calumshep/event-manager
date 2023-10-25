@@ -14,7 +14,9 @@ class DashboardController extends Controller
     public function dashboard()
     {
         return view('dashboard', [
-            'events' => Event::where('start', '>=', Date::now())->oldest('start')->paginate(10),
+            'events' => Event::where('start', '>=', Date::now())
+                             ->oldest('start')
+                             ->paginate(5),
         ]);
     }
 

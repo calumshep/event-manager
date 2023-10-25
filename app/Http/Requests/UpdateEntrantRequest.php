@@ -6,7 +6,7 @@ use App\Enums\Gender;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class UpdateCompetitorRequest extends StoreCompetitorRequest
+class UpdateEntrantRequest extends StoreEntrantRequest
 {
     /**
      * Determine if the user is authorized to make this request.

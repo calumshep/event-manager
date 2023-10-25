@@ -9,18 +9,18 @@
             <div class="card shadow mb-3">
                 <div class="card-body">
                     <h1 class="card-title">
-                        {{ $creating ? "New" : null }} Competitor
+                        {{ $creating ? "New" : null }} Entrant
                     </h1>
 
                     @if($creating)
                         <p class="text-muted">
-                            You only have to do this once. Then, you can use this competitor to enter multiple
+                            You only have to do this once. Then, you can use this entrant to enter multiple
                             competitions.
                         </p>
                     @endif
 
                     <form method="POST"
-                          action="{{ $creating ? route('competitors.store') : route('competitors.update', $competitor) }}">
+                          action="{{ $creating ? route('entrants.store') : route('entrants.update', $entrant) }}">
                         @csrf
                         {{ $creating ? null : method_field('PUT') }}
 
@@ -30,7 +30,7 @@
                                 <input type="text"
                                        name="name"
                                        id="name"
-                                       value="{{ old('name') ? old('name') : $competitor->name }}"
+                                       value="{{ old('name') ? old('name') : $entrant->name }}"
                                        class="form-control"
                                        required>
                             </div>
@@ -41,7 +41,7 @@
                                 <input type="date"
                                        name="dob"
                                        id="dob"
-                                       value="@if(old('dob')){{ old('dob') }}@elseif($competitor->dob){{ $competitor->dob->format('Y-m-d') }}@endif"
+                                       value="@if(old('dob')){{ old('dob') }}@elseif($entrant->dob){{ $entrant->dob->format('Y-m-d') }}@endif"
                                        class="form-control"
                                        required>
                             </div>
@@ -51,7 +51,7 @@
                                 <select name="gender" id="gender" class="form-select">
                                     @foreach($genders as $gender)
                                         <option value="{{ $gender }}"
-                                            @selected(old('gender') ? old('gender') == $gender : $competitor->gender == $gender)>
+                                            @selected(old('gender') ? old('gender') == $gender : $entrant->gender == $gender)>
                                             {{ ucfirst($gender) }}
                                         </option>
                                     @endforeach
@@ -63,13 +63,13 @@
                                 <input type="text"
                                        name="reg_id"
                                        id="reg_id"
-                                       value="{{ old('reg_id') ? old('reg_id') : $competitor->reg_id }}"
+                                       value="{{ old('reg_id') ? old('reg_id') : $entrant->reg_id }}"
                                        class="form-control">
                             </div>
                         </fieldset>
 
                         <div class="d-flex justify-content-between">
-                            <a href="{{ (!$creating && !$readonly) ? route('competitors.show', $competitor) : route('competitors.index') }}"
+                            <a href="{{ (!$creating && !$readonly) ? route('entrants.show', $entrant) : route('entrants.index') }}"
                                class="btn btn-secondary">
                                 &laquo; Back
                             </a>
@@ -86,7 +86,7 @@
                                             data-bs-target="#deleteModal">
                                         <i class="fa-solid fa-trash me-2"></i>Delete
                                     </button>
-                                    <a href="{{ route('competitors.edit', $competitor) }}" class="btn btn-primary">
+                                    <a href="{{ route('entrants.edit', $entrant) }}" class="btn btn-primary">
                                         <i class="fa-solid fa-pencil me-2"></i>Edit
                                     </a>
                                 @else
@@ -108,18 +108,18 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="deleteModalLabel">
-                            Delete Competitor
+                            Delete Entrant
                         </h1>
 
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
-                        Are you sure you want to delete this competitor?
+                        Are you sure you want to delete this entrant?
                     </div>
 
                     <div class="modal-footer">
-                        <form method="POST" action="{{ route('competitors.destroy', $competitor) }}">
+                        <form method="POST" action="{{ route('entrants.destroy', $entrant) }}">
                             @csrf
                             @method('DELETE')
 

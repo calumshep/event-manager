@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Competitor extends Model
+class Entrant extends Model
 {
     use SoftDeletes, HasFactory;
 
@@ -23,7 +23,7 @@ class Competitor extends Model
     ];
 
     /**
-     * Get the User which owns this Competitor.
+     * Get the User which owns this Entrant.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
