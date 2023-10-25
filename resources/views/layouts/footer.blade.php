@@ -15,7 +15,22 @@
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
                         <a href="https://gbski.com/" class="nav-link p-0 text-muted">
-                            GBSki
+                            &raquo; GBSki
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="http://snowsportscotland.org/" class="nav-link p-0 text-muted">
+                            &raquo; Snowsport Scotland
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="https://snowsportengland.org.uk/" class="nav-link p-0 text-muted">
+                            &raquo; Snowsport England
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="https://snowsportwales.com/" class="nav-link p-0 text-muted">
+                            &raquo; Snowsport Wales
                         </a>
                     </li>
                 </ul>

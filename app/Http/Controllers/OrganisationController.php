@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Gender;
 use App\Http\Requests\Auth\StoreOrganisationRequest;
 use App\Http\Requests\Auth\UpdateOrganisationRequest;
-use App\Models\Competitor;
+use App\Models\Entrant;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
 

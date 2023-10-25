@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Competitor;
+use App\Models\Entrant;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Event;
@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
             // Seed with dummy users
             User::factory(10)
 
-                // Give each dummy user 0-3 competitors that they own
-                ->hasCompetitors(rand(0, 3))
+                // Give each dummy user 0-3 entrants that they own
+                ->hasEntrants(rand(0, 3))
 
                 // Give each dummy user 0-2 events that they own
                 ->has(
@@ -42,19 +42,23 @@ class DatabaseSeeder extends Seeder
                         ->has(
                             Ticket::factory()
                                 ->count(rand(0,2))
+
+                                // Set the validity time of the ticket in relation to the event
                                 ->state(function (array $attributes, Event $event) {
                                     return [
                                         'time' => fake()->dateTimeBetween($event->start, $event->end ?: $event->start . ' +12 hours')
                                     ];
-                })))->create();
 
+            // Save all the dummy data
+            })))->create();
+
+            // Create specific testing account (for logging in with)
             $user = User::factory()->create([
-                'first_name'    => 'Calum',
-                'last_name'     => 'Shepherd',
+                'first_name'    => 'Test',
+                'last_name'     => 'User',
                 'email'         => 'test@example.com'
             ]);
-
-            $user->competitors()->saveMany(Competitor::factory()->count(2)->make());
+            $user->entrants()->saveMany(Entrant::factory()->count(2)->make());
             $user->events()->saveMany(Event::factory()->count(2)->make());
         }
     }

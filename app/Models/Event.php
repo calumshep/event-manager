@@ -15,6 +15,7 @@ class Event extends Model
         'end',
         'short_desc',
         'long_desc',
+        'organisation_id',
     ];
 
     protected $casts = [

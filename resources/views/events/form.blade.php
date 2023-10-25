@@ -12,14 +12,10 @@
 
             @if($creating)
                 <p class="text-muted">
-                    Once you have created the event, you can thenadd different tickets for it, including free,
+                    Once you have created the event, you can then add different tickets for it, including free,
                     paid, and discounted tickets.
                 </p>
             @endif
-            <p class="text-muted">
-                The short description appears on the upcoming events dashboard and should be a short 'sell' of your
-                event. The long description will be shown on the event page and should include full details.
-            </p>
 
             <form method="POST"
                   action="{{ $creating ? route('events.store') : route('events.update', $event) }}">
@@ -29,6 +25,10 @@
                 <fieldset @disabled($readonly)>
                     <div class="row">
                         <div class="col-md-6">
+                            <p class="text-muted">
+                                These basic details help people find your event.
+                            </p>
+
                             <div class="mb-3">
                                 <label class="form-label" for="name">Event name<span
                                         class="text-danger">*</span></label>
@@ -37,6 +37,7 @@
                                        id="name"
                                        value="{{ old('name') ? old('name') : $event->name }}"
                                        class="form-control"
+                                       autocomplete="off"
                                        required>
                             </div>
 
@@ -45,8 +46,8 @@
                                         class="text-danger">*</span></label>
                                 <select name="org" id="org" class="form-select" required>
                                     @forelse($orgs as $org)
-                                        <option value="{{ $org }}"
-                                            @selected(old('org') ? old('org') == $org->id : $competitor->org == $org->id)>
+                                        <option value="{{ $org->id }}"
+                                            @selected(old('org') ? old('org') == $org->id : $event->org == $org->id)>
                                             {{ $org->name }}
                                         </option>
                                     @empty
@@ -72,18 +73,25 @@
                                        required>
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label" for="end">End date</label>
-                                <input type="date"
-                                       name="end"
-                                       id="end"
-                                       value="@if(old('end')){{ old('end') }}@elseif($event->end){{ $event->end->format('Y-m-d') }}@endif"
-                                       class="form-control">
-                                <small class="form-text">Leave empty for events no longer than 1 day.</small>
-                            </div>
+                            @if(!$readonly || $event->end_date)
+                                <div class="mb-3">
+                                    <label class="form-label" for="end">End date</label>
+                                    <input type="date"
+                                           name="end"
+                                           id="end"
+                                           value="@if(old('end')){{ old('end') }}@elseif($event->end){{ $event->end->format('Y-m-d') }}@endif"
+                                           class="form-control">
+                                    <small class="form-text">Leave blank for events no longer than 1 day.</small>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="col-md-6">
+                            <p class="text-muted">
+                                The short description appears on the upcoming events dashboard and should be a short 'sell' of your
+                                event. The long description will be shown on the event page and should include full details.
+                            </p>
+
                             <div class="mb-3">
                                 <label class="form-label" for="short_desc">Short description<span
                                         class="text-danger">*</span></label>
@@ -141,6 +149,57 @@
             </form>
         </div>
     </div>
+
+    @unless($creating)
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow mb-3">
+                    <div class="card-body">
+                        <div class="d-flex mb-3 justify-content-between align-items-baseline">
+                            <h2 class="card-title h3">Tickets</h2>
+
+                            <a href="{{ route('events.tickets.create', $event)  }}" class="btn btn-primary">
+                                <i class="fa-solid fa-plus me-2"></i>New Ticket
+                            </a>
+                        </div>
+
+                        <p class="text-muted">
+                            To attend your event, at least one ticket must be purchased. Events with no ticket options
+                            here cannot be attended!
+                        </p>
+
+                        <table class="table table-hover table-striped border card-text">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Time</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @forelse($event->tickets as $ticket)
+                                    <tr>
+                                        <td><a href="{{ route('events.tickets.show', [$event, $ticket]) }}">{{
+                                        $ticket->name
+                                        }}</a></td>
+                                        <td>{{ $ticket->time->format('d/m/Y') }}</td>
+                                        <td>£{{ number_format($ticket->price/100, 2) }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="3">
+                                            No tickets found for this event.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endunless
 
     @if($readonly)
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

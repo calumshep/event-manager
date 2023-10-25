@@ -45,13 +45,13 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the competitors belonging to the user.
+     * Get the entrants belonging to the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function competitors()
+    public function entrants()
     {
-        return $this->hasMany(Competitor::class);
+        return $this->hasMany(Entrant::class);
     }
 
     /**

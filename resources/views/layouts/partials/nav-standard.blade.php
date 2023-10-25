@@ -8,11 +8,11 @@
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('competitors.index') }}"
-       class="nav-link @if(Route::is('competitors*')) active @endif"
-       @if(Route::is('competitors*')) aria-current="page" @endif>
+    <a href="{{ route('entrants.index') }}"
+       class="nav-link @if(Route::is('entrants*')) active @endif"
+       @if(Route::is('entrants*')) aria-current="page" @endif>
         <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
-        Your Competitors
+        Your Entrants
     </a>
 </li>
 
