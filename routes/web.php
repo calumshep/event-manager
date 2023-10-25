@@ -5,6 +5,7 @@ use App\Http\Controllers\EntrantController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\OrganisationController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,6 +45,18 @@ Route::controller(AccountController::class)
         Route::put('/{user}', 'update')->name('update');
 });
 
-Route::resource('competitors', CompetitorController::class)->middleware(['auth']);
-Route::resource('events', EventController::class)->middleware(['auth']);
-Route::resource('organisations', OrganisationController::class)->middleware(['auth']);
+Route::resources([
+    'entrants'   => EntrantController::class,
+    'events'        => EventController::class,
+    'organisations' => OrganisationController::class,
+]);
+
+Route::controller(TicketController::class)
+    ->middleware(['auth'])
+    ->prefix('/events/{event}/tickets')
+    ->name('events.tickets.')
+    ->group(function ()
+    {
+        Route::post('/checkout', 'checkout')->name('checkout');
+});
+Route::resource('events.tickets', TicketController::class)->except(['index']);

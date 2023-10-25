@@ -17,6 +17,10 @@ class Ticket extends Model
         'price',
     ];
 
+    protected $casts = [
+        'time' => 'datetime'
+    ];
+
     /**
      * Get the event this ticket belongs to.
      *
@@ -25,5 +29,15 @@ class Ticket extends Model
     public function event()
     {
         return $this->belongsTo(Event::class);
+    }
+
+    /**
+     * Get the entrants who have this ticket.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function entrant()
+    {
+        return $this->belongsToMany(Entrant::class);
     }
 }
