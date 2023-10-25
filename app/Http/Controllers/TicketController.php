@@ -99,6 +99,29 @@ class TicketController extends Controller
     }
 
     /**
+     * Show the view to check out a ticket purchase.
+     *
+     * @param Request $request
+     * @param \App\Models\Event $event
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function checkout(Request $request, Event $event)
+    {
+        $input = $request->toArray();
+
+        foreach ($event->tickets as $ticket) {
+            $ticket->quantity = (int) $input['quantity_'.$ticket->id];
+        }
+        $tickets = $event->tickets->reject(function (Ticket $ticket) { return $ticket->quantity <= 0; });
+
+        return view('tickets.checkout', [
+            'event'     => $event,
+            'tickets'   => $tickets,
+        ]);
+    }
+
+    /**
      * Purchase the specified Ticket as the authenticated user.
      *
      * @param \App\Models\Event $event
