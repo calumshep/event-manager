@@ -8,6 +8,11 @@ use App\Models\Event;
 
 class EventController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -25,7 +30,7 @@ class EventController extends Controller
     {
         return view('events.form', [
             'event'         => new Event(),
-            'orgs'          => auth()->user()->organisations(),
+            'orgs'          => auth()->user()->organisations,
             'readonly'      => false,
             'creating'      => true,
         ]);
@@ -39,11 +44,12 @@ class EventController extends Controller
         $input = $request->validated();
 
         $event = new Event([
-            'name'          => $input['name'],
-            'start'         => $input['start'],
-            'end'           => $input['end'],
-            'short_desc'    => $input['short_desc'],
-            'long_desc'     => $input['long_desc'],
+            'name'              => $input['name'],
+            'start'             => $input['start'],
+            'end'               => $input['end'],
+            'short_desc'        => $input['short_desc'],
+            'long_desc'         => $input['long_desc'],
+            'organisation_id'   => $input['org'],
         ]);
 
         auth()->user()->events()->save($event);
@@ -60,7 +66,7 @@ class EventController extends Controller
     {
         return view('events.form', [
             'event'         => $event,
-            'orgs'          => $event->user->organisations(),
+            'orgs'          => $event->user->organisations,
             'readonly'      => true,
             'creating'      => false,
         ]);
@@ -73,6 +79,7 @@ class EventController extends Controller
     {
         return view('events.form', [
             'event'         => $event,
+            'orgs'          => $event->user->organisations,
             'readonly'      => false,
             'creating'      => false,
         ]);
@@ -86,11 +93,12 @@ class EventController extends Controller
         $input = $request->validated();
 
         $event = $event->fill([
-            'name'          => $input['name'],
-            'start'         => $input['start'],
-            'end'           => $input['end'],
-            'short_desc'    => $input['short_desc'],
-            'long_desc'     => $input['long_desc'],
+            'name'              => $input['name'],
+            'start'             => $input['start'],
+            'end'               => $input['end'],
+            'short_desc'        => $input['short_desc'],
+            'long_desc'         => $input['long_desc'],
+            'organisation_id'   => $input['org'],
         ]);
 
         $event->save();
