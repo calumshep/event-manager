@@ -29,6 +29,9 @@ class DashboardController extends Controller
      */
     public function event(Event $event)
     {
-        return view('events.detail', compact('event'));
+        return view('events.detail', [
+            'event'     => $event,
+            'entrants'  => auth()->user()->entrants->toJson(),
+        ]);
     }
 }

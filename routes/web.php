@@ -57,6 +57,6 @@ Route::controller(TicketController::class)
     ->name('events.tickets.')
     ->group(function ()
     {
-        Route::post('/checkout', 'checkout')->name('checkout');
+        Route::post('/purchase', 'purchase')->name('purchase');
 });
 Route::resource('events.tickets', TicketController::class)->except(['index']);
