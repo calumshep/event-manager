@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layout.app')
 
 @section('content')
 
@@ -20,8 +20,8 @@
                         <h2 class="h4">{{ $organisation->name }}</h2>
 
                         <p><strong>
-                            <a href="{{ $organisation->website }}">{{ $organisation->website }}</a>
-                        </strong></p>
+                                <a href="{{ $organisation->website }}">{{ $organisation->website }}</a>
+                            </strong></p>
 
                         <p>{{ $organisation->description }}</p>
 

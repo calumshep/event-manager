@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layout.app')
 
 @section('content')
 
@@ -42,7 +42,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label" for="time">Validity<span
-                                        class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                 <input type="date"
                                        name="time"
                                        id="time"
@@ -54,12 +54,12 @@
 
                             <div class="mb-3">
                                 <label class="form-label" for="description">Description<span
-                                        class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                 <textarea
-                                    name="description"
-                                    id="description"
-                                    class="form-control"
-                                    rows="2"
+                                        name="description"
+                                        id="description"
+                                        class="form-control"
+                                        rows="2"
                                 >{{ old('description') ?: $ticket->description }}</textarea>
                             </div>
 

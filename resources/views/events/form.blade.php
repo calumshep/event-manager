@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layout.app')
 
 @section('content')
 
@@ -31,7 +31,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label" for="name">Event name<span
-                                        class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                 <input type="text"
                                        name="name"
                                        id="name"
@@ -43,11 +43,11 @@
 
                             <div class="mb-3">
                                 <label class="form-label" for="org">Event organiser<span
-                                        class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                 <select name="org" id="org" class="form-select" required>
                                     @forelse($orgs as $org)
                                         <option value="{{ $org->id }}"
-                                            @selected(old('org') ? old('org') == $org->id : $event->org == $org->id)>
+                                                @selected(old('org') ? old('org') == $org->id : $event->org == $org->id)>
                                             {{ $org->name }}
                                         </option>
                                     @empty
@@ -57,14 +57,15 @@
 
                                 @if($creating)
                                     <small class="form-text text-muted">
-                                        If you have not already, you must create an organisation to assign this event to.
+                                        If you have not already, you must create an organisation to assign this event
+                                        to.
                                     </small>
                                 @endif
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label" for="start">Start date<span
-                                        class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                 <input type="date"
                                        name="start"
                                        id="start"
@@ -88,29 +89,31 @@
 
                         <div class="col-md-6">
                             <p class="text-muted">
-                                The short description appears on the upcoming events dashboard and should be a short 'sell' of your
-                                event. The long description will be shown on the event page and should include full details.
+                                The short description appears on the upcoming events dashboard and should be a short
+                                'sell' of your
+                                event. The long description will be shown on the event page and should include full
+                                details.
                             </p>
 
                             <div class="mb-3">
                                 <label class="form-label" for="short_desc">Short description<span
-                                        class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                 <textarea
-                                    name="short_desc"
-                                    id="short_desc"
-                                    class="form-control"
-                                    rows="2"
+                                        name="short_desc"
+                                        id="short_desc"
+                                        class="form-control"
+                                        rows="2"
                                 >{{ old('short_desc') ?: $event->short_desc }}</textarea>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label" for="long_desc">Long description<span
-                                        class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                 <textarea
-                                    name="long_desc"
-                                    id="long_desc"
-                                    class="form-control"
-                                    rows="4"
+                                        name="long_desc"
+                                        id="long_desc"
+                                        class="form-control"
+                                        rows="4"
                                 >{{ old('long_desc') ?: $event->long_desc }}</textarea>
                             </div>
                         </div>
@@ -170,29 +173,29 @@
 
                         <table class="table table-hover table-striped border card-text">
                             <thead class="table-light">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Time</th>
-                                    <th>Price</th>
-                                </tr>
+                            <tr>
+                                <th>Name</th>
+                                <th>Time</th>
+                                <th>Price</th>
+                            </tr>
                             </thead>
 
                             <tbody>
-                                @forelse($event->tickets as $ticket)
-                                    <tr>
-                                        <td><a href="{{ route('events.tickets.show', [$event, $ticket]) }}">{{
+                            @forelse($event->tickets as $ticket)
+                                <tr>
+                                    <td><a href="{{ route('events.tickets.show', [$event, $ticket]) }}">{{
                                         $ticket->name
                                         }}</a></td>
-                                        <td>{{ $ticket->time->format('d/m/Y') }}</td>
-                                        <td>£{{ number_format($ticket->price/100, 2) }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="3">
-                                            No tickets found for this event.
-                                        </td>
-                                    </tr>
-                                @endforelse
+                                    <td>{{ $ticket->time->format('d/m/Y') }}</td>
+                                    <td>£{{ number_format($ticket->price/100, 2) }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3">
+                                        No tickets found for this event.
+                                    </td>
+                                </tr>
+                            @endforelse
                             </tbody>
                         </table>
                     </div>

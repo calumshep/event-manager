@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layout.app')
 
 @section('content')
 
@@ -44,9 +44,12 @@
                             <hr>
 
                             <div class="input-group my-3">
-                                <label class="input-group-text" for="ticket_{{ $ticket->id }}_entrant">Choose entrant</label>
-                                <select class="form-select entrant-select" id="ticket_{{ $ticket->id }}_entrant"></select>
-                                <button type="button" class="btn btn-outline-primary entry-button">Enter &raquo;</button>
+                                <label class="input-group-text" for="ticket_{{ $ticket->id }}_entrant">Choose
+                                    entrant</label>
+                                <select class="form-select entrant-select"
+                                        id="ticket_{{ $ticket->id }}_entrant"></select>
+                                <button type="button" class="btn btn-outline-primary entry-button">Enter &raquo;
+                                </button>
                             </div>
 
                             <ul class="list-group" id="ticket_{{ $ticket->id }}_entrants"></ul>
@@ -90,24 +93,21 @@
          * Calculate the total price based on the current state.
          * @returns {number} Total price (in pounds).
          */
-        function calcTot()
-        {
+        function calcTot() {
             let total = 0;
 
-            document.querySelectorAll('[id^="price_"]').forEach((price) =>
-            {
+            document.querySelectorAll('[id^="price_"]').forEach((price) => {
                 total += parseInt(price.value) * parseInt(price.nextElementSibling.value);
             });
 
-            return total/100;
+            return total / 100;
         }
 
         /**
          * Fill out all selects' options with an array of entrants.
          * @param entrants JSON serialized entrant collection
          */
-        function updateSelects(entrants)
-        {
+        function updateSelects(entrants) {
             entrants.forEach((entrant) => {
                 document.querySelectorAll('.entrant-select').forEach((select) => {
                     let opt = document.createElement('option')
@@ -123,8 +123,7 @@
          * Disable the specified entrant option in all selects.
          * @param entrant_id ID of the entrant to remove
          */
-        function disableEntrant(entrant_id)
-        {
+        function disableEntrant(entrant_id) {
             document.querySelectorAll('option').forEach((opt) => {
                 if (opt.value === entrant_id) {
                     opt.disabled = true;
@@ -136,8 +135,7 @@
          * Enable the specified entrant option in all selects.
          * @param entrant_id ID of the entrant to remove
          */
-        function enableEntrant(entrant_id)
-        {
+        function enableEntrant(entrant_id) {
             document.querySelectorAll('option').forEach((opt) => {
                 if (opt.value === entrant_id) {
                     opt.disabled = false;
@@ -152,8 +150,7 @@
          * @param entrant_id ID of the entrant
          * @param entrant_name Full name of the entrant
          */
-        function addEntrantItem(ticket_id, entrant_id, entrant_name)
-        {
+        function addEntrantItem(ticket_id, entrant_id, entrant_name) {
             let item = document.createElement('li');
             item.className = 'list-group-item px-2 d-flex justify-content-between align-items-baseline';
 
@@ -171,8 +168,7 @@
             let removeSpan = document.createElement('span');
             removeSpan.innerHTML = 'Remove';
 
-            btn.addEventListener('click', function ()
-            {
+            btn.addEventListener('click', function () {
                 // enableEntrant(this.nextElementSibling.name.split('_')[3]);
                 this.parentElement.remove();
             });
@@ -183,8 +179,8 @@
             item.appendChild(btn);
 
             let input = document.createElement('input');
-            input.type ='hidden'
-            input.name ='ticket_' + ticket_id + '_entrant_' + entrant_id;
+            input.type = 'hidden'
+            input.name = 'ticket_' + ticket_id + '_entrant_' + entrant_id;
             input.value = '1';
 
             item.appendChild(input);
@@ -201,10 +197,8 @@
          * Attach event listener to each entry button.
          * On click, the listener will remove the entrant from the selects' options.
          */
-        document.querySelectorAll('.entry-button').forEach((btn) =>
-        {
-            btn.addEventListener('click', function ()
-            {
+        document.querySelectorAll('.entry-button').forEach((btn) => {
+            btn.addEventListener('click', function () {
                 if (this.previousElementSibling.options.namedItem(this.previousElementSibling.value).disabled) {
                     // TODO: handle error
                 } else {

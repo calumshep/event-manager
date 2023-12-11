@@ -16,15 +16,16 @@
                 </li>
 
                 <div class="d-lg-none">
-                    @include('layouts.partials.nav-standard')
+                    @include('layout.partials.nav-standard')
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
                             <i class="fa-solid fa-shield-halved fa-fw me-2"></i>
                             Admin
                         </a>
                         <ul class="dropdown-menu">
-                            @include('layouts.partials.nav-admin')
+                            @include('layout.partials.nav-admin')
                         </ul>
                     </li>
                 </div>
@@ -77,6 +78,7 @@
                             <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
                             <hr class="d-lg-none my-2 text-white-50">
                         </li>
+
                     @endunless
                     -->
 

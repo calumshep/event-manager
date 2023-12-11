@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layout.app')
 
 @section('head')
 
@@ -113,19 +113,19 @@
 
             <div class="col-md-8">
                 <div class="card bg-light shadow">
-                     <div class="card-body text-center">
-                         <h3 class="card-title">Create Your Account</h3>
-                         <p class="lead card-text">
-                             Click the button below to sign up as a parent/guardian or entrant over 16. You can add
-                             your child(ren) to your account later. Creating an account is free!
-                         </p>
-                         <a class="card-text btn btn-lg btn-primary" href="{{ route('register') }}">
-                             <i class="fa-solid fa-pencil me-2"></i>Sign Up
-                         </a>
-                         <a class="card-text btn btn-lg btn-secondary" href="#">
-                             <i class="fa-solid fa-envelope me-2"></i>Contact Us
-                         </a>
-                     </div>
+                    <div class="card-body text-center">
+                        <h3 class="card-title">Create Your Account</h3>
+                        <p class="lead card-text">
+                            Click the button below to sign up as a parent/guardian or entrant over 16. You can add
+                            your child(ren) to your account later. Creating an account is free!
+                        </p>
+                        <a class="card-text btn btn-lg btn-primary" href="{{ route('register') }}">
+                            <i class="fa-solid fa-pencil me-2"></i>Sign Up
+                        </a>
+                        <a class="card-text btn btn-lg btn-secondary" href="#">
+                            <i class="fa-solid fa-envelope me-2"></i>Contact Us
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -142,7 +142,8 @@
             We take 3% commission per payment processed from competition entrants. We use
             <a href="https://stripe.com/gb" target="_blank">Stripe</a> to process all payments, which automatically pays
             entry fees into your account (minus <a href="https://stripe.com/gb/pricing" target="_blank">Stripe's
-            processing fees</a>). We then automatically invoice you for our small commission, a price worth paying to
+                processing fees</a>). We then automatically invoice you for our small commission, a price worth paying
+            to
             remove the headache from taking competition entries!
     </div>
 

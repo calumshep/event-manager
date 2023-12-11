@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layout.app')
 
 @section('content')
 
@@ -14,37 +14,36 @@
 
     <table class="table table-hover table-striped border shadow">
         <thead class="table-light">
-            <tr>
-                <td>Name</td>
-                <td>Start</td>
-                <td>End</td>
-                <td></td>
-            </tr>
+        <tr>
+            <td>Name</td>
+            <td>Start</td>
+            <td>End</td>
+            <td></td>
+        </tr>
         </thead>
 
         <tbody>
-            @forelse($events as $event)
-                <tr>
-                    <td>
-                        <a href="{{ route('events.show', $event) }}">
-                             {{ $event->name }}
-                        </a>
-                    </td>
-                    <td>{{ $event->start->format('D j M Y') }}</td>
-                    <td>{{ $event->start->format('D j M Y') }}</td>
-                    <td>
-                        <a href="{{ route('events.show', $event) }}">
-                            View &raquo;
-                        </a>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4">No events to display.</td>
-                </tr>
-            @endforelse
+        @forelse($events as $event)
+            <tr>
+                <td>
+                    <a href="{{ route('events.show', $event) }}">
+                        {{ $event->name }}
+                    </a>
+                </td>
+                <td>{{ $event->start->format('D j M Y') }}</td>
+                <td>{{ $event->start->format('D j M Y') }}</td>
+                <td>
+                    <a href="{{ route('events.show', $event) }}">
+                        View &raquo;
+                    </a>
+                </td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="4">No events to display.</td>
+            </tr>
+        @endforelse
         </tbody>
     </table>
-
 
 @endsection
