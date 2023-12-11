@@ -27,36 +27,38 @@
     <form method="POST" action="{{ route('events.tickets.purchase', $event) }}">
         @csrf
 
-        @forelse($event->tickets as $ticket)
-            <div class="card shadow mb-3">
-                <div class="card-body">
-                    <h3 class="h5 card-title">{{ $ticket->name }}</h3>
-                    <h4 class="h6 card-subtitle">
-                        {{ $ticket->time->format('D j M Y') }}
-                        &middot;
-                        £{{ number_format($ticket->price/100, 2) }}
-                    </h4>
+        <div class="row row-cols-2 g-4">
+            @forelse($event->tickets as $ticket)
+                <div class="col">
+                    <div class="card shadow mb-3">
+                        <div class="card-body">
+                            <h3 class="h5 card-title">{{ $ticket->name }}</h3>
+                            <h4 class="h6 card-subtitle">
+                                {{ $ticket->time->format('D j M Y') }}
+                                &middot;
+                                £{{ number_format($ticket->price/100, 2) }}
+                            </h4>
 
-                    <hr>
-                    <p>{{ $ticket->description }}</p>
-                    <hr>
+                            <hr>
+                            <p>{{ $ticket->description }}</p>
+                            <hr>
 
-                    <input type="hidden" name="quantity_{{ $ticket->id }}" value="{{ $ticket->quantity }}">
+                            <div class="input-group my-3">
+                                <label class="input-group-text" for="ticket_{{ $ticket->id }}_entrant">Choose entrant</label>
+                                <select class="form-select entrant-select" id="ticket_{{ $ticket->id }}_entrant"></select>
+                                <button type="button" class="btn btn-outline-primary entry-button">Enter &raquo;</button>
+                            </div>
 
-                    <div class="input-group my-3">
-                        <label class="input-group-text" for="ticket_{{ $ticket->id }}_entrant">Choose entrant</label>
-                        <select class="form-select entrant-select" id="ticket_{{ $ticket->id }}_entrant"></select>
-                        <button type="button" class="btn btn-outline-primary entry-button">Enter &raquo;</button>
+                            <ul class="list-group" id="ticket_{{ $ticket->id }}_entrants"></ul>
+                        </div>
                     </div>
-
-                    <ul class="list-group" id="ticket_{{ $ticket->id }}_entrants"></ul>
                 </div>
-            </div>
-        @empty
-            <div class="alert alert-warning">
-                No tickets are available.
-            </div>
-        @endforelse
+            @empty
+                <div class="alert alert-warning">
+                    No tickets are available.
+                </div>
+            @endforelse
+        </div>
 
         @unless(empty($event->tickets))
             <div class="row">
@@ -67,8 +69,6 @@
                     </div>
                 </div>
             </div>
-
-            <input type="hidden" name="total_amount" value="">
 
             <button type="submit" class="btn btn-primary float-end">
                 Checkout &raquo;
@@ -125,7 +125,6 @@
          */
         function disableEntrant(entrant_id)
         {
-
             document.querySelectorAll('option').forEach((opt) => {
                 if (opt.value === entrant_id) {
                     opt.disabled = true;
@@ -174,7 +173,7 @@
 
             btn.addEventListener('click', function ()
             {
-                enableEntrant(this.nextElementSibling.name.split('_')[3]);
+                // enableEntrant(this.nextElementSibling.name.split('_')[3]);
                 this.parentElement.remove();
             });
 
@@ -209,7 +208,7 @@
                 if (this.previousElementSibling.options.namedItem(this.previousElementSibling.value).disabled) {
                     // TODO: handle error
                 } else {
-                    disableEntrant(this.previousElementSibling.value);
+                    // disableEntrant(this.previousElementSibling.value);
                     addEntrantItem(this.previousElementSibling.id.split('_')[1], this.previousElementSibling.value,
                         this.previousElementSibling.options.namedItem(this.previousElementSibling.value).innerHTML);
                 }

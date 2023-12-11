@@ -58,5 +58,6 @@ Route::controller(TicketController::class)
     ->group(function ()
     {
         Route::post('/purchase', 'purchase')->name('purchase');
+        Route::get('/purchase/success', 'success')->name('purchase.success');
 });
 Route::resource('events.tickets', TicketController::class)->except(['index']);

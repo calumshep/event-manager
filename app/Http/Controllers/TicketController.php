@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
+use App\Models\Entrant;
 use App\Models\Event;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
@@ -53,7 +54,7 @@ class TicketController extends Controller
     {
         return view('tickets.form', [
             'ticket'    => $ticket,
-            'event'     => $ticket->event,
+            'event'     => $event,
             'readonly'  => true,
             'creating'  => false,
         ]);
@@ -66,7 +67,7 @@ class TicketController extends Controller
     {
         return view('tickets.form', [
             'ticket'    => $ticket,
-            'event'     => $ticket->event,
+            'event'     => $event,
             'readonly'  => false,
             'creating'  => false,
         ]);
@@ -75,7 +76,7 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTicketRequest $request, Event $event, Ticket $ticket)
+    public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
         $input = $request->validated();
 
@@ -103,14 +104,46 @@ class TicketController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Event $event
-     * @param \App\Models\Ticket $ticket
      *
-     * @return void
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function purchase(Request $request, Event $event, Ticket $ticket)
+    public function purchase(Request $request, Event $event)
     {
-        $input = $request->toArray();
-        dd($input);
+        $tickets = [];
+        $entrants = [];
+
+        foreach (array_keys($request->toArray()) as $key) {
+            $parts = explode('_', $key);
+
+            if ($parts[0] == 'ticket') {
+                $i = array_search($parts[1], $tickets);
+                if ($i) {
+                    $entrants[$i] .= $parts[3];
+                } else {
+                    $tickets[$i] = $parts[1];
+                    $entrants[$i] = $parts[3];
+                }
+            }
+        }
+
+        dd(json_encode([$tickets, $entrants]));
+
+        return auth()->user()->checkout(null, [
+            // Checkout options
+            'success_url'   =>
+                route('events.tickets.purchase.success', $event) . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'    => route('events.tickets.purchase', $event).'?checkout=cancelled',
+
+            // Data about the ticket order
+            'metadata' => [
+                'tickets_bought' => json_encode([$tickets, $entrants]),
+            ]
+        ]);
+    }
+
+    public function success()
+    {
+
     }
 
     /**
