@@ -13,7 +13,7 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
-                <h1 class="h3 mb-3 text-center">Please sign in</h1>
+                <h1 class="h3 mb-3 text-center">Login</h1>
 
                 <div class="form-floating mb-3">
                     <input type="email" name="email" class="form-control" id="floatingInput"

@@ -4,13 +4,22 @@ import '../sass/app.scss'
 // Import all of Bootstrap's JS
 import * as bootstrap from 'bootstrap'
 
-/*!
- * Color mode toggler for Bootstrap's docs (https://getbootstrap.com/)
- * Copyright 2011-2022 The Bootstrap Authors
- * Licensed under the Creative Commons Attribution 3.0 Unported License.
 (() => {
     'use strict'
 
+    document.querySelector('#navbarSideCollapse').addEventListener('click', () => {
+        document.querySelector('.offcanvas-collapse').classList.toggle('open');
+    });
+
+    document.querySelector('#logout_button').addEventListener('click', () => {
+        document.querySelector('#logout_form').submit();
+    })
+
+    /*
+     * Color mode toggler for Bootstrap's docs (https://getbootstrap.com/)
+     * Copyright 2011-2022 The Bootstrap Authors
+     * Licensed under the Creative Commons Attribution 3.0 Unported License.
+     */
     const storedTheme = localStorage.getItem('theme')
 
     const getPreferredTheme = () => {
@@ -64,4 +73,3 @@ import * as bootstrap from 'bootstrap'
             })
     })
 })()
-*/

@@ -19,7 +19,7 @@
             <form method="POST" action="{{ route('register') }}">
                 @csrf
 
-                <h1 class="h3 mb-3 text-center">Sign up</h1>
+                <h1 class="h3 mb-3 text-center">Sign Up</h1>
 
                 <div class="form-floating mb-3">
                     <input type="text" name="first_name" class="form-control"

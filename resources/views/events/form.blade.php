@@ -123,7 +123,7 @@
                 <div class="d-flex justify-content-between">
                     <a href="{{ (!$creating && !$readonly) ? route('events.show', $event) : route('events.index') }}"
                        class="btn btn-secondary">
-                        &laquo; Back
+                        <i class="fa-solid fa-close me-2"></i>Cancel
                     </a>
 
                     <div>

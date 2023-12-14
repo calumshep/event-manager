@@ -23,48 +23,37 @@ $utilities: map-merge($utilities, ("border-end": map-merge(map-get($utilities, "
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 8. Add additional custom code here
-.dropdown-toggle {
-    outline: 0;
+
+/*
+ * Off-canvas navbar styling from https://getbootstrap.com/docs/5.3/examples/offcanvas-navbar/.
+ */
+html,
+body {
+    overflow-x: hidden; /* Prevent scroll on narrow devices */
 }
 
-.btn-toggle {
-    padding: .25rem .5rem;
-    font-weight: 600;
-    color: rgba(0, 0, 0, .65);
-    background-color: transparent;
+body {
+    padding-top: 56px;
 }
 
-.btn-toggle:hover,
-.btn-toggle:focus {
-    color: rgba(0, 0, 0, .85);
-    background-color: #d2f4ea;
-}
-
-.btn-toggle::before {
-    width: 1.25em;
-    line-height: 0;
-    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
-    transition: transform .35s ease;
-    transform-origin: .5em 50%;
-}
-
-.btn-toggle[aria-expanded="true"] {
-    color: rgba(0, 0, 0, .85);
-}
-
-.btn-toggle[aria-expanded="true"]::before {
-    transform: rotate(90deg);
-}
-
-.btn-toggle-nav a {
-    padding: .1875rem .5rem;
-    margin-top: .125rem;
-    margin-left: 1.25rem;
-}
-
-.btn-toggle-nav a:hover,
-.btn-toggle-nav a:focus {
-    background-color: #d2f4ea;
+@media (max-width: 991.98px) {
+    .offcanvas-collapse {
+        position: fixed;
+        top: 56px; /* Height of navbar */
+        bottom: 0;
+        left: 100%;
+        width: 100%;
+        padding-right: 1rem;
+        padding-left: 1rem;
+        overflow-y: auto;
+        visibility: hidden;
+        background-color: #343a40;
+        transition: transform .3s ease-in-out, visibility .3s ease-in-out;
+    }
+    .offcanvas-collapse.open {
+        visibility: visible;
+        transform: translateX(-100%);
+    }
 }
 
 .nav-scroller {
@@ -78,9 +67,32 @@ $utilities: map-merge($utilities, ("border-end": map-merge(map-get($utilities, "
     display: flex;
     flex-wrap: nowrap;
     padding-bottom: 1rem;
-    margin-top: -1px;
+    //margin-top: -1px;
     overflow-x: auto;
     text-align: center;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
+    color: var(--bs-light);
+}
+
+.nav-scroller .nav-link {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: .875rem;
+    color: var(--bs-secondary);
+}
+
+.nav-scroller .nav-link:hover {
+    color: var(--bs-primary);
+}
+
+.nav-scroller .active {
+    font-weight: 500;
+    color: var(--bs-dark);
+}
+
+@include color-mode(dark) {
+    .nav-scroller .active {
+        color: var(--bs-light)
+    }
 }

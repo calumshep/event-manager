@@ -14,27 +14,16 @@
 </head>
 
 <body>
-@include('layout.navigation')
+    @include('layout.navigation')
 
-<!-- Page Content -->
-<div class="@unless(Route::is('home')) container-xxl @endunless mb-4">
-    @if(Auth::check() && !Route::is('home'))
-        <div class="row gx-4">
-            <div class="col-lg-3 border-end-lg d-none d-lg-block">
-                @include('layout.sidebar')
-            </div>
-            <main class="col-lg-9">
-                @yield('content')
-            </main>
-        </div>
-    @else
+    <!-- Page Content -->
+    <main class="container">
         @yield('content')
-    @endauth
-</div>
+    </main>
 
-@include('layout.footer')
+    @include('layout.footer')
 
-@yield('scripts')
-<script src="https://kit.fontawesome.com/c000864a8c.js" crossorigin="anonymous"></script>
+    @yield('scripts')
+    <script src="https://kit.fontawesome.com/c000864a8c.js" crossorigin="anonymous"></script>
 </body>
 </html>
