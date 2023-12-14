@@ -48,6 +48,31 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\HelpArticle
+ *
+ * @property-read \App\Models\HelpCategory|null $category
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle query()
+ */
+	class HelpArticle extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\HelpCategory
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HelpArticle> $articles
+ * @property-read int|null $articles_count
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory query()
+ */
+	class HelpCategory extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Organisation
  *
  * @property int $id
@@ -58,6 +83,8 @@ namespace App\Models{
  * @property string|null $website
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Event> $events
+ * @property-read int|null $events_count
  * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\OrganisationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Organisation newModelQuery()

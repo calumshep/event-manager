@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreHelpArticleRequest;
-use App\Http\Requests\UpdateHelpArticleRequest;
-use App\Models\HelpArticle;
+use App\Http\Requests\StoreHelpCategoryRequest;
+use App\Http\Requests\UpdateHelpCategoryRequest;
 use App\Models\HelpCategory;
 
-class HelpArticleController extends Controller
+class HelpCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('help.index', [
-            'categories'    => HelpCategory::all(),
-        ]);
+        //
     }
 
     /**
@@ -30,7 +27,7 @@ class HelpArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreHelpArticleRequest $request)
+    public function store(StoreHelpCategoryRequest $request)
     {
         //
     }
@@ -38,7 +35,7 @@ class HelpArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(HelpArticle $helpArticle)
+    public function show(HelpCategory $helpCategory)
     {
         //
     }
@@ -46,7 +43,7 @@ class HelpArticleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HelpArticle $helpArticle)
+    public function edit(HelpCategory $helpCategory)
     {
         //
     }
@@ -54,7 +51,7 @@ class HelpArticleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateHelpArticleRequest $request, HelpArticle $helpArticle)
+    public function update(UpdateHelpCategoryRequest $request, HelpCategory $helpCategory)
     {
         //
     }
@@ -62,7 +59,7 @@ class HelpArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HelpArticle $helpArticle)
+    public function destroy(HelpCategory $helpCategory)
     {
         //
     }
