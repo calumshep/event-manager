@@ -46,16 +46,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the entrants belonging to the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function entrants()
-    {
-        return $this->hasMany(Entrant::class);
-    }
-
-    /**
      * Get the events belonging to the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

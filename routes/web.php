@@ -46,7 +46,6 @@ Route::controller(AccountController::class)
 });
 
 Route::resources([
-    'entrants'   => EntrantController::class,
     'events'        => EventController::class,
     'organisations' => OrganisationController::class,
 ]);

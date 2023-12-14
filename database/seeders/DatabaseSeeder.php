@@ -23,9 +23,6 @@ class DatabaseSeeder extends Seeder
             // Seed with dummy users
             User::factory(10)
 
-                // Give each dummy user 0-3 entrants that they own
-                ->hasEntrants(rand(0, 3))
-
                 // Give each dummy user 0-2 events that they own
                 ->has(
                     Event::factory()
@@ -58,7 +55,6 @@ class DatabaseSeeder extends Seeder
                 'last_name'     => 'User',
                 'email'         => 'test@example.com'
             ]);
-            $user->entrants()->saveMany(Entrant::factory()->count(2)->make());
             $user->events()->saveMany(Event::factory()->count(2)->make());
         }
     }

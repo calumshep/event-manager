@@ -30,14 +30,4 @@ class Ticket extends Model
     {
         return $this->belongsTo(Event::class);
     }
-
-    /**
-     * Get the entrants who have this ticket.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function entrant()
-    {
-        return $this->belongsToMany(Entrant::class);
-    }
 }

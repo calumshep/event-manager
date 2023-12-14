@@ -103,11 +103,7 @@
                     free in seconds.
                 </p>
                 <p>
-                    Next, you will need to add entrants you want to enter in to competitions to your account. Again,
-                    this takes seconds, and you only have to do this once.
-                </p>
-                <p>
-                    Finally, you just need to find the competition you want to enter, and pay for your entries!
+                    Then you just need to find the competition you want to enter, and pay for your entries!
                 </p>
             </div>
 
@@ -116,8 +112,7 @@
                     <div class="card-body text-center">
                         <h3 class="card-title">Create Your Account</h3>
                         <p class="lead card-text">
-                            Click the button below to sign up as a parent/guardian or entrant over 16. You can add
-                            your child(ren) to your account later. Creating an account is free!
+                            Click the button below to sign up. Creating an account is free!
                         </p>
                         <a class="card-text btn btn-lg btn-primary" href="{{ route('register') }}">
                             <i class="fa-solid fa-pencil me-2"></i>Sign Up

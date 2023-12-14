@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('entrant_ticket', function (Blueprint $table) {
+        Schema::create('user_ticket', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+
+            $table->string('name');
+            $table->json('details')->nullable();
 
             $table->foreignIdFor(Entrant::class);
             $table->foreignIdFor(Ticket::class);

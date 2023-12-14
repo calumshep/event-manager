@@ -12,42 +12,6 @@
 
 namespace App\Models{
 /**
- * App\Models\Entrant
- *
- * @property int $id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string $name
- * @property \Illuminate\Support\Carbon $dob
- * @property string $gender
- * @property string|null $reg_id
- * @property int $user_id
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ticket> $tickets
- * @property-read int|null $tickets_count
- * @property-read \App\Models\User|null $user
- * @method static \Database\Factories\EntrantFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant query()
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant whereDob($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant whereGender($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant whereRegId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant withTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Entrant withoutTrashed()
- */
-	class Entrant extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\Event
  *
  * @property int $id
@@ -127,8 +91,6 @@ namespace App\Models{
  * @property int $price
  * @property int $event_id
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Entrant> $entrant
- * @property-read int|null $entrant_count
  * @property-read \App\Models\Event|null $event
  * @method static \Database\Factories\TicketFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Ticket newModelQuery()
@@ -167,8 +129,6 @@ namespace App\Models{
  * @property string|null $pm_type
  * @property string|null $pm_last_four
  * @property string|null $trial_ends_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Entrant> $entrants
- * @property-read int|null $entrants_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Event> $events
  * @property-read int|null $events_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications

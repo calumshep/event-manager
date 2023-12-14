@@ -109,25 +109,6 @@ class TicketController extends Controller
      */
     public function purchase(Request $request, Event $event)
     {
-        $tickets = [];
-        $entrants = [];
-
-        foreach (array_keys($request->toArray()) as $key) {
-            $parts = explode('_', $key);
-
-            if ($parts[0] == 'ticket') {
-                $i = array_search($parts[1], $tickets);
-                if ($i) {
-                    $entrants[$i] .= $parts[3];
-                } else {
-                    $tickets[$i] = $parts[1];
-                    $entrants[$i] = $parts[3];
-                }
-            }
-        }
-
-        dd(json_encode([$tickets, $entrants]));
-
         return auth()->user()->checkout(null, [
             // Checkout options
             'success_url'   =>
@@ -136,7 +117,7 @@ class TicketController extends Controller
 
             // Data about the ticket order
             'metadata' => [
-                'tickets_bought' => json_encode([$tickets, $entrants]),
+
             ]
         ]);
     }

@@ -31,7 +31,6 @@ class DashboardController extends Controller
     {
         return view('events.detail', [
             'event'     => $event,
-            'entrants'  => auth()->user()->entrants->toJson(),
         ]);
     }
 }
