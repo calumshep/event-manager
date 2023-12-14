@@ -48,7 +48,7 @@ class EventController extends Controller
             'start'             => $input['start'],
             'end'               => $input['end'],
             'short_desc'        => $input['short_desc'],
-            'long_desc'         => $input['long_desc'],
+            'long_desc'         => clean($request->long_desc),
             'organisation_id'   => $input['org'],
         ]);
 

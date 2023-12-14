@@ -1,5 +1,9 @@
 @extends('layout.app')
 
+@section('head')
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+@endsection
+
 @section('content')
 
     <h1>
@@ -120,15 +124,15 @@
                     <div class="mb-3">
                         <label class="form-label" for="long_desc">Long description<span
                                 class="text-danger">*</span></label>
-                        <textarea
-                            name="long_desc"
-                            id="long_desc"
-                            class="form-control"
-                            rows="4"
-                        >{{ old('long_desc') ?: $event->long_desc }}</textarea>
+                        <input type="hidden" name="long_desc" id="long_desc">
+
+                        <div id="quill_editor">
+                            {!! $event ? $event->long_desc : '' !!}
+                        </div>
                     </div>
                 </div>
             </div>
+        </fieldset>
 
             <hr>
         </fieldset>
@@ -250,4 +254,27 @@
         </div>
     @endif
 
+@endsection
+
+@section('scripts')
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        let readonly = !!{{ $readonly }};
+
+        let editor = new Quill('#quill_editor', {
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'header': [3,4] }],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ],
+            },
+            theme: 'snow',
+            readOnly: readonly,
+        });
+
+        editor.on('text-change', () => {
+            document.querySelector('#long_desc').value = editor.root.innerHTML;
+        });
+    </script>
 @endsection
