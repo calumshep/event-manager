@@ -23,9 +23,9 @@
                     <li class="nav-item">
                         <a @class([
                                'nav-link',
-                               'active' => Route::is('events.index'),
+                               'active' => Route::is('events*'),
                            ])
-                           {{ Route::is('events.index') ? 'aria-current="page"' : '' }}
+                           {{ Route::is('events*') ? 'aria-current="page"' : '' }}
                            href="{{ route('events.index') }}">
                             <i class="fa-solid fa-calendar fa-fw me-1"></i>
                             Manage Events
@@ -72,6 +72,11 @@
                             </button>
                         </li>
                     </ul>
+                </li>
+
+                <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+                    <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+                    <hr class="d-lg-none my-2 text-white-50">
                 </li>
 
                 @auth
