@@ -2,156 +2,167 @@
 
 @section('content')
 
+    <h1>
+        {{ $creating ? "New" : null }} Event
+    </h1>
+
+    @if($creating)
+        <p class="text-muted">
+            Once you have created the event, you can then add different tickets for it, including free,
+            paid, and discounted tickets.
+        </p>
+    @endif
+
     @include('components.status')
 
-    <div class="card shadow mb-3">
-        <div class="card-body">
-            <h1 class="card-title">
-                {{ $creating ? "New" : null }} Event
-            </h1>
+    <form method="POST"
+          action="{{ $creating ? route('events.store') : route('events.update', $event) }}">
+        @csrf
+        {{ $creating ? null : method_field('PUT') }}
 
-            @if($creating)
-                <p class="text-muted">
-                    Once you have created the event, you can then add different tickets for it, including free,
-                    paid, and discounted tickets.
-                </p>
-            @endif
+        <fieldset @disabled($readonly)>
+            <!-- basics -->
+            <hr>
+            <div class="row pt-3 mb-3">
+                <div class="col-lg-4">
+                    <h2 class="h5">Basics</h2>
 
-            <form method="POST"
-                  action="{{ $creating ? route('events.store') : route('events.update', $event) }}">
-                @csrf
-                {{ $creating ? null : method_field('PUT') }}
+                    <p>
+                        These basic details help people find your event.
+                    </p>
+                </div>
 
-                <fieldset @disabled($readonly)>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p class="text-muted">
-                                These basic details help people find your event.
-                            </p>
-
-                            <div class="mb-3">
-                                <label class="form-label" for="name">Event name<span
-                                            class="text-danger">*</span></label>
-                                <input type="text"
-                                       name="name"
-                                       id="name"
-                                       value="{{ old('name') ? old('name') : $event->name }}"
-                                       class="form-control"
-                                       autocomplete="off"
-                                       required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label" for="org">Event organiser<span
-                                            class="text-danger">*</span></label>
-                                <select name="org" id="org" class="form-select" required>
-                                    @forelse($orgs as $org)
-                                        <option value="{{ $org->id }}"
-                                                @selected(old('org') ? old('org') == $org->id : $event->org == $org->id)>
-                                            {{ $org->name }}
-                                        </option>
-                                    @empty
-                                        <option selected disabled>No organisations</option>
-                                    @endforelse
-                                </select>
-
-                                @if($creating)
-                                    <small class="form-text text-muted">
-                                        If you have not already, you must create an organisation to assign this event
-                                        to.
-                                    </small>
-                                @endif
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label" for="start">Start date<span
-                                            class="text-danger">*</span></label>
-                                <input type="date"
-                                       name="start"
-                                       id="start"
-                                       value="@if(old('start')){{ old('start') }}@elseif($event->start){{ $event->start->format('Y-m-d') }}@endif"
-                                       class="form-control"
-                                       required>
-                            </div>
-
-                            @if(!$readonly || $event->end_date)
-                                <div class="mb-3">
-                                    <label class="form-label" for="end">End date</label>
-                                    <input type="date"
-                                           name="end"
-                                           id="end"
-                                           value="@if(old('end')){{ old('end') }}@elseif($event->end){{ $event->end->format('Y-m-d') }}@endif"
-                                           class="form-control">
-                                    <small class="form-text">Leave blank for events no longer than 1 day.</small>
-                                </div>
-                            @endif
-                        </div>
-
-                        <div class="col-md-6">
-                            <p class="text-muted">
-                                The short description appears on the upcoming events dashboard and should be a short
-                                'sell' of your
-                                event. The long description will be shown on the event page and should include full
-                                details.
-                            </p>
-
-                            <div class="mb-3">
-                                <label class="form-label" for="short_desc">Short description<span
-                                            class="text-danger">*</span></label>
-                                <textarea
-                                        name="short_desc"
-                                        id="short_desc"
-                                        class="form-control"
-                                        rows="2"
-                                >{{ old('short_desc') ?: $event->short_desc }}</textarea>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label" for="long_desc">Long description<span
-                                            class="text-danger">*</span></label>
-                                <textarea
-                                        name="long_desc"
-                                        id="long_desc"
-                                        class="form-control"
-                                        rows="4"
-                                >{{ old('long_desc') ?: $event->long_desc }}</textarea>
-                            </div>
-                        </div>
+                <div class="col-lg-8">
+                    <div class="mb-3">
+                        <label class="form-label" for="name">Event name<span
+                                class="text-danger">*</span></label>
+                        <input type="text"
+                               name="name"
+                               id="name"
+                               value="{{ old('name') ? old('name') : $event->name }}"
+                               class="form-control"
+                               autocomplete="off"
+                               required>
                     </div>
-                </fieldset>
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ (!$creating && !$readonly) ? route('events.show', $event) : route('events.index') }}"
-                       class="btn btn-secondary">
-                        <i class="fa-solid fa-close me-2"></i>Cancel
-                    </a>
+                    <div class="mb-3">
+                        <label class="form-label" for="org">Event organiser<span
+                                class="text-danger">*</span></label>
+                        <select name="org" id="org" class="form-select" required>
+                            @forelse($orgs as $org)
+                                <option value="{{ $org->id }}"
+                                    @selected(old('org') ? old('org') == $org->id : $event->org == $org->id)>
+                                    {{ $org->name }}
+                                </option>
+                            @empty
+                                <option selected disabled>No organisations</option>
+                            @endforelse
+                        </select>
 
-                    <div>
-                        @if(!$readonly)
-                            <button type="reset" class="btn btn-outline-danger">Reset</button>
-                        @endif()
-
-                        @if($readonly)
-                            <button type="button"
-                                    class="btn btn-outline-danger"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal">
-                                <i class="fa-solid fa-trash me-2"></i>Delete
-                            </button>
-
-                            <a href="{{ route('events.edit', $event) }}" class="btn btn-primary">
-                                <i class="fa-solid fa-pencil me-2"></i>Edit
-                            </a>
-                        @else
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa-solid fa-save me-2"></i>Save
-                            </button>
+                        @if($creating)
+                            <small class="form-text text-muted">
+                                If you have not already, you must create an organisation to assign this event
+                                to.
+                            </small>
                         @endif
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="start">Start date<span
+                                class="text-danger">*</span></label>
+                        <input type="date"
+                               name="start"
+                               id="start"
+                               value="@if(old('start')){{ old('start') }}@elseif($event->start){{ $event->start->format('Y-m-d') }}@endif"
+                               class="form-control"
+                               required>
+                    </div>
+
+                    @if(!$readonly || $event->end_date)
+                        <div class="mb-3">
+                            <label class="form-label" for="end">End date</label>
+                            <input type="date"
+                                   name="end"
+                                   id="end"
+                                   value="@if(old('end')){{ old('end') }}@elseif($event->end){{ $event->end->format('Y-m-d') }}@endif"
+                                   class="form-control">
+                            <small class="form-text">Leave blank for events no longer than 1 day.</small>
+                        </div>
+                    @endif
                 </div>
-            </form>
+            </div>
+
+            <!-- details -->
+            <hr>
+            <div class="row pt-3 mb-3">
+                <div class="col-lg-4">
+                    <h2 class="h5">Details</h2>
+
+                    <p>
+                        The short description appears on the upcoming events dashboard and should be a short 'sell' of
+                        your event. The long description will be shown on the event page and should include full
+                        details.
+                    </p>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="mb-3">
+                        <label class="form-label" for="short_desc">Short description<span
+                                class="text-danger">*</span></label>
+                        <textarea
+                            name="short_desc"
+                            id="short_desc"
+                            class="form-control"
+                            rows="2"
+                        >{{ old('short_desc') ?: $event->short_desc }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="long_desc">Long description<span
+                                class="text-danger">*</span></label>
+                        <textarea
+                            name="long_desc"
+                            id="long_desc"
+                            class="form-control"
+                            rows="4"
+                        >{{ old('long_desc') ?: $event->long_desc }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+        </fieldset>
+
+        <div class="d-flex justify-content-between">
+            <a href="{{ (!$creating && !$readonly) ? route('events.show', $event) : route('events.index') }}"
+               class="btn btn-secondary">
+                <i class="fa-solid fa-close me-2"></i>Cancel
+            </a>
+
+            <div>
+                @if(!$readonly)
+                    <button type="reset" class="btn btn-outline-danger">Reset</button>
+                @endif()
+
+                @if($readonly)
+                    <button type="button"
+                            class="btn btn-outline-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal">
+                        <i class="fa-solid fa-trash me-2"></i>Delete
+                    </button>
+
+                    <a href="{{ route('events.edit', $event) }}" class="btn btn-primary">
+                        <i class="fa-solid fa-pencil me-2"></i>Edit
+                    </a>
+                @else
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-save me-2"></i>Save
+                    </button>
+                @endif
+            </div>
         </div>
-    </div>
+    </form>
 
     @unless($creating)
         <div class="row">
