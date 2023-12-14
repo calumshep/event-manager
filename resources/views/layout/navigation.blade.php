@@ -121,7 +121,13 @@
 
                 @auth
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a @class([
+                               'nav-link',
+                               'dropdown-toggle',
+                                'active' => Route::is(['account.show-own', 'account.edit'])
+                           ]) href="#"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
                             <i class="fa-solid fa-user-lock me-1"></i>
                             Signed in as {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
                         </a>
@@ -172,31 +178,50 @@
 </nav>
 
 <div class="nav-scroller shadow mb-3">
-    <nav class="nav" aria-label="Secondary navigation" data-bs-theme="light">
-        @if(Route::is(['events*', 'organisations*']))
-            <a @class([
-                   'nav-link',
-                   'active' => Route::is([
+    @unless(Route::is('help*'))
+        <nav class="nav" aria-label="Secondary navigation" data-bs-theme="light">
+            @if(Route::is(['events*', 'organisations*']))
+                <a @class([
+                       'nav-link',
+                       'active' => Route::is([
+                           'events.index', 'events.show', 'events.create', 'events.update', 'events.tickets*'
+                       ])
+                   ]) {{ Route::is([
                        'events.index', 'events.show', 'events.create', 'events.update', 'events.tickets*'
-                   ])
-               ]) {{ Route::is([
-                   'events.index', 'events.show', 'events.create', 'events.update', 'events.tickets*'
-               ]) ?
-               'aria-current="page"' :
-               '' }}
-               href="{{ route('events.index') }}">
-                <i class="fa-solid fa-rectangle-list fa-fw"></i>
-                My Events
-            </a>
+                   ]) ?
+                   'aria-current="page"' :
+                   '' }}
+                   href="{{ route('events.index') }}">
+                    <i class="fa-solid fa-rectangle-list fa-fw"></i>
+                    My Events
+                </a>
 
-            <a @class([
-                   'nav-link',
-                   'active' => Route::is('organisations*')
-               ]) {{ Route::is('organisations*') ? 'aria-current="page"' : '' }}
-               href="{{ route('organisations.index') }}">
-                <i class="fa-solid fa-building fa-fw"></i>
-                My Organisations
-            </a>
-        @endif
-    </nav>
+                <a @class([
+                       'nav-link',
+                       'active' => Route::is('organisations*')
+                   ]) {{ Route::is('organisations*') ? 'aria-current="page"' : '' }}
+                   href="{{ route('organisations.index') }}">
+                    <i class="fa-solid fa-building fa-fw"></i>
+                    My Organisations
+                </a>
+            @elseif(Route::is(['account.show-own', 'account.edit']))
+                <a @class([
+                       'nav-link',
+                       'active' => Route::is(['account.show-own', 'account.edit'])
+                   ]) {{ ['account.show-own', 'account.edit'] ? 'aria-current="page"' : '' }}
+                   href="{{ route('account.show-own') }}">
+                    <i class="fa-solid fa-user-gear fa-fw me-1"></i>
+                    My Account
+                </a>
+            @endif
+        </nav>
+    @else
+        <div class="container">
+            <nav class="p-2" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">All Help</li>
+                </ol>
+            </nav>
+        </div>
+    @endif
 </div>
