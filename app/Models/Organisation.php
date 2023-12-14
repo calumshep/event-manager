@@ -25,4 +25,14 @@ class Organisation extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the events belonging to this organisation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }

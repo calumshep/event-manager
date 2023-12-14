@@ -22,7 +22,7 @@ class OrganisationController extends Controller
     public function index()
     {
         return view('organisations.index', [
-            'organisations' => auth()->user()->organisations,
+            'organisations' => auth()->user()->organisations->sortBy('updated_at')->paginate(6),
         ]);
     }
 
@@ -105,6 +105,12 @@ class OrganisationController extends Controller
      */
     public function destroy(Organisation $organisation)
     {
+        if ($organisation->events->count() > 0) {
+            return redirect()->back()->withErrors([
+                'You cannot delete an organisation which has events assigned to it.'
+            ]);
+        }
+
         $organisation->delete();
 
         return redirect()->route('organisations.index')->with([

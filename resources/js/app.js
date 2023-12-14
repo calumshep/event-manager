@@ -50,7 +50,8 @@ import * as bootstrap from 'bootstrap'
         })
 
         btnToActive.classList.add('active')
-        activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+        // TODO: fix for FA icons
+        // activeThemeIcon.setAttribute('href', svgOfActiveBtn)
     }
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {

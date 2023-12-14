@@ -6,7 +6,7 @@
         </button>
 
         <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav me-auto mb-0">
                 <li class="nav-item">
                     <a @class([
                            'nav-link',
@@ -23,7 +23,7 @@
                     <li class="nav-item">
                         <a @class([
                                'nav-link',
-                               'active' => Route::is('events*'),
+                               'active' => Route::is(['events*', 'organisations*']),
                            ])
                            {{ Route::is('events*') ? 'aria-current="page"' : '' }}
                            href="{{ route('events.index') }}">
@@ -32,9 +32,49 @@
                         </a>
                     </li>
                 @endauth
+
+                <li class="nav-item">
+                    <a @class([
+                           'nav-link',
+                           'active' => Route::is('help*'),
+                       ])
+                       {{ Route::is('help*') ? 'aria-current="page"' : '' }}
+                       href="{{ route('help.index') }}">
+                        <i class="fa-solid fa-question-circle fa-fw me-1"></i>
+                        Help
+                    </a>
+                </li>
             </ul>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-plus fa-fw"></i>
+                        <span class="d-lg-none ms-1">New</span>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('events.create') }}">
+                                <i class="fa-solid fa-calendar-plus fa-fw"></i>
+                                <span class="d-lg-inline d-none ms-1">New </span>Event
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="{{ route('organisations.create') }}">
+                                <i class="fa-solid fa-person-circle-plus fa-fw"></i>
+                                <span class="d-lg-inline d-none ms-1">New </span>Organisation
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+                    <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+                    <hr class="d-lg-none my-2 text-white-50">
+                </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
                             id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown"
@@ -136,8 +176,14 @@
         @if(Route::is(['events*', 'organisations*']))
             <a @class([
                    'nav-link',
-                   'active' => Route::is(['events.index', 'events.show', 'events.update'])
-               ]) {{ Route::is(['events.index', 'events.show', 'events.update']) ? 'aria-current="page"' : '' }}
+                   'active' => Route::is([
+                       'events.index', 'events.show', 'events.create', 'events.update', 'events.tickets*'
+                   ])
+               ]) {{ Route::is([
+                   'events.index', 'events.show', 'events.create', 'events.update', 'events.tickets*'
+               ]) ?
+               'aria-current="page"' :
+               '' }}
                href="{{ route('events.index') }}">
                 <i class="fa-solid fa-rectangle-list fa-fw"></i>
                 My Events
@@ -145,17 +191,8 @@
 
             <a @class([
                    'nav-link',
-                   'active' => Route::is('events.create')
-               ]) {{ Route::is('events.create') ? 'aria-current="page"' : '' }}
-               href="{{ route('events.create') }}">
-                <i class="fa-solid fa-calendar-plus fa-fw"></i>
-                New Event
-            </a>
-
-            <a @class([
-                   'nav-link',
-                   'active' => Route::is('organisations.index')
-               ]) {{ Route::is('organisations.index') ? 'aria-current="page"' : '' }}
+                   'active' => Route::is('organisations*')
+               ]) {{ Route::is('organisations*') ? 'aria-current="page"' : '' }}
                href="{{ route('organisations.index') }}">
                 <i class="fa-solid fa-building fa-fw"></i>
                 My Organisations

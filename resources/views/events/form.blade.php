@@ -6,9 +6,11 @@
 
 @section('content')
 
-    <h1>
-        {{ $creating ? "New" : null }} Event
-    </h1>
+    <h1>{{ $creating ? "New" : null }} Event</h1>
+
+    <p>
+        Required fields are marked with an asterisk (<span class="text-danger">*</span>).
+    </p>
 
     @if($creating)
         <p class="text-muted">
@@ -65,8 +67,8 @@
 
                         @if($creating)
                             <small class="form-text text-muted">
-                                If you have not already, you must create an organisation to assign this event
-                                to.
+                                If you have not already, you must <a href="{{ route('organisations.create') }}">create
+                                an organisation</a> to assign this event to.
                             </small>
                         @endif
                     </div>
@@ -192,7 +194,7 @@
         <div class="d-flex justify-content-between">
             <a href="{{ (!$creating && !$readonly) ? route('events.show', $event) : route('events.index') }}"
                class="btn btn-secondary">
-                <i class="fa-solid fa-close me-2"></i>Cancel
+                &laquo; Back
             </a>
 
             <div>
@@ -258,24 +260,23 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script>
-        let readonly = !!{{ $readonly }};
+    @unless($readonly)
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script>
+            let editor = new Quill('#quill_editor', {
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'header': [3,4] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ],
+                },
+                theme: 'snow',
+            });
 
-        let editor = new Quill('#quill_editor', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'header': [3,4] }],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ],
-            },
-            theme: 'snow',
-            readOnly: readonly,
-        });
-
-        editor.on('text-change', () => {
-            document.querySelector('#long_desc').value = editor.root.innerHTML;
-        });
-    </script>
+            editor.on('text-change', () => {
+                document.querySelector('#long_desc').value = editor.root.innerHTML;
+            });
+        </script>
+    @endunless
 @endsection

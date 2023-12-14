@@ -10,9 +10,18 @@
         </a>
     </div>
 
+    <p>
+        Each event you run is assigned to one of your organisations. This makes it clear to your attendees who is
+        running the event, who is responsible for it, and tells us who to pay.
+    </p>
+    <p>
+        In future, you will be able to add others to your ogrganisations, and share admin access to events within those
+        organisations.
+    </p>
+
     @include('components.status')
 
-    <div class="row row-cols-1 row-cols-md-3 g-4 mb-3">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-3">
         @forelse($organisations as $organisation)
             <div class="col">
                 <div class="card h-100 shadow">
@@ -40,5 +49,7 @@
             </p>
         @endforelse
     </div>
+
+    {{ $organisations->links() }}
 
 @endsection
