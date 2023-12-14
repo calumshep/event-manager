@@ -134,8 +134,60 @@
             </div>
         </fieldset>
 
+        @unless($creating)
+            <!-- tickets -->
             <hr>
-        </fieldset>
+
+            <div class="row pt-3 mb-3">
+                <div class="col-lg-4">
+                    <h2 class="h5">Tickets</h2>
+
+                    <p>
+                        Tickets allow your attendees to register or pay for the event. Add tickets for different days,
+                        different price points, concessions, extras you're selling, etc.
+                        <strong>Your event should have at least one ticket type.</strong>
+                    </p>
+                </div>
+
+                <div class="col-lg-8">
+                    <p>
+                        <a href="{{ route('events.tickets.create', $event)  }}" class="btn btn-primary">
+                            <i class="fa-solid fa-plus me-2"></i>New Ticket
+                        </a>
+                    </p>
+
+                    <table class="table table-hover table-striped border card-text">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Time</th>
+                            <th>Price</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        @forelse($event->tickets as $ticket)
+                            <tr>
+                                <td><a href="{{ route('events.tickets.show', [$event, $ticket]) }}">{{
+                                        $ticket->name
+                                        }}</a></td>
+                                <td>{{ $ticket->time->format('d/m/Y') }}</td>
+                                <td>£{{ number_format($ticket->price/100, 2) }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3">
+                                    No tickets found for this event.
+                                </td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endunless
+
+        <hr>
 
         <div class="d-flex justify-content-between">
             <a href="{{ (!$creating && !$readonly) ? route('events.show', $event) : route('events.index') }}"
@@ -167,57 +219,6 @@
             </div>
         </div>
     </form>
-
-    @unless($creating)
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card shadow mb-3">
-                    <div class="card-body">
-                        <div class="d-flex mb-3 justify-content-between align-items-baseline">
-                            <h2 class="card-title h3">Tickets</h2>
-
-                            <a href="{{ route('events.tickets.create', $event)  }}" class="btn btn-primary">
-                                <i class="fa-solid fa-plus me-2"></i>New Ticket
-                            </a>
-                        </div>
-
-                        <p class="text-muted">
-                            To attend your event, at least one ticket must be purchased. Events with no ticket options
-                            here cannot be attended!
-                        </p>
-
-                        <table class="table table-hover table-striped border card-text">
-                            <thead class="table-light">
-                            <tr>
-                                <th>Name</th>
-                                <th>Time</th>
-                                <th>Price</th>
-                            </tr>
-                            </thead>
-
-                            <tbody>
-                            @forelse($event->tickets as $ticket)
-                                <tr>
-                                    <td><a href="{{ route('events.tickets.show', [$event, $ticket]) }}">{{
-                                        $ticket->name
-                                        }}</a></td>
-                                    <td>{{ $ticket->time->format('d/m/Y') }}</td>
-                                    <td>£{{ number_format($ticket->price/100, 2) }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3">
-                                        No tickets found for this event.
-                                    </td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endunless
 
     @if($readonly)
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

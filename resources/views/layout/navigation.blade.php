@@ -136,8 +136,8 @@
         @if(Route::is(['events*', 'organisations*']))
             <a @class([
                    'nav-link',
-                   'active' => Route::is('events.index')
-               ]) {{ Route::is('events.index') ? 'aria-current="page"' : '' }}
+                   'active' => Route::is(['events.index', 'events.show', 'events.update'])
+               ]) {{ Route::is(['events.index', 'events.show', 'events.update']) ? 'aria-current="page"' : '' }}
                href="{{ route('events.index') }}">
                 <i class="fa-solid fa-rectangle-list fa-fw"></i>
                 My Events
