@@ -1,7 +1,7 @@
 <hr>
 
 <div class="container">
-    <footer class="d-flex p-5 justify-content-between align-items-start">
+    <footer class="d-flex py-5 justify-content-between align-items-start">
         <div class="mb-3">
             <p class="text-muted">{{ config('app.name', "Event Manager") }} © {{ date('Y') }}</p>
             <p><a href="#">Terms &amp; Conditions</a></p>
