@@ -24,7 +24,7 @@ class StoreTicketRequest extends FormRequest
         return [
             'name'          => 'required|max:255',
             'description'   => 'required',
-            'time'          => 'required|after:today',
+            //'time'          => 'required|after:today',
             'price'         => 'required|gte:0',
         ];
     }

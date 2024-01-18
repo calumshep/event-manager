@@ -51,7 +51,10 @@
                         <div class="mb-3">
                             <label class="form-label" for="description">Description<span
                                     class="text-danger">*</span></label>
-                            <input type="hidden" name="description" id="description">
+                            <input type="hidden"
+                                   name="description"
+                                   id="description"
+                                   value="{{ old('description', $ticket->description) }}">
 
                             <div id="quill_editor">
                                 {!! $ticket ? $ticket->description : '' !!}
@@ -68,25 +71,36 @@
                     <h2 class="h5">Configuration</h2>
 
                     <p>
-                        These settings allow you to customise how this ticket works. For more information, see our
-                        <a href="{{ route('help.index') }}">help section</a>.
+                        These settings allow you to customise how this ticket works.
+                        <!--For more information, see our
+                        <a href="{{ route('help.index') }}">help section</a>.-->
                     </p>
                     <p>
-                        For a free event, set the Price to 0.00.
+                        For a free ticket, set the Price to 0.00.
                     </p>
                 </div>
 
                 <div class="col-lg-8">
                     <div class="mb-3">
                         <label class="form-label" for="time">Validity<span class="text-danger">*</span></label>
-                        <input type="date"
-                               name="time"
-                               id="time"
-                               value="@if(old('time')){{ old('time') }}@elseif($ticket->time){{
-                                   $ticket->time->format('Y-m-d') }}@endif"
-                               class="form-control"
-                               aria-describedby="validityHelp"
-                               required>
+                        <select class="form-select" name="time" id="time" required>
+                            <option value disabled selected>Select a day...</option>
+
+                            @foreach($event_days as $day)
+                                @if($ticket->time)
+                                    <option value="{{ $day->format('Y-m-d') }}"
+                                            @selected(old('time', $ticket->time->format('Y-m-d')) == $day->format('Y-m-d'))>
+                                        {{ $day->format('D d M Y') }}
+                                    </option>
+                                @else
+                                    <option value="{{ $day->format('Y-m-d') }}"
+                                            @selected(old('time') == $day->format('Y-m-d'))>
+                                        {{ $day->format('D d M Y') }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+
                         <div id="validityHelp" class="form-text">
                             You must specify a date which this ticket is valid for. If your event only spans a single
                             day, then select that day.
@@ -198,7 +212,7 @@
             });
 
             editor.on('text-change', () => {
-                document.querySelector('#long_desc').value = editor.root.innerHTML;
+                document.querySelector('#description').value = editor.root.innerHTML;
             });
         </script>
     @endunless

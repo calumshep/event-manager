@@ -6,7 +6,6 @@ use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Event;
 use App\Models\Ticket;
-use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
@@ -20,11 +19,13 @@ class TicketController extends Controller
      */
     public function create(Event $event)
     {
+//        dd($event->days());
         return view('tickets.form', [
-            'ticket'    => new Ticket(),
-            'event'     => $event,
-            'readonly'  => false,
-            'creating'  => true,
+            'ticket'        => new Ticket(),
+            'event'         => $event,
+            'event_days'    => $event->days(),
+            'readonly'      => false,
+            'creating'      => true,
         ]);
     }
 
@@ -37,13 +38,13 @@ class TicketController extends Controller
 
         $ticket = new Ticket([
             'name'          => $input['name'],
-            'description'   => $input['description'],
-            'time'          => $input['time'],
+            'description'   => clean($request->description),
+            'time'          => $request->time,
             'price'         => $input['price']*100,
         ]);
         $event->tickets()->save($ticket);
 
-        return redirect()->route('events.show', $event);
+        return redirect()->route('events.tickets.show', [$event, $ticket]);
     }
 
     /**
@@ -52,10 +53,11 @@ class TicketController extends Controller
     public function show(Event $event, Ticket $ticket)
     {
         return view('tickets.form', [
-            'ticket'    => $ticket,
-            'event'     => $event,
-            'readonly'  => true,
-            'creating'  => false,
+            'ticket'        => $ticket,
+            'event'         => $event,
+            'event_days'    => $event->days(),
+            'readonly'      => true,
+            'creating'      => false,
         ]);
     }
 
@@ -65,29 +67,32 @@ class TicketController extends Controller
     public function edit(Event $event, Ticket $ticket)
     {
         return view('tickets.form', [
-            'ticket'    => $ticket,
-            'event'     => $event,
-            'readonly'  => false,
-            'creating'  => false,
+            'ticket'        => $ticket,
+            'event'         => $event,
+            'event_days'    => $event->days(),
+            'readonly'      => false,
+            'creating'      => false,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTicketRequest $request, Ticket $ticket)
+    public function update(UpdateTicketRequest $request, Event $event, Ticket $ticket)
     {
         $input = $request->validated();
 
         $ticket->fill([
             'name'          => $input['name'],
-            'description'   => $input['description'],
-            'time'          => $input['time'],
+            'description'   => clean($request->description),
+            'time'          => $request->time,
             'price'         => $input['price']*100,
         ]);
         $ticket->save();
 
-        return redirect()->route('events.show', $ticket->event);
+        return redirect()->route('events.tickets.show', [$event, $ticket])->with([
+            'status' => 'Ticket details updated successfully.'
+        ]);
     }
 
     /**
@@ -100,7 +105,7 @@ class TicketController extends Controller
 
     /**
      * Purchase the specified Ticket as the authenticated user.
-     * 
+     *
      * @param \App\Models\Event $event
      *
      * @return \Illuminate\Http\RedirectResponse
