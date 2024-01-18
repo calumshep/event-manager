@@ -6,7 +6,7 @@ use App\Models\Event;
 use Date;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class HomeController extends Controller
 {
     /**
      * Display the dashboard.

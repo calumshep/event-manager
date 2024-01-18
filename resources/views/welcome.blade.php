@@ -9,6 +9,7 @@
             Events and tickets, done right...
         </p>
 
+        <!--
         <div class="input-group mb-3 w-75 mx-auto">
             <div class="form-floating">
                 <input type="search" class="form-control" name="search" id="search" placeholder="Alpine champs...">
@@ -20,7 +21,7 @@
                 <span class="d-none">Search</span>
             </button>
         </div>
-
+        -->
     </div>
 
     <hr>

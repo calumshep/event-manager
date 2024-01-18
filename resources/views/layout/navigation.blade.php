@@ -178,7 +178,35 @@
 </nav>
 
 <div class="nav-scroller shadow mb-3">
-    @unless(Route::is('help*'))
+    @if(Route::is('help*'))
+        <div class="container">
+            <nav class="p-2" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">All Help</li>
+                </ol>
+            </nav>
+        </div>
+    @elseif(Route::is('home*'))
+        <div class="container">
+            <nav class="p-2" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li @class([
+                        'breadcrumb-item',
+                        'active' => !Route::is('home')
+                    ])>
+                        @unless(Route::is('home'))
+                            <a href="{{ route('home') }}">Upcoming Events</a>
+                        @else
+                            Upcoming Events
+                        @endunless
+                    </li>
+                    @if(Route::is('home.event'))
+                        <li class="breadcrumb-item">{{ $event->name }}</li>
+                    @endif
+                </ol>
+            </nav>
+        </div>
+    @else
         <nav class="nav" aria-label="Secondary navigation" data-bs-theme="light">
             @if(Route::is(['events*', 'organisations*']))
                 <a @class([
@@ -215,13 +243,5 @@
                 </a>
             @endif
         </nav>
-    @else
-        <div class="container">
-            <nav class="p-2" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item active">All Help</li>
-                </ol>
-            </nav>
-        </div>
     @endif
 </div>
