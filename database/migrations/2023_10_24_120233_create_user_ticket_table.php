@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Entrant;
 use App\Models\Ticket;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -20,7 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->json('details')->nullable();
 
-            $table->foreignIdFor(Entrant::class);
+            $table->string('buyer_email');
             $table->foreignIdFor(Ticket::class);
         });
     }

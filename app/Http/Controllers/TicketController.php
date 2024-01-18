@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
-use App\Models\Entrant;
 use App\Models\Event;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
@@ -101,13 +100,12 @@ class TicketController extends Controller
 
     /**
      * Purchase the specified Ticket as the authenticated user.
-     *
-     * @param \Illuminate\Http\Request $request
+     * 
      * @param \App\Models\Event $event
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function purchase(Request $request, Event $event)
+    public function purchase(Event $event)
     {
         return auth()->user()->checkout(null, [
             // Checkout options

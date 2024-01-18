@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Entrant;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Event;
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
 
