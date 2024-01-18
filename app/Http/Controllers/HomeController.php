@@ -11,9 +11,9 @@ class HomeController extends Controller
     /**
      * Display the dashboard.
      */
-    public function dashboard()
+    public function welcome()
     {
-        return view('dashboard', [
+        return view('welcome', [
             'events' => Event::where('start', '>=', Date::now())
                              ->oldest('start')
                              ->paginate(5),
