@@ -136,10 +136,10 @@
         <p>
             We take 3% commission per payment processed from competition entrants. We use
             <a href="https://stripe.com/gb" target="_blank">Stripe</a> to process all payments, which automatically pays
-            entry fees into your account (minus <a href="https://stripe.com/gb/pricing" target="_blank">Stripe's
-                processing fees</a>). We then automatically invoice you for our small commission, a price worth paying
-            to
-            remove the headache from taking competition entries!
+            entry fees into your account (minus
+            <a href="https://stripe.com/gb/pricing" target="_blank">Stripe's processing fees</a>).
+            We then automatically invoice you for our small commission, a price worth paying to remove the headache from
+            taking competition entries!
     </div>
 
 @endsection
