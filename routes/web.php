@@ -19,12 +19,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () { return view('welcome'); })->name('home');
 Route::controller(HomeController::class)
     ->middleware(['auth'])
-    ->name('home')
+    ->prefix('/dashboard')
+    ->name('dashboard')
     ->group(function ()
 {
-    Route::get('/', 'welcome');
+    Route::get('/', 'dashboard');
     Route::get('/{event}', 'event')->name('.event');
 });
 
