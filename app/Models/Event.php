@@ -13,6 +13,7 @@ class Event extends Model
         'name',
         'start',
         'end',
+        'slug',
         'short_desc',
         'long_desc',
         'organisation_id',

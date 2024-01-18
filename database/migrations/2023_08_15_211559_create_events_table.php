@@ -21,6 +21,7 @@ return new class extends Migration
             $table->dateTime('start');
             $table->dateTime('end')->nullable();
 
+            $table->string('slug');
             $table->text('short_desc');
             $table->text('long_desc');
 

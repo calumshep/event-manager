@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
+use Illuminate\Support\Str;
 
 class EventController extends Controller
 {
@@ -47,6 +48,7 @@ class EventController extends Controller
             'name'              => $input['name'],
             'start'             => $input['start'],
             'end'               => $input['end'],
+            'slug'              => Str::of($input['name'])->slug(),
             'short_desc'        => $input['short_desc'],
             'long_desc'         => clean($request->long_desc),
             'organisation_id'   => $input['org'],
@@ -96,6 +98,7 @@ class EventController extends Controller
             'name'              => $input['name'],
             'start'             => $input['start'],
             'end'               => $input['end'],
+            'slug'              => Str::of($input['name'])->slug(),
             'short_desc'        => $input['short_desc'],
             'long_desc'         => clean($request->long_desc),
             'organisation_id'   => $input['org'],
