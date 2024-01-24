@@ -2,27 +2,19 @@
 
 @section('content')
 
-    <h1>{{ $event->name }}</h1>
-    <h2 class="h4 text-muted">
-        {{ $event->start->format('D j M Y') }} {{ isset($event->end) ? 'to ' . $event->end->format('D j M Y') : null }}
-    </h2>
-    <p>{{ $event->short_desc }}</p>
+    @include('components.event-detail-header')
 
-    <hr>
+    <p>
+        Specify how many of each ticket type you want to purchase. You can enter further details on the next page.
+    </p>
 
-    <p>{{ $event->long_desc }}</p>
-
-    <hr>
-
-    <h2 class="h3">Get Tickets</h2>
-
-    <form method="POST" action="{{ route('events.tickets.purchase', $event) }}">
+    <form method="POST" action="{{ route('events.tickets.checkout', $event) }}">
         @csrf
 
-        <div class="row row-cols-2 g-4">
+        <div class="row row-cols-md-2 row-cols-1 g-4">
             @forelse($event->tickets as $ticket)
                 <div class="col">
-                    <div class="card shadow mb-3">
+                    <div class="card shadow">
                         <div class="card-body">
                             <h3 class="h5 card-title">{{ $ticket->name }}</h3>
                             <h4 class="h6 card-subtitle">
@@ -32,8 +24,22 @@
                             </h4>
 
                             <hr>
-                            <p>{{ $ticket->description }}</p>
+                            <p>{!! $ticket->description !!}</p>
+
                             <hr>
+                            <input type="hidden" id="price_{{ $ticket->id }}" value="{{ $ticket->price }}">
+                            <div class="input-group">
+                                <span class="input-group-text" id="quantity_{{ $ticket->id }}_label">Quantity</span>
+                                <input type="number"
+                                       min="0"
+                                       step="1"
+                                       name="quantity_{{ $ticket->id }}"
+                                       id="quantity_{{ $ticket->id }}"
+                                       class="form-control"
+                                       placeholder="0"
+                                       aria-label="Quantity"
+                                       aria-describedby="quantity_{{ $ticket->id }}_label">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -45,18 +51,20 @@
         </div>
 
         @unless(empty($event->tickets))
-            <div class="row">
-                <div class="col-12 col-md-6 ms-auto">
-                    <div class="d-flex justify-content-between align-items-baseline border-top border-bottom pt-3 mb-3">
+            <div class="row border-top border-bottom pt-3 my-3">
+                <div class="col-12 col-md-6 mx-auto">
+                    <div class="d-flex justify-content-between align-items-baseline">
                         <h4>Total</h4>
                         <p><span id="total_amount">£0.00</span></p>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary float-end">
-                Checkout &raquo;
-            </button>
+            <div class="mx-auto text-center">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    Continue &raquo;
+                </button>
+            </div>
         @endunless
     </form>
 
@@ -74,14 +82,30 @@
          * Calculate the total price based on the current state.
          * @returns {number} Total price (in pounds).
          */
-        function calcTot() {
+        function calcTot()
+        {
             let total = 0;
 
-            document.querySelectorAll('[id^="price_"]').forEach((price) => {
-                total += parseInt(price.value) * parseInt(price.nextElementSibling.value);
+            document.querySelectorAll('[id^="price_"]').forEach((priceInput) => {
+                let quantity = priceInput.nextElementSibling.lastElementChild.value
+                if (quantity) {
+                    total += parseInt(priceInput.value) * parseInt(quantity);
+                }
             });
 
             return total / 100;
         }
+
+        /**
+         * Update the price display.
+         */
+        function updateTot()
+        {
+            document.querySelector('#total_amount').innerHTML = GBP.format(calcTot());
+        }
+
+        document.querySelectorAll('input[id^="quantity_"]').forEach((quantityInput) => {
+            quantityInput.addEventListener('change', updateTot);
+        });
     </script>
 @endsection

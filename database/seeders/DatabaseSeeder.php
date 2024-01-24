@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Ticket;
+use App\Models\TicketType;
 use App\Models\User;
 use App\Models\Event;
 use Illuminate\Database\Seeder;
@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         if (App::environment('local')) {
             // Seed with dummy users
-            User::factory(10)
+            User::factory(5)
 
                 // Give each dummy user 0-2 events that they own
                 ->has(
@@ -35,8 +35,8 @@ class DatabaseSeeder extends Seeder
 
                         // Give each dummy event 0-2 tickets
                         ->has(
-                            Ticket::factory()
-                                ->count(rand(0,2))
+                            TicketType::factory()
+                                ->count(rand(1,3))
 
                                 // Set the validity time of the ticket in relation to the event
                                 ->state(function (array $attributes, Event $event) {

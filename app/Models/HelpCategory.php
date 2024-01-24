@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HelpCategory extends Model
 {
@@ -16,9 +16,9 @@ class HelpCategory extends Model
     /**
      * Get the help articles in this category.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function articles()
+    public function articles(): HasMany
     {
         return $this->hasMany(HelpArticle::class, 'category_id', 'id');
     }

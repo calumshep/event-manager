@@ -121,6 +121,46 @@
                                    required>
                         </div>
                     </div>
+
+                    <div class="mb-3">
+                        <p>Collect:</p>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
+                                   name="dob"
+                                   id="dob"
+                                   @checked(key_exists('dob', $details))>
+                            <label class="form-check-label" for="dob">
+                                Date of Birth
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
+                                   name="bass_no"
+                                   id="bass_no"
+                                   @checked(key_exists('bass_no', $details))>
+                            <label class="form-check-label" for="bass_no">
+                                BASS Number
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
+                                   name="university"
+                                   id="university"
+                                   @checked(key_exists('university', $details))>
+                            <label class="form-check-label" for="university">
+                                Higher Education Institution
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </fieldset>

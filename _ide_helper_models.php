@@ -137,8 +137,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $orderable
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $ticketTypes
- * @property-read int|null $ticket_types_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $tickets
+ * @property-read int|null $tickets_count
  * @method static \Database\Factories\OrderFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
@@ -163,7 +163,7 @@ namespace App\Models{
  * @property int $order_id
  * @property int $ticket_type_id
  * @property string $name
- * @property mixed $metadata
+ * @property array $metadata
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket newModelQuery()

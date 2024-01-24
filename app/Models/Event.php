@@ -6,6 +6,8 @@ use DateInterval;
 use DatePeriod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Event extends Model
 {
@@ -29,9 +31,9 @@ class Event extends Model
     /**
      * Get the user who owns this event.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -39,9 +41,9 @@ class Event extends Model
     /**
      * Get the organisation which owns this event.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function organisation()
+    public function organisation(): BelongsTo
     {
         return $this->belongsTo(Organisation::class);
     }
@@ -49,11 +51,11 @@ class Event extends Model
     /**
      * Get the tickets relevant to this event.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function tickets()
+    public function tickets(): HasMany
     {
-        return $this->hasMany(Ticket::class);
+        return $this->hasMany(TicketType::class);
     }
 
     /**
@@ -61,7 +63,7 @@ class Event extends Model
      *
      * @return DatePeriod|array
      */
-    public function days()
+    public function days(): DatePeriod|array
     {
         if ($this->end) {
             return new DatePeriod(

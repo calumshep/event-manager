@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Ticket extends Model
+class TicketType extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;//, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -26,10 +28,22 @@ class Ticket extends Model
     /**
      * Get the event this ticket belongs to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function event()
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
+    }
+
+    /**
+     * Get the orders containing this ticket type.
+     *
+     * @return BelongsToMany
+     */
+    public function orders(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class)
+            ->using(OrderTicket::class)
+            ->withTimestamps();
     }
 }

@@ -13,7 +13,7 @@ import * as bootstrap from 'bootstrap'
 
     document.querySelector('#logout_button').addEventListener('click', () => {
         document.querySelector('#logout_form').submit();
-    })
+    });
 
     /*
      * Color mode toggler for Bootstrap's docs (https://getbootstrap.com/)

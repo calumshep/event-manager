@@ -8,7 +8,7 @@ use App\Models\Event;
 use App\Models\TicketType;
 use Illuminate\Foundation\Http\FormRequest;
 
-class TicketController extends Controller
+class TicketTypeController extends Controller
 {
     public function __construct()
     {
@@ -37,30 +37,30 @@ class TicketController extends Controller
     {
         $input = $request->validated();
 
-        $ticket = new TicketType([
+        $ticket_type = new TicketType([
             'name'          => $input['name'],
             'description'   => clean($request->description),
             'time'          => $request->time,
             'price'         => $input['price']*100,
         ]);
 
-        $ticket->details = $this->computeDetails($request);
+        $ticket_type->details = $this->computeDetails($request);
 
-        $event->tickets()->save($ticket);
+        $event->tickets()->save($ticket_type);
 
-        return redirect()->route('events.tickets.show', [$event, $ticket])->with([
-            'status' => 'TicketType successfully created.'
+        return redirect()->route('events.tickets.show', [$event, $ticket_type])->with([
+            'status' => 'Ticket successfully created.'
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Event $event, TicketType $ticket)
+    public function show(Event $event, TicketType $ticket_type)
     {
         return view('tickets.form', [
-            'ticket'        => $ticket,
-            'details'       => $ticket->details,
+            'ticket'        => $ticket_type,
+            'details'       => $ticket_type->details,
             'event'         => $event,
             'event_days'    => $event->days(),
             'readonly'      => true,
@@ -71,11 +71,11 @@ class TicketController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Event $event, TicketType $ticket)
+    public function edit(Event $event, TicketType $ticket_type)
     {
         return view('tickets.form', [
-            'ticket'        => $ticket,
-            'details'       => $ticket->details,
+            'ticket'        => $ticket_type,
+            'details'       => $ticket_type->details,
             'event'         => $event,
             'event_days'    => $event->days(),
             'readonly'      => false,
@@ -86,22 +86,22 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTicketRequest $request, Event $event, TicketType $ticket)
+    public function update(UpdateTicketRequest $request, Event $event, TicketType $ticket_type)
     {
         $input = $request->validated();
 
-        $ticket->fill([
+        $ticket_type->fill([
             'name'          => $input['name'],
             'description'   => clean($request->description),
             'time'          => $request->time,
             'price'         => $input['price']*100,
         ]);
 
-        $ticket->details = $this->computeDetails($request);
+        $ticket_type->details = $this->computeDetails($request);
 
-        $ticket->save();
+        $ticket_type->save();
 
-        return redirect()->route('events.tickets.show', [$event, $ticket])->with([
+        return redirect()->route('events.tickets.show', [$event, $ticket_type])->with([
             'status' => 'TicketType details updated successfully.'
         ]);
     }
@@ -109,15 +109,19 @@ class TicketController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Event $event, TicketType $ticket)
+    public function destroy(Event $event, TicketType $ticket_type)
     {
-        //
+        // TODO: add checks
+
+        $ticket_type->delete();
+
+        return redirect()->route('events.show', $event)->with([
+            'warning' => "Ticket successfully deleted.",
+        ]);
     }
 
     /**
      * Compute details for information collection on ticket.
-     *
-     * @param \Illuminate\Foundation\Http\FormRequest $request
      *
      * @return array
      */

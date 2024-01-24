@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
@@ -12,7 +14,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, Billable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, Billable /* , MustVerifyEmail */;
 
     /**
      * The attributes that are mass assignable.
@@ -48,9 +50,9 @@ class User extends Authenticatable
     /**
      * Get the events belonging to the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function events()
+    public function events(): HasMany
     {
         return $this->hasMany(Event::class);
     }
@@ -58,10 +60,20 @@ class User extends Authenticatable
     /**
      * Get the organisations belonging to the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function organisations()
+    public function organisations(): HasMany
     {
         return $this->hasMany(Organisation::class);
+    }
+
+    /**
+     * Get the orders belonging to the user.
+     *
+     * @return MorphMany
+     */
+    public function orders(): MorphMany
+    {
+        return $this->morphMany(Order::class, 'orderable');
     }
 }

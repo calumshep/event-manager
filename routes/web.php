@@ -5,7 +5,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HelpArticleController;
 use App\Http\Controllers\OrganisationController;
-use App\Http\Controllers\TicketController;
+use App\Http\Controllers\TicketTypeController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,20 +48,24 @@ Route::resources([
     'organisations' => OrganisationController::class,
 ]);
 
-Route::controller(TicketController::class)
-    ->middleware(['auth'])
-    ->prefix('/events/{event}/tickets')
+Route::controller(OrderController::class)
+    ->prefix('/events/{event:slug}/')
     ->name('events.tickets.')
     ->group(function ()
     {
+        Route::post('/checkout', 'checkout')->name('checkout');
         Route::post('/purchase', 'purchase')->name('purchase');
         Route::get('/purchase/success', 'success')->name('purchase.success');
 });
-Route::resource('events.tickets', TicketController::class)->except(['index']);
+
+Route::resource('events.tickets', TicketTypeController::class)
+    ->parameters(['tickets' => 'ticket_type'])
+    ->except(['index']);
 
 Route::resource('help', HelpArticleController::class)
     ->parameters('helpArticle')
     ->except('show');
+
 Route::controller(HelpArticleController::class)
     ->prefix('/help')
     ->name('help.')
