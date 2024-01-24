@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Event;
-use App\Models\Ticket;
+use App\Models\TicketType;
+use Illuminate\Foundation\Http\FormRequest;
 
 class TicketController extends Controller
 {
@@ -19,9 +20,9 @@ class TicketController extends Controller
      */
     public function create(Event $event)
     {
-//        dd($event->days());
         return view('tickets.form', [
-            'ticket'        => new Ticket(),
+            'ticket'        => new TicketType(),
+            'details'       => [],
             'event'         => $event,
             'event_days'    => $event->days(),
             'readonly'      => false,
@@ -36,24 +37,30 @@ class TicketController extends Controller
     {
         $input = $request->validated();
 
-        $ticket = new Ticket([
+        $ticket = new TicketType([
             'name'          => $input['name'],
             'description'   => clean($request->description),
             'time'          => $request->time,
             'price'         => $input['price']*100,
         ]);
+
+        $ticket->details = $this->computeDetails($request);
+
         $event->tickets()->save($ticket);
 
-        return redirect()->route('events.tickets.show', [$event, $ticket]);
+        return redirect()->route('events.tickets.show', [$event, $ticket])->with([
+            'status' => 'TicketType successfully created.'
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Event $event, Ticket $ticket)
+    public function show(Event $event, TicketType $ticket)
     {
         return view('tickets.form', [
             'ticket'        => $ticket,
+            'details'       => $ticket->details,
             'event'         => $event,
             'event_days'    => $event->days(),
             'readonly'      => true,
@@ -64,10 +71,11 @@ class TicketController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Event $event, Ticket $ticket)
+    public function edit(Event $event, TicketType $ticket)
     {
         return view('tickets.form', [
             'ticket'        => $ticket,
+            'details'       => $ticket->details,
             'event'         => $event,
             'event_days'    => $event->days(),
             'readonly'      => false,
@@ -78,7 +86,7 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTicketRequest $request, Event $event, Ticket $ticket)
+    public function update(UpdateTicketRequest $request, Event $event, TicketType $ticket)
     {
         $input = $request->validated();
 
@@ -88,58 +96,55 @@ class TicketController extends Controller
             'time'          => $request->time,
             'price'         => $input['price']*100,
         ]);
+
+        $ticket->details = $this->computeDetails($request);
+
         $ticket->save();
 
         return redirect()->route('events.tickets.show', [$event, $ticket])->with([
-            'status' => 'Ticket details updated successfully.'
+            'status' => 'TicketType details updated successfully.'
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Event $event, Ticket $ticket)
+    public function destroy(Event $event, TicketType $ticket)
     {
         //
     }
 
     /**
-     * Purchase the specified Ticket as the authenticated user.
+     * Compute details for information collection on ticket.
      *
-     * @param \App\Models\Event $event
+     * @param \Illuminate\Foundation\Http\FormRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return array
      */
-    public function purchase(Event $event)
+    public function computeDetails(FormRequest $request)
     {
-        return auth()->user()->checkout(null, [
-            // Checkout options
-            'success_url'   =>
-                route('events.tickets.purchase.success', $event) . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url'    => route('events.tickets.purchase', $event).'?checkout=cancelled',
-
-            // Data about the ticket order
-            'metadata' => [
-
-            ]
-        ]);
-    }
-
-    public function success()
-    {
-
-    }
-
-    /**
-     * Refund the specified Ticket to the original purchaser.
-     *
-     * @param \App\Models\Event $event
-     * @param \App\Models\Ticket $ticket
-     *
-     * @return void
-     */
-    public function refund(Event $event, Ticket $ticket)
-    {
-
+        $details = [];
+        if ($request->dob) {
+            $details['dob'] = [
+                'label' => 'Date of birth',
+                'type' => 'date',
+                'required' => true,
+            ];
+        }
+        if ($request->bass_no) {
+            $details['bass_no'] = [
+                'label' => 'BASS number',
+                'type' => 'text',
+                'required' => false,
+            ];
+        }
+        if ($request->university) {
+            $details['university'] = [
+                'label' => 'Education institution',
+                'type' => 'text',
+                'required' => false,
+            ];
+        }
+        return $details;
     }
 }

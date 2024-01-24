@@ -20,12 +20,13 @@ namespace App\Models{
  * @property string $name
  * @property \Illuminate\Support\Carbon $start
  * @property \Illuminate\Support\Carbon|null $end
+ * @property string $slug
  * @property string $short_desc
  * @property string $long_desc
  * @property int $user_id
  * @property int $organisation_id
  * @property-read \App\Models\Organisation|null $organisation
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ticket> $tickets
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $tickets
  * @property-read int|null $tickets_count
  * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\EventFactory factory($count = null, $state = [])
@@ -39,6 +40,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereOrganisationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereShortDesc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUserId($value)
@@ -48,12 +50,51 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Guest
+ *
+ * @property int $id
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
+ * @property-read int|null $orders_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Cashier\Subscription> $subscriptions
+ * @property-read int|null $subscriptions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Guest hasExpiredGenericTrial()
+ * @method static \Illuminate\Database\Eloquent\Builder|Guest newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Guest newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Guest onGenericTrial()
+ * @method static \Illuminate\Database\Eloquent\Builder|Guest query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Guest whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Guest whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Guest whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Guest whereUpdatedAt($value)
+ */
+	class Guest extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\HelpArticle
  *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $title
+ * @property string $body
+ * @property int $author_id
+ * @property int $category_id
  * @property-read \App\Models\HelpCategory|null $category
  * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle query()
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle whereAuthorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpArticle whereUpdatedAt($value)
  */
 	class HelpArticle extends \Eloquent {}
 }
@@ -62,13 +103,81 @@ namespace App\Models{
 /**
  * App\Models\HelpCategory
  *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $name
+ * @property string $icon
+ * @property string $description
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HelpArticle> $articles
  * @property-read int|null $articles_count
  * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory query()
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory whereIcon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HelpCategory whereUpdatedAt($value)
  */
 	class HelpCategory extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Order
+ *
+ * @property int $id
+ * @property string $checkout_id
+ * @property int $total_amount
+ * @property int $paid
+ * @property int $orderable_id
+ * @property string $orderable_type
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $orderable
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $ticketTypes
+ * @property-read int|null $ticket_types_count
+ * @method static \Database\Factories\OrderFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCheckoutId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ */
+	class Order extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\OrderTicket
+ *
+ * @property int $id
+ * @property int $order_id
+ * @property int $ticket_type_id
+ * @property string $name
+ * @property mixed $metadata
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereMetadata($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereTicketTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereUpdatedAt($value)
+ */
+	class OrderTicket extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -107,7 +216,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Ticket
+ * App\Models\TicketType
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -116,27 +225,28 @@ namespace App\Models{
  * @property string $description
  * @property \Illuminate\Support\Carbon $time
  * @property int $price
+ * @property array|null $details
  * @property int $event_id
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $deleted_at
  * @property-read \App\Models\Event|null $event
- * @method static \Database\Factories\TicketFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket query()
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereEventId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket wherePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket withTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Ticket withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
+ * @property-read int|null $orders_count
+ * @method static \Database\Factories\TicketTypeFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereDetails($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereUpdatedAt($value)
  */
-	class Ticket extends \Eloquent {}
+	class TicketType extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -160,6 +270,8 @@ namespace App\Models{
  * @property-read int|null $events_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
+ * @property-read int|null $orders_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Organisation> $organisations
  * @property-read int|null $organisations_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions

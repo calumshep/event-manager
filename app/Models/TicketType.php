@@ -15,10 +15,12 @@ class Ticket extends Model
         'description',
         'time',
         'price',
+        'details',
     ];
 
     protected $casts = [
-        'time' => 'datetime'
+        'time'      => 'datetime',
+        'details'   => 'array',
     ];
 
     /**
