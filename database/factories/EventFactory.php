@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
+ * @method hasTickets(\Database\Factories\TicketTypeFactory|\Illuminate\Database\Eloquent\Factories\Factory $state)
  */
 class EventFactory extends Factory
 {

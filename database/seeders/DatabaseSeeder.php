@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
                         })
 
                         // Give each dummy event 0-2 tickets
-                        ->has(
+                        ->hasTickets(
                             TicketType::factory()
                                 ->count(rand(1,3))
 
