@@ -49,33 +49,35 @@
             </ul>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-plus fa-fw"></i>
-                        <span class="d-lg-none ms-1">New</span>
-                    </a>
+                @auth
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-plus fa-fw"></i>
+                            <span class="d-lg-none ms-1">New</span>
+                        </a>
 
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="{{ route('events.create') }}">
-                                <i class="fa-solid fa-calendar-plus fa-fw"></i>
-                                <span class="d-lg-inline d-none ms-1">New </span>Event
-                            </a>
-                        </li>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('events.create') }}">
+                                    <i class="fa-solid fa-calendar-plus fa-fw"></i>
+                                    <span class="d-lg-inline d-none ms-1">New </span>Event
+                                </a>
+                            </li>
 
-                        <li>
-                            <a class="dropdown-item" href="{{ route('organisations.create') }}">
-                                <i class="fa-solid fa-person-circle-plus fa-fw"></i>
-                                <span class="d-lg-inline d-none ms-1">New </span>Organisation
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('organisations.create') }}">
+                                    <i class="fa-solid fa-person-circle-plus fa-fw"></i>
+                                    <span class="d-lg-inline d-none ms-1">New </span>Organisation
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
-                <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
-                    <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
-                    <hr class="d-lg-none my-2 text-white-50">
-                </li>
+                    <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+                        <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+                        <hr class="d-lg-none my-2 text-white-50">
+                    </li>
+                @endauth
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
