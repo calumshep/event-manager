@@ -69,7 +69,10 @@
                     <div class="mb-3">
                         <label class="form-label" for="description">Description<span
                                 class="text-danger">*</span></label>
-                        <input type="hidden" name="description" id="description">
+                        <input type="hidden"
+                               name="description"
+                               id="description"
+                               value="{{ old('description', $organisation->description) }}">
 
                         <div id="quill_editor">
                             {!! $organisation ? $organisation->description : '' !!}
@@ -172,7 +175,6 @@
 
             editor.on('text-change', () => {
                 document.querySelector('#description').value = editor.root.innerHTML;
-                console.log(document.querySelector('#description').value);
             });
         </script>
     @endunless
