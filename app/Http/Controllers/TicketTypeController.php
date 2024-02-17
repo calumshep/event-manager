@@ -108,7 +108,11 @@ class TicketTypeController extends Controller
      */
     public function destroy(Event $event, TicketType $ticket_type)
     {
-        // TODO: add checks
+        if ($ticket_type->orders->count()) {
+            return redirect()->back()->withErrors([
+                "You cannot delete a ticket which has orders."
+            ]);
+        }
 
         $ticket_type->delete();
 

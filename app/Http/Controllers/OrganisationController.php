@@ -101,9 +101,9 @@ class OrganisationController extends Controller
      */
     public function destroy(Organisation $organisation)
     {
-        if ($organisation->events->count() > 0) {
+        if ($organisation->events->count()) {
             return redirect()->back()->withErrors([
-                'You cannot delete an organisation which has events assigned to it.'
+                "You cannot delete an organisation which has events associated with it. Try deleting the events first."
             ]);
         }
 

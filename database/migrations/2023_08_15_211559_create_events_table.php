@@ -28,6 +28,8 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Organisation::class);
             $table->string('stripe_id');
+
+            $table->softDeletes();
         });
     }
 

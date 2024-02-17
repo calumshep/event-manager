@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('orderable_type');
 
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

@@ -113,6 +113,12 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
+        if ($event->tickets->count()) {
+            return redirect()->back()->withErrors([
+                "You cannot delete an event which contains tickets. Try deleting the tickets first."
+            ]);
+        }
+
         $event->delete();
 
         return redirect()->route('events.index')->with([

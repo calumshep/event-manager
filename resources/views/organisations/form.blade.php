@@ -10,7 +10,7 @@
 
     <p>
         Required fields are marked with an asterisk (<span class="text-danger">*</span>).
-    </p
+    </p>
 
     @include('components.status')
 
@@ -43,8 +43,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="website">Website<span
-                                class="text-danger">*</span></label>
+                        <label class="form-label" for="website">Website<span class="text-danger">*</span></label>
                         <input type="url"
                                name="website"
                                id="website"
@@ -127,7 +126,12 @@
                     </div>
 
                     <div class="modal-body">
-                        Are you sure you want to delete this organisation?
+                        <p>
+                            Are you sure you want to delete this organisation?
+                        </p>
+                        <p class="text-danger">
+                            You cannot undo this action.
+                        </p>
                     </div>
 
                     <div class="modal-footer">

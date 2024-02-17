@@ -235,7 +235,12 @@
                     </div>
 
                     <div class="modal-body">
-                        Are you sure you want to delete this event?
+                        <p>
+                            Are you sure you want to delete this event?
+                        </p>
+                        <p class="text-danger">
+                            You cannot undo this action.
+                        </p>
                     </div>
 
                     <div class="modal-footer">
