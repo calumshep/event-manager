@@ -15,7 +15,7 @@
         running the event, who is responsible for it, and tells us who to pay.
     </p>
     <p>
-        In future, you will be able to add others to your ogrganisations, and share admin access to events within those
+        In future, you will be able to add others to your organisations, and share admin access to events within those
         organisations.
     </p>
 
@@ -30,9 +30,7 @@
 
                         <p><strong>
                                 <a href="{{ $organisation->website }}">{{ $organisation->website }}</a>
-                            </strong></p>
-
-                        <p>{{ $organisation->description }}</p>
+                        </strong></p>
 
                         <div class="text-end">
                             <a class="btn btn-primary" href="{{ route('organisations.show', $organisation) }}">

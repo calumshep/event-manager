@@ -18,6 +18,7 @@ class TicketType extends Model
         'time',
         'price',
         'details',
+        'stripe_id',
     ];
 
     protected $casts = [
@@ -42,7 +43,7 @@ class TicketType extends Model
      */
     public function orders(): BelongsToMany
     {
-        return $this->belongsToMany(Order::class)
+        return $this->belongsToMany(Order::class, 'order_ticket')
             ->using(OrderTicket::class)
             ->withTimestamps();
     }

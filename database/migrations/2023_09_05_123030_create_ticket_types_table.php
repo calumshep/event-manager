@@ -24,6 +24,7 @@ return new class extends Migration
             $table->json('details')->nullable();
 
             $table->foreignIdFor(Event::class);
+            $table->string('stripe_id');
 
             $table->softDeletes();
         });

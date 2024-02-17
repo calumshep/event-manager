@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
+use App\Http\Support\StripeHelper;
 use App\Models\Event;
 use App\Models\TicketType;
 use Illuminate\Foundation\Http\FormRequest;
+use Stripe\Exception\ApiErrorException;
 
 class TicketTypeController extends Controller
 {
@@ -37,16 +39,13 @@ class TicketTypeController extends Controller
     {
         $input = $request->validated();
 
-        $ticket_type = new TicketType([
+        $ticket_type = $event->tickets()->create([
             'name'          => $input['name'],
             'description'   => clean($request->description),
             'time'          => $request->time,
             'price'         => $input['price']*100,
+            'details'       => $this->computeDetails($request),
         ]);
-
-        $ticket_type->details = $this->computeDetails($request);
-
-        $event->tickets()->save($ticket_type);
 
         return redirect()->route('events.tickets.show', [$event, $ticket_type])->with([
             'status' => 'Ticket successfully created.'
@@ -95,14 +94,12 @@ class TicketTypeController extends Controller
             'description'   => clean($request->description),
             'time'          => $request->time,
             'price'         => $input['price']*100,
+            'details'       => $this->computeDetails($request),
         ]);
-
-        $ticket_type->details = $this->computeDetails($request);
-
         $ticket_type->save();
 
         return redirect()->route('events.tickets.show', [$event, $ticket_type])->with([
-            'status' => 'TicketType details updated successfully.'
+            'status' => 'Ticket details updated successfully.'
         ]);
     }
 

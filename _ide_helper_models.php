@@ -1,6 +1,7 @@
 <?php
 
 // @formatter:off
+// phpcs:ignoreFile
 /**
  * A helper file for your Eloquent Models
  * Copy the phpDocs from this file to the correct Model,
@@ -25,6 +26,8 @@ namespace App\Models{
  * @property string $long_desc
  * @property int $user_id
  * @property int $organisation_id
+ * @property string $stripe_id
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Organisation|null $organisation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $tickets
  * @property-read int|null $tickets_count
@@ -32,8 +35,10 @@ namespace App\Models{
  * @method static \Database\Factories\EventFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Event newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Event newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Event onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Event query()
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereLongDesc($value)
@@ -42,8 +47,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereShortDesc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereStripeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Event withoutTrashed()
  */
 	class Event extends \Eloquent {}
 }
@@ -136,21 +144,26 @@ namespace App\Models{
  * @property string $orderable_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $orderable
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $tickets
  * @property-read int|null $tickets_count
  * @method static \Database\Factories\OrderFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCheckoutId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order withoutTrashed()
  */
 	class Order extends \Eloquent {}
 }
@@ -227,13 +240,15 @@ namespace App\Models{
  * @property int $price
  * @property array|null $details
  * @property int $event_id
- * @property string|null $deleted_at
+ * @property string $stripe_id
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Event|null $event
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
  * @property-read int|null $orders_count
  * @method static \Database\Factories\TicketTypeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType query()
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereDeletedAt($value)
@@ -243,8 +258,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereStripeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType withoutTrashed()
  */
 	class TicketType extends \Eloquent {}
 }

@@ -167,7 +167,8 @@
             });
 
             editor.on('text-change', () => {
-                document.querySelector('#long_desc').value = editor.root.innerHTML;
+                document.querySelector('#description').value = editor.root.innerHTML;
+                console.log(document.querySelector('#description').value);
             });
         </script>
     @endunless

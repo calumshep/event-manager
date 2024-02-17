@@ -44,7 +44,7 @@ class EventController extends Controller
     {
         $input = $request->validated();
 
-        $event = new Event([
+        $event = auth()->user()->events()->create([
             'name'              => $input['name'],
             'start'             => $input['start'],
             'end'               => $input['end'],
@@ -53,8 +53,6 @@ class EventController extends Controller
             'long_desc'         => clean($request->long_desc),
             'organisation_id'   => $input['org'],
         ]);
-
-        auth()->user()->events()->save($event);
 
         return redirect()->route('events.show', $event)->with([
             'status' => 'Event successfully created.'
@@ -103,7 +101,6 @@ class EventController extends Controller
             'long_desc'         => clean($request->long_desc),
             'organisation_id'   => $input['org'],
         ]);
-
         $event->save();
 
         return redirect()->route('events.show', $event)->with([

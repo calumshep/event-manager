@@ -21,6 +21,7 @@ class Event extends Model
         'short_desc',
         'long_desc',
         'organisation_id',
+        'stripe_id',
     ];
 
     protected $casts = [

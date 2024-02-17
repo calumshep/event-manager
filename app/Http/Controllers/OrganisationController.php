@@ -42,12 +42,11 @@ class OrganisationController extends Controller
     {
         $input = $request->validated();
 
-        $organisation = new Organisation([
+        $organisation = auth()->user()->organisations()->create([
             'name'          => $input['name'],
             'description'   => $input['description'],
             'website'       => $input['website'],
         ]);
-        auth()->user()->organisations()->save($organisation);
 
         return redirect()->route('organisations.index', [
             'organisation' => $organisation,
