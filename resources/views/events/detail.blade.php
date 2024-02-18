@@ -2,6 +2,8 @@
 
 @section('content')
 
+    @include('components.status')
+
     @include('components.event-detail-header')
 
     <p>

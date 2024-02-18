@@ -49,12 +49,13 @@ Route::resources([
 ]);
 
 Route::controller(OrderController::class)
-    ->prefix('/events/{event:slug}/')
+    ->prefix('/event/{event:slug}/')
     ->name('events.tickets.')
     ->group(function ()
     {
         Route::post('/checkout', 'checkout')->name('checkout');
         Route::post('/purchase', 'purchase')->name('purchase');
+        Route::get('/purchase', 'cancelled')->name('cancelled');
         Route::get('/purchase/success', 'success')->name('purchase.success');
 });
 

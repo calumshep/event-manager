@@ -7,6 +7,7 @@ use App\Models\Guest;
 use App\Models\Order;
 use App\Models\TicketType;
 use Illuminate\Http\Request;
+use Laravel\Cashier\Checkout;
 
 class OrderController extends Controller
 {
@@ -40,7 +41,18 @@ class OrderController extends Controller
     }
 
     /**
-     * Purchase the specified tickets (in the request) as the authenticated user.
+     * Purchase the specified tickets (in the request) as the authenticated user or as a guest.
+     *
+     * Request should look like:
+     *      "quantity_1" => "2"         // Number supplied is TicketType ID.
+ *          "name_1" => array:2 [▼      // ". Number of items in name_ array should match quantity above.
+     *          0 => "Test 1"
+     *          1 => "test2"
+     *      ]
+     *      "quantity_2" => "1"         // Second TicketType ordered.
+     *      "name_2" => array:1 [▼
+     *          0 => "test 3"
+     *      ]
      *
      * @param \App\Models\Event $event
      * @param \Illuminate\Http\Request $request
@@ -55,6 +67,7 @@ class OrderController extends Controller
             'checkout_id'   => '',
             'total_amount'  => 0,
         ]);
+
         if (auth()->user()) {
             // If logged in, associate the authenticated user with the order
             $order->orderable()->associate(auth()->user());
@@ -72,45 +85,71 @@ class OrderController extends Controller
 
         $input = $request->toArray();
 
-        // Iterate through all the possible ticket types for the event
+        // Create empty array to store items to send to Stripe Checkout
+        $checkout_items = [];
+
+        // Iterate through all the possible ticket types for the event to find purchased ones
         foreach($event->tickets as $ticket_type) {
+
             // Check if ticket type has been ordered at least once
             $key = 'quantity_'.$ticket_type->id;
             if (key_exists($key, $input)) {
+
+                // Get the number of tickets purchased
+                $quantity = $input[$key];
+
                 // For each ticket ordered...
-                for ($j = 0; $j < $input[$key]; $j++) {
+                for ($j = 0; $j < $quantity; $j++) {
+
+                    // Iterate through all required ticket details and set metadata on ticket instance
                     $metadata = [];
-                    // Iterate through all required ticket details
                     foreach ($ticket_type->details as $name => $detail) {
                         $metadata[$name] = $input[$name.'_'.$ticket_type->id][$j];
                     }
                     $ticket_type->metadata = $metadata;
 
-                    // Attach the ticket to the order with the ticket holder's name and supplied metadata
+                    // Attach the ticket to the order with the ticket holder's name and any supplied metadata
                     $order->tickets()->attach($ticket_type->id, [
-                        'name'      => $input['name_'.$ticket_type->id][$j],
-                        'metadata'  => $metadata,
+                        'ticket_holder_name'    => $input['name_'.$ticket_type->id][$j],
+                        'metadata'              => $metadata,
                     ]);
+
+                    // Update order total and save
                     $order->total_amount += $ticket_type->price;
                     $order->save();
                 }
+
+                // Add the total quantity of this ticket to the checkout items for Stripe
+                $checkout_items[$ticket_type->stripe_id] = $quantity;
             }
         }
 
-        /* Redirect to Stripe to process payment
-        return auth()->user()->checkout(null, [
-            // Checkout options
+        // Checkout options
+        $checkout_options = [
             'success_url' =>
-                route('events.tickets.purchase.success', $order) . '?session_id={CHECKOUT_SESSION_ID}',
+                route('events.tickets.purchase.success', $event) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' =>
-                route('events.tickets.purchase', $order).'?checkout=cancelled',
+                route('events.tickets.cancelled', $event),
 
             // Pass order ID to Stripe
             'metadata' => [
                 'order_id' => $order->id,
             ],
+        ];
+
+        // Redirect to Stripe to process payment
+        if (auth()->user()) {
+            return auth()->user()->checkout($checkout_items, $checkout_options);
+        } else {
+            return Checkout::guest()->create($checkout_items, $checkout_options);
+        }
+    }
+
+    public function cancelled(Event $event)
+    {
+        return redirect()->route('home.event', $event)->with([
+            'warning' => "Your ticket purchase was cancelled.",
         ]);
-        */
     }
 
     public function success()

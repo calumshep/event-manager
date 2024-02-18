@@ -56,10 +56,10 @@
     <h2 class="h3 mb-3">Upcoming Events</h2>
 
     @forelse($events as $event)
-        <div class="d-flex align-items-start rounded shadow p-3 mb-3">
-            <img src="https://placehold.co/50" class="rounded" alt="placeholder">
+        <!--<img src="https://placehold.co/50" class="rounded" alt="placeholder">-->
 
-            <div class="ms-3 flex-fill">
+        <div class="d-flex align-items-start rounded shadow p-3 mb-3">
+            <div class="flex-fill">
                 <h5>
                     <a class="text-decoration-none" href="{{ route('home.event', $event) }}">
                         {{ $event->name }} &middot;
@@ -73,6 +73,7 @@
                     {{ $event->short_desc }}
                 </p>
 
+                <!--
                 <div class="d-flex align-items-baseline justify-content-between">
                     <div>
                         <a href="#">GBSki</a> &middot;
@@ -83,7 +84,12 @@
                         Enter &raquo;
                     </a>
                 </div>
+                -->
             </div>
+
+            <a href="{{ route('home.event', $event) }}" class="btn btn-primary">
+                View &raquo;
+            </a>
         </div>
     @empty
         <p class="lead">

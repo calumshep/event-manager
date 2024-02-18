@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Date;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {

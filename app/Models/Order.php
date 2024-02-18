@@ -38,7 +38,9 @@ class Order extends Model
     public function tickets(): BelongsToMany
     {
         return $this->belongsToMany(TicketType::class, 'order_ticket')
+            ->withTimestamps()
+            ->withPivot('ticket_holder_name', 'metadata')
             ->using(OrderTicket::class)
-            ->withTimestamps();
+            ->as('data');
     }
 }
