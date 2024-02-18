@@ -5,7 +5,7 @@
     @include('components.event-detail-header')
 
     <p>
-        This form does <strong>not save as you go</strong>, so please complete your checkout in one go!
+        This form <strong>does not save as you go</strong>, so please complete your checkout in one go!
     </p>
 
     <form method="POST" action="{{ route('events.tickets.purchase', $event) }}">
@@ -30,13 +30,14 @@
                         <input type="email" name="buyer_email" id="buyer_email" class="form-control" required>
                     </div>
                 </div>
-                @endguest
+            </div>
+        @endguest
 
         @foreach($tickets as $ticket)
             <hr>
 
             <div class="row pt-3 mb-3">
-                <div class="col-lg-4">
+                <div class="col-lg-4 mb-3 mb-lg-0">
                     <h3 class="h5">{{ $ticket->name }}</h3>
 
                     <h4 class="h6 card-subtitle">
@@ -53,10 +54,10 @@
                         <h5>Ticket {{ $i + 1 }}</h5>
 
                         <div class="mb-3">
-                            <label for="name_{{ $ticket->id }}[]">Full name</label>
+                            <label for="name_{{ $ticket->id . '_' . $i }}">Full name</label>
                             <input type="text"
                                    name="name_{{ $ticket->id }}[]"
-                                   id="name_{{ $ticket->id }}[]"
+                                   id="name_{{ $ticket->id . '_' . $i }}"
                                    class="form-control"
                                    required>
                         </div>
@@ -65,7 +66,7 @@
                             <div class="row row-cols-1 row-cols-md-2">
                                 @foreach($ticket->details as $name => $detail)
                                     <div class="col mb-3">
-                                        <label for="{{ $name }}_{{ $ticket->id }}[]">
+                                        <label for="{{ $name }}_{{ $ticket->id . '_' . $i }}">
                                             {{ $detail['label'] }}
                                             @if($detail['required'])
                                                 <span class="text-danger">*</span>
@@ -73,7 +74,7 @@
                                         </label>
                                         <input type="{{ $detail['type'] }}"
                                                name="{{ $name }}_{{ $ticket->id }}[]"
-                                               id="{{ $name }}_{{ $ticket->id }}[]"
+                                               id="{{ $name }}_{{ $ticket->id . '_' . $i }}"
                                                class="form-control"
                                                @required($detail['required'])>
                                     </div>
@@ -90,6 +91,14 @@
                 </div>
             </div>
         @endforeach
+
+        <hr>
+        <div class="col-12 col-lg-8 ms-auto">
+            <div class="d-flex justify-content-between align-items-baseline">
+                <h4 class="mb-0">Total</h4>
+                <span id="total_amount">£{{ number_format($total/100, 2) }}</span>
+            </div>
+        </div>
 
         <hr>
         <div class="d-flex justify-content-between">

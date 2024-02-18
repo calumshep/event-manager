@@ -22,6 +22,7 @@ class OrderController extends Controller
 
         $quantities = $request->toArray();
         $keys = array_keys($quantities);
+        $total = 0;
 
         // Hack-y way to get all the tickets requested on the form (ignoring 0 quantities) and assign quantity to object
         for ($i = 1; $i < count($quantities); $i++) {
@@ -30,6 +31,7 @@ class OrderController extends Controller
             if($quantities[$key]) {
                 $ticket = TicketType::find(explode('_', $key)[1]);
                 $ticket->quantity = $quantities[$key];
+                $total += $ticket->price * $ticket->quantity;
                 $tickets[$i] = $ticket;
             }
         }
@@ -37,6 +39,7 @@ class OrderController extends Controller
         return view('tickets.checkout', [
             'event'     => $event,
             'tickets'   => $tickets,
+            'total'     => $total,
         ]);
     }
 
