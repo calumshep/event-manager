@@ -73,3 +73,9 @@ Route::controller(HelpArticleController::class)
     {
         Route::get('/{helpArticle:slug}')->name('show');
 });
+
+Route::controller(OrganisationController::class)->group(function ()
+{
+    // Stripe onboarding refresh URL
+    Route::get('organisations/{organisation}/refresh', 'refresh')->name('organisations.refresh');
+});

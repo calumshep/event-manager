@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('website')->nullable();
 
             $table->foreignIdFor(User::class);
+            $table->string('stripe_id');
 
             $table->softDeletes();
         });

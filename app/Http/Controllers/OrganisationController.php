@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\StoreOrganisationRequest;
 use App\Http\Requests\Auth\UpdateOrganisationRequest;
+use App\Http\Support\StripeHelper;
 use App\Models\Organisation;
 
 class OrganisationController extends Controller
@@ -48,9 +49,10 @@ class OrganisationController extends Controller
             'website'       => $input['website'],
         ]);
 
-        return redirect()->route('organisations.index', [
-            'organisation' => $organisation,
-        ]);
+        // Send user to Stripe onboarding
+        return redirect(
+            to: StripeHelper::accountOnboarding($organisation)->url
+        );
     }
 
     /**

@@ -3,8 +3,11 @@
 namespace App\Http\Support;
 
 use App\Models\Event;
+use App\Models\Organisation;
 use App\Models\TicketType;
 use Laravel\Cashier\Cashier;
+use Stripe\Account;
+use Stripe\AccountLink;
 use Stripe\Price;
 use Stripe\Product;
 
@@ -108,6 +111,32 @@ class StripeHelper
     {
         Cashier::stripe()->prices->update($ticket->stripe_id, [
             'active' => false,
+        ]);
+    }
+
+    /**
+     * Create a new Stripe account. Note that no parameters are supplied - only a Stripe account is returned, the ID
+     * of which should be used to redirect the user to the onboarding process with Stripe.
+     *
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    public static function createNewAccount(): Account
+    {
+        return Cashier::stripe()->accounts->create(['type' => 'standard']);
+    }
+
+    /**
+     * Create a Stripe AccountLink to get a URL for the onboarding process.
+     *
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    public static function accountOnboarding(Organisation $org): AccountLink
+    {
+        return Cashier::stripe()->accountLinks->create([
+            'account'       => $org->stripe_id,
+            'refresh_url'   => route('organisations.refresh', ['organisation' => $org]),
+            'return_url'    => route('organisations.index', ['organisation' => $org]),
+            'type'          => 'account_onboarding',
         ]);
     }
 }
