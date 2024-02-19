@@ -48,6 +48,7 @@ Route::resources([
     'organisations' => OrganisationController::class,
 ]);
 
+Route::resource('orders', OrderController::class)->only(['index', 'show']);
 Route::controller(OrderController::class)
     ->prefix('/event/{event:slug}/')
     ->name('event.tickets.')

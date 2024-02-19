@@ -18,11 +18,13 @@
         Stripe.
     </p>
 
-    @if($events->count() == 0)
+    <hr>
+
+    @php /*@if($events->count() == 0)
         <p>
             First time running an event with us? Check out our <a href="{{ route('help.index') }}">help section</a>.
         </p>
-    @endif
+    @endif */ @endphp
 
     @include('components.status')
 
@@ -32,11 +34,14 @@
                 <div class="card h-100 shadow">
                     <div class="card-body">
                         <h2 class="h3 card-title">{{ $event->name }}</h2>
+
                         <h3 class="h5 card-subtitle">
                             {{ $event->start->format('D j M Y') }}
                             {{ $event->end ? '- ' . $event->end->format('D j M Y') : '' }}
                         </h3>
+
                         <p class="card-text">{{ $event->short_desc }}</p>
+
                         <div class="d-flex align-items-end">
                             <a class="btn btn-primary btn-sm" href="{{ route('events.show', $event) }}">
                                 View &raquo;
@@ -46,7 +51,7 @@
                 </div>
             </div>
         @empty
-            <p>No events found.</p>
+            <p class="lead">No events found.</p>
         @endforelse
     </div>
 

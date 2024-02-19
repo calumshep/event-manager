@@ -31,6 +31,18 @@
                             Manage Events
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a @class([
+                               'nav-link',
+                               'active' => Route::is(['orders*']),
+                           ])
+                           {{ Route::is('orders*') ? 'aria-current="page"' : '' }}
+                           href="{{ route('orders.index') }}">
+                            <i class="fa-solid fa-receipt fa-fw me-1"></i>
+                            My Orders
+                        </a>
+                    </li>
                 @endauth
 
                 <!-- TODO: add help menu back
@@ -190,20 +202,22 @@
                 </ol>
             </nav>
         </div>
-    @elseif(Route::is('home*', 'event.*'))
+    @elseif(Route::is('home*', 'event.*', 'orders*'))
         <div class="container">
             <nav class="p-2" aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li @class([
-                        'breadcrumb-item',
-                        'active' => Route::is('home')
-                    ])>
-                        @unless(Route::is('home'))
-                            <a href="{{ route('home') }}">Upcoming Events</a>
-                        @else
-                            Upcoming Events
-                        @endunless
-                    </li>
+                    @unless(Route::is('orders*'))
+                        <li @class([
+                            'breadcrumb-item',
+                            'active' => Route::is('home')
+                        ])>
+                            @unless(Route::is('home'))
+                                <a href="{{ route('home') }}">Upcoming Events</a>
+                            @else
+                                Upcoming Events
+                            @endunless
+                        </li>
+                    @endunless
                     @if(Route::is('home.event', 'event.*'))
                         <li @class([
                             'breadcrumb-item',
@@ -222,6 +236,26 @@
                                 'active'
                             ])>
                                 Checkout
+                            </li>
+                        @endif
+                    @elseif(Route::is('orders*'))
+                        <li @class([
+                            'breadcrumb-item',
+                            'active' => Route::is('orders.index')
+                        ])>
+                            @unless(Route::is('orders.index'))
+                                <a href="{{ route('orders.index') }}">My Orders</a>
+                            @else
+                                My Orders
+                            @endunless
+                        </li>
+
+                        @if(Route::is('orders.show'))
+                            <li @class([
+                            'breadcrumb-item',
+                            'active'
+                            ])>
+                                Order {{ $order->id }}
                             </li>
                         @endif
                     @endif

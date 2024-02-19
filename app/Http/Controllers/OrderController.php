@@ -15,6 +15,38 @@ use Stripe\Exception\ApiErrorException;
 class OrderController extends Controller
 {
     /**
+     * Show all the user's paid orders including tickets.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function index()
+    {
+        return view('orders.index', [
+            'orders' => auth()->user()->orders
+                // Only show paid orders
+                ->where('paid', '=', true)
+                // Include tickets (necessary to get ticket quantity and related event
+                ->load('tickets')
+                // Paginate
+                ->paginate(10),
+        ]);
+    }
+
+    /**
+     * Show the specified order.
+     *
+     * @param \App\Models\Order $order
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function show(Order $order)
+    {
+        return view('orders.show', [
+            'order' => $order->load('tickets'),
+        ]);
+    }
+
+    /**
      * Show the checkout page for the specified event.
      *
      * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse

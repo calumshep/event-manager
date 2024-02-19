@@ -19,6 +19,8 @@
         organisations.
     </p>
 
+    <hr>
+
     @include('components.status')
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-3">
@@ -41,10 +43,7 @@
                 </div>
             </div>
         @empty
-            <p>
-                No organisations found. Perhaps you need to
-                <a href="{{ route('organisations.create') }}">create one</a>?
-            </p>
+            <p class="lead">No organisations found</p>
         @endforelse
     </div>
 
