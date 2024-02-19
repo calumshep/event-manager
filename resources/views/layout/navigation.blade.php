@@ -255,7 +255,7 @@
                             'breadcrumb-item',
                             'active'
                             ])>
-                                Order {{ $order->id }}
+                                Order #{{ $order->id }}
                             </li>
                         @endif
                     @endif

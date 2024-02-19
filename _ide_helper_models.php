@@ -175,7 +175,7 @@ namespace App\Models{
  * @property int $id
  * @property int $order_id
  * @property int $ticket_type_id
- * @property string $name
+ * @property string $ticket_holder_name
  * @property array $metadata
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -185,8 +185,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereMetadata($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereTicketHolderName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereTicketTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereUpdatedAt($value)
  */

@@ -43,6 +43,7 @@ class OrderController extends Controller
     {
         return view('orders.show', [
             'order' => $order->load('tickets'),
+            'event' => $order->tickets->first()->event,
         ]);
     }
 

@@ -7,10 +7,10 @@
     <table class="table table-hover table-striped border shadow">
         <thead class="thead-dark">
             <tr>
-                <td>Order ID</td>
-                <td>Event</td>
-                <td>Tickets</td>
-                <td></td>
+                <th>Order ID</th>
+                <th>Event</th>
+                <th>Tickets</th>
+                <th></th>
             </tr>
         </thead>
 

@@ -35,9 +35,9 @@ class OrderPaid extends Mailable
      */
     public function __construct(Event $event, Order $order)
     {
-        $this->event = $event;
-        $this->order = $order;
-        $this->url = "https://example.com";
+        $this->event    = $event;
+        $this->order    = $order;
+        $this->url      = route('orders.show', $order);
     }
 
     /**

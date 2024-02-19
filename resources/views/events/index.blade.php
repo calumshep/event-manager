@@ -42,9 +42,13 @@
 
                         <p class="card-text">{{ $event->short_desc }}</p>
 
-                        <div class="d-flex align-items-end">
+                        <div class="d-flex justify-content-between align-items-baseline">
                             <a class="btn btn-primary btn-sm" href="{{ route('events.show', $event) }}">
-                                View &raquo;
+                                <i class="fa-solid fa-magnifying-glass me-2"></i>Details
+                            </a>
+
+                            <a class="btn btn-success btn-sm" href="{{ route('events.sales', $event) }}">
+                                <i class="fa-solid fa-sterling-sign me-2"></i>Ticket Sales
                             </a>
                         </div>
                     </div>

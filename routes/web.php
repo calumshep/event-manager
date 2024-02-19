@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\EventSalesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HelpArticleController;
@@ -20,6 +21,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Auth routes
+require __DIR__.'/auth.php';
+
+// Home and event detail routes
 Route::controller(HomeController::class)
     ->name('home')
     ->group(function ()
@@ -28,7 +33,18 @@ Route::controller(HomeController::class)
     Route::get('event/{event:slug}', 'event')->name('.event');
 });
 
-require __DIR__.'/auth.php';
+// Event ticket ordering routes
+Route::controller(OrderController::class)
+    ->prefix('/event/{event:slug}/')
+    ->name('event.tickets.')
+    ->group(function ()
+    {
+        Route::post('/checkout', 'checkout')->name('checkout');
+        Route::post('/purchase', 'purchase')->name('purchase');
+        Route::get('/purchase', 'cancelled')->name('cancelled');
+        Route::get('/purchase/success', 'success')->name('purchase.success');
+});
+Route::resource('orders', OrderController::class)->only(['index', 'show']);
 
 // Account management
 Route::controller(AccountController::class)
@@ -43,26 +59,26 @@ Route::controller(AccountController::class)
         Route::put('/{user}', 'update')->name('update');
 });
 
-Route::resources([
-    'events'        => EventController::class,
-    'organisations' => OrganisationController::class,
-]);
-
-Route::resource('orders', OrderController::class)->only(['index', 'show']);
-Route::controller(OrderController::class)
-    ->prefix('/event/{event:slug}/')
-    ->name('event.tickets.')
-    ->group(function ()
-    {
-        Route::post('/checkout', 'checkout')->name('checkout');
-        Route::post('/purchase', 'purchase')->name('purchase');
-        Route::get('/purchase', 'cancelled')->name('cancelled');
-        Route::get('/purchase/success', 'success')->name('purchase.success');
-});
-
+// Event ticket resource routes
 Route::resource('events.tickets', TicketTypeController::class)
     ->parameters(['tickets' => 'ticket_type'])
     ->except(['index']);
+
+// Ticket sales routes
+Route::controller(EventSalesController::class)
+    ->middleware(['auth'])
+    ->prefix('/events/{event}')
+    ->name('events.')
+    ->group(function ()
+    {
+        Route::get('/sales', 'sales')->name('sales');
+});
+
+// Event and organisation resource routes
+Route::resources([
+    'organisations' => OrganisationController::class,
+    'events'        => EventController::class,
+]);
 
 Route::resource('help', HelpArticleController::class)
     ->parameters('helpArticle')

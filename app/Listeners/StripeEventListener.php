@@ -38,6 +38,7 @@ class StripeEventListener
                 // Find the Order and mark as paid
                 $order = Order::findOrFail($session->metadata['order_id']);
                 $order->paid = true;
+                $order->checkout_id = $stripeObject->id;
                 $order->save();
 
                 // Send confirmation/ticket email to the user
