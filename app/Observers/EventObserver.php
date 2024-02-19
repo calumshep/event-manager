@@ -16,7 +16,7 @@ class EventObserver
     {
         // Create product in Stripe
         try {
-            $product = StripeHelper::createNewProduct($event);
+            $product = StripeHelper::createProduct($event);
             $event->stripe_id = $product->id;
         } catch (ApiErrorException $e) {
             Log::error($e);

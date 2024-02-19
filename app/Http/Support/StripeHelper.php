@@ -33,7 +33,7 @@ class StripeHelper
      * @return Product
      * @throws \Stripe\Exception\ApiErrorException
      */
-    public static function createNewProduct(Event $event): Product
+    public static function createProduct(Event $event): Product
     {
         return Cashier::stripe()->products->create(self::eventDetails($event));
     }
@@ -69,7 +69,7 @@ class StripeHelper
      * @return Price
      * @throws \Stripe\Exception\ApiErrorException
      */
-    public static function createNewPrice(TicketType $ticket): Price
+    public static function createPrice(TicketType $ticket): Price
     {
         return Cashier::stripe()->prices->create([
             'currency'      => config('cashier.currency'),
@@ -89,11 +89,15 @@ class StripeHelper
      */
     public static function updatePrice(TicketType $ticket): Price
     {
-        return Cashier::stripe()->prices->update($ticket->stripe_id, [
-            'currency_options' => [
-                config('cashier.currency') => $ticket->price,
-            ],
-            'nickname'  => $ticket->name,
+        Cashier::stripe()->prices->update($ticket->stripe_id, [
+            'active' => false,
+        ]);
+
+        return Cashier::stripe()->prices->create([
+            'currency'      => config('cashier.currency'),
+            'unit_amount'   => $ticket->price,
+            'nickname'      => $ticket->name,
+            'product'       => $ticket->event->stripe_id,
         ]);
     }
 
