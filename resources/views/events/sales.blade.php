@@ -6,19 +6,43 @@
         <div class="col-lg-6">
             <h1>Event Sales</h1>
             <h2 class="h3">{{ $event->name }}</h2>
+
+            <div class="d-flex">
+                <a href="#" class="btn btn-primary me-2">
+                    <i class="fa-solid fa-people-group me-2"></i>Attendee List
+                </a>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        <i class="fa-solid fa-file-export me-2"></i>Download Orders
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">
+                            <i class="fa-solid fa-file-csv me-2"></i>CSV file
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <div class="col-lg-6">
             <h3 class="h6">Sales progress</h3>
-            @foreach($event->tickets as $ticket_type)
-                <p class="mb-0">{{ $ticket_type->name }}</p>
+            @foreach($sales_progress as $sale)
+                <p class="mb-0">{{ $sale->first()->ticketType->name }}</p>
+
                 <div class="progress"
                      role="progressbar"
-                     aria-label="{{ $ticket_type->name }} sales"
-                     aria-valuenow="33"
+                     aria-label="{{ $sale->first()->name }} sales"
+                     aria-valuenow="{{ ($sale->count() / $sale->first()->ticketType->capacity) * 100 }}"
                      aria-valuemin="0"
                      aria-valuemax="100">
-                    <div class="progress-bar" style="width: 33%">20/60 (33%)</div>
+                    <div class="progress-bar overflow-visible"
+                         style="width: {{ ($sale->count() / $sale->first()->ticketType->capacity) *100 }}%">
+                        {{ $sale->count() }} / {{ $sale->first()->ticketType->capacity }}
+                        ({{ number_format(($sale->count() / $sale->first()->ticketType->capacity) * 100, 0) }}%)
+                    </div>
                 </div>
             @endforeach
         </div>

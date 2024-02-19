@@ -172,6 +172,7 @@
                             <th>Name</th>
                             <th>Time</th>
                             <th>Price</th>
+                            <th>Capacity</th>
                         </tr>
                         </thead>
 
@@ -183,10 +184,11 @@
                                         }}</a></td>
                                 <td>{{ $ticket->time->format('d/m/Y') }}</td>
                                 <td>£{{ number_format($ticket->price/100, 2) }}</td>
+                                <td>{{ $ticket->capacity ?? 'Not set' }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3">
+                                <td colspan="4">
                                     No tickets found for this event.
                                 </td>
                             </tr>

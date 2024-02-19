@@ -21,6 +21,7 @@ return new class extends Migration
 
             $table->dateTime('time');
             $table->integer('price');
+            $table->integer('capacity')->nullable();
             $table->json('details')->nullable();
 
             $table->foreignIdFor(Event::class);

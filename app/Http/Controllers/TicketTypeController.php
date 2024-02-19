@@ -44,6 +44,7 @@ class TicketTypeController extends Controller
             'description'   => clean($request->description),
             'time'          => $request->time,
             'price'         => $input['price']*100,
+            'capacity'      => $input['capacity'],
             'details'       => $this->computeDetails($request),
         ]);
 
@@ -94,6 +95,7 @@ class TicketTypeController extends Controller
             'description'   => clean($request->description),
             'time'          => $request->time,
             'price'         => $input['price']*100,
+            'capacity'      => $input['capacity'],
             'details'       => $this->computeDetails($request),
         ]);
         $ticket_type->save();

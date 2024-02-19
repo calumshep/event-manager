@@ -54,7 +54,9 @@
                         <h5>Ticket {{ $i + 1 }}</h5>
 
                         <div class="mb-3">
-                            <label for="name_{{ $ticket->id . '_' . $i }}">Full name</label>
+                            <label for="name_{{ $ticket->id . '_' . $i }}">
+                                Full name<span class="text-danger">*</span>
+                            </label>
                             <input type="text"
                                    name="name_{{ $ticket->id }}[]"
                                    id="name_{{ $ticket->id . '_' . $i }}"

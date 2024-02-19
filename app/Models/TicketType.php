@@ -20,6 +20,7 @@ class TicketType extends Model
         'description',
         'time',
         'price',
+        'capacity',
         'details',
         'stripe_id',
     ];

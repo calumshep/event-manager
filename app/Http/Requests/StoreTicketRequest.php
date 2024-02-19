@@ -26,6 +26,7 @@ class StoreTicketRequest extends FormRequest
             'description'   => 'required',
             //'time'          => 'required|after:today',
             'price'         => 'required|gte:0',
+            'capacity'      => 'sometimes|gt:0'
         ];
     }
 }

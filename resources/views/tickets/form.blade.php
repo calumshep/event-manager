@@ -101,7 +101,7 @@
                             @endforeach
                         </select>
 
-                        <div id="validityHelp" class="form-text">
+                        <div id="timeHelp" class="form-text">
                             You must specify a date which this ticket is valid for. If your event only spans a single
                             day, then select that day.
                         </div>
@@ -119,6 +119,21 @@
                                        number_format($ticket->price/100, 2) }}"
                                    class="form-control"
                                    required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="capacity">Capacity</label>
+                        <input type="number"
+                               step="1"
+                               min="1"
+                               name="capacity"
+                               id="capacity"
+                               value="{{ old('capacity', $ticket->capacity) }}"
+                               class="form-control">
+
+                        <div id="capacityHelp" class="form-text">
+                            Leave blank for unlimited tickets.
                         </div>
                     </div>
 
