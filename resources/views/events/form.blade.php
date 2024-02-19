@@ -6,7 +6,15 @@
 
 @section('content')
 
-    <h1>{{ $creating ? "New" : null }} Event</h1>
+    <div class="d-flex justify-content-between align-items-baseline">
+        <h1>{{ $creating ? "New" : null }} Event</h1>
+
+        @unless($creating)
+            <a class="btn btn-success" href="{{ route('events.sales', $event) }}">
+                <i class="fa-solid fa-sterling-sign me-2"></i>Ticket Sales
+            </a>
+        @endunless
+    </div>
 
     <p>
         Required fields are marked with an asterisk (<span class="text-danger">*</span>).
