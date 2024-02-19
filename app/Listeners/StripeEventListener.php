@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Events\WebhookReceived;
+use Log;
 use Stripe\Event;
 
 class StripeEventListener
@@ -47,7 +48,7 @@ class StripeEventListener
                 break;
 
             default:
-                throw new Exception("A webhook was received but not handled.");
+                Log::warning("A webhook was received but not handled.");
         }
     }
 }
