@@ -10,7 +10,7 @@
                 <li class="nav-item">
                     <a @class([
                            'nav-link',
-                           'active' => Route::is('home'),
+                           'active' => Route::is('home', 'event.*'),
                        ])
                        {{ Route::is('home') ? 'aria-current="page"' : '' }}
                        href="{{ route('home') }}">
@@ -190,13 +190,13 @@
                 </ol>
             </nav>
         </div>
-    @elseif(Route::is('home*'))
+    @elseif(Route::is('home*', 'event.*'))
         <div class="container">
             <nav class="p-2" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li @class([
                         'breadcrumb-item',
-                        'active' => !Route::is('home')
+                        'active' => Route::is('home')
                     ])>
                         @unless(Route::is('home'))
                             <a href="{{ route('home') }}">Upcoming Events</a>
@@ -204,8 +204,26 @@
                             Upcoming Events
                         @endunless
                     </li>
-                    @if(Route::is('home.event'))
-                        <li class="breadcrumb-item">{{ $event->name }}</li>
+                    @if(Route::is('home.event', 'event.*'))
+                        <li @class([
+                            'breadcrumb-item',
+                            'active' => Route::is('home.event')
+                        ])>
+                            @if(Route::is('event.*'))
+                                <a href="{{ route('home.event', $event) }}">{{ $event->name }}</a>
+                            @else
+                                {{ $event->name }}
+                            @endif
+                        </li>
+
+                        @if(Route::is('event.tickets.*'))
+                            <li @class([
+                                'breadcrumb-item',
+                                'active'
+                            ])>
+                                Checkout
+                            </li>
+                        @endif
                     @endif
                 </ol>
             </nav>

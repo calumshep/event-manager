@@ -50,7 +50,7 @@ Route::resources([
 
 Route::controller(OrderController::class)
     ->prefix('/event/{event:slug}/')
-    ->name('events.tickets.')
+    ->name('event.tickets.')
     ->group(function ()
     {
         Route::post('/checkout', 'checkout')->name('checkout');

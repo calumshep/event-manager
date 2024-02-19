@@ -14,7 +14,7 @@ class OrderController extends Controller
     /**
      * Show the checkout page for the specified event.
      *
-     * @return \Illuminate\Contracts\View\View
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
     public function checkout(Event $event, Request $request)
     {
@@ -34,6 +34,10 @@ class OrderController extends Controller
                 $total += $ticket->price * $ticket->quantity;
                 $tickets[$i] = $ticket;
             }
+        }
+
+        if (sizeof($tickets) == 0) {
+            return redirect()->back()->withErrors("You must select at least 1 ticket.");
         }
 
         return view('tickets.checkout', [
@@ -130,9 +134,9 @@ class OrderController extends Controller
         // Checkout options
         $checkout_options = [
             'success_url' =>
-                route('events.tickets.purchase.success', $event) . '?session_id={CHECKOUT_SESSION_ID}',
+                route('event.tickets.purchase.success', $event) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' =>
-                route('events.tickets.cancelled', $event),
+                route('event.tickets.cancelled', $event),
 
             // Pass order ID to Stripe
             'metadata' => [

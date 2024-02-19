@@ -8,7 +8,7 @@
         This form <strong>does not save as you go</strong>, so please complete your checkout in one go!
     </p>
 
-    <form method="POST" action="{{ route('events.tickets.purchase', $event) }}">
+    <form method="POST" action="{{ route('event.tickets.purchase', $event) }}">
         @csrf
 
         @guest

@@ -10,7 +10,7 @@
         Specify how many of each ticket type you want to purchase. You can enter further details on the next page.
     </p>
 
-    <form method="POST" action="{{ route('events.tickets.checkout', $event) }}">
+    <form method="POST" action="{{ route('event.tickets.checkout', $event) }}">
         @csrf
 
         <div class="row row-cols-md-2 row-cols-1 g-4">
