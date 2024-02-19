@@ -7,7 +7,10 @@ use App\Models\Guest;
 use App\Models\Order;
 use App\Models\TicketType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Checkout;
+use Stripe\Exception\ApiErrorException;
 
 class OrderController extends Controller
 {
@@ -64,7 +67,7 @@ class OrderController extends Controller
      * @param \App\Models\Event $event
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return Checkout
      * @throws \Exception
      */
     public function purchase(Event $event, Request $request)
@@ -85,7 +88,7 @@ class OrderController extends Controller
                 $order->orderable()->associate($guest);
             } else {
                 // If no guest record exists, create it and associate with that
-                $order->orderable()->associate(new Guest(['email' => $request->email]));
+                $order->orderable()->associate(Guest::create(['email' => $request->buyer_email]));
             }
         }
         $order->save();
@@ -152,6 +155,13 @@ class OrderController extends Controller
         }
     }
 
+    /**
+     * Handle Stripe redirecting back form a cancelled Checkout session.
+     *
+     * @param \App\Models\Event $event
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function cancelled(Event $event)
     {
         return redirect()->route('home.event', $event)->with([
@@ -159,8 +169,27 @@ class OrderController extends Controller
         ]);
     }
 
-    public function success()
+    /**
+     * Handle successful completion of a Stripe Checkout session.
+     *
+     * @param \App\Models\Event $event
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function success(Event $event, Request $request)
     {
+        try {
+            return view('tickets.success', [
+                'event'     => $event,
+                'checkout'  => Cashier::stripe()->checkout->sessions->retrieve($request->get('session_id'))
+            ]);
+        } catch (ApiErrorException $e) {
+            Log::error($e);
 
+            return redirect()->route('home.event', $event)->withErrors([
+                "An unknown error occurred."
+            ]);
+        }
     }
 }
