@@ -72,6 +72,9 @@ Route::controller(EventSalesController::class)
     ->group(function ()
     {
         Route::get('/sales', 'sales')->name('sales');
+        Route::get('/sales/export', 'exportSales')->name('sales.export');
+        Route::get('/attendees', 'attendees')->name('attendees');
+        Route::get('/attendees/export', 'exportAttendees')->name('attendees.export');
 });
 
 // Event and organisation resource routes

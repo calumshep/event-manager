@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 #[ObservedBy([EventObserver::class])]
 class Event extends Model
@@ -80,5 +81,36 @@ class Event extends Model
         } else {
             return [$this->start];
         }
+    }
+
+    /**
+     * Get the orders which contain tickets for this event.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getOrders(): Collection
+    {
+        return $this
+            ->getTickets()
+            ->groupBy('order_id')
+            ->map(function (Collection $order) {
+                $collated_order = $order->first()->order;
+                $collated_order->tickets = $order;
+
+                return $collated_order;
+            })->sortByDesc('updated_at');
+    }
+
+    /**
+     * Get all the ordered ticket instances for this event.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getTickets(): Collection
+    {
+        return
+            OrderTicket
+                ::whereIn('ticket_type_id', $this->tickets->pluck('id'))
+                ->get();
     }
 }

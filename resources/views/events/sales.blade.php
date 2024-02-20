@@ -4,13 +4,22 @@
 
     <div class="row">
         <div class="col-lg-6">
-            <h1>Event Sales</h1>
-            <h2 class="h3">{{ $event->name }}</h2>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h1>Event Sales</h1>
+                    <h2 class="h3">{{ $event->name }}</h2>
+                </div>
+
+                <div>
+                    <a href="{{ route('events.show', $event) }}" class="btn btn-secondary">&laquo; Back to Event</a>
+                </div>
+            </div>
 
             <div class="d-flex">
-                <a href="#" class="btn btn-primary me-2">
+                <a href="{{ route('events.attendees', $event) }}" class="btn btn-success me-2">
                     <i class="fa-solid fa-people-group me-2"></i>Attendee List
                 </a>
+
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle"
                             type="button"
@@ -18,8 +27,11 @@
                             aria-expanded="false">
                         <i class="fa-solid fa-file-export me-2"></i>Download Orders
                     </button>
+
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">
+                        <li><a class="dropdown-item"
+                               href="{{ route('events.sales.export', $event) }}"
+                               target="_blank">
                             <i class="fa-solid fa-file-csv me-2"></i>CSV file
                         </a></li>
                     </ul>
@@ -59,7 +71,7 @@
                 <h4 class="h6">
                     Order {{ $order->id }}
                     &middot;
-                    {{ $order->checkout_id }}
+                    <code>{{ $order->checkout_id }}</code>
                 </h4>
 
                 <p class="fw-ligther">
