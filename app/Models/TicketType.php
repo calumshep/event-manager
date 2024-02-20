@@ -51,4 +51,24 @@ class TicketType extends Model
             ->using(OrderTicket::class)
             ->withTimestamps();
     }
+
+    /**
+     * Get the number of this ticket types purchased.
+     *
+     * @return int
+     */
+    public function purchased(): int
+    {
+        return OrderTicket::where('ticket_type_id', $this->id)->count();
+    }
+
+    /**
+     * Get the number of this ticket type remaining.
+     *
+     * @return int
+     */
+    public function remaining(): int
+    {
+        return $this->capacity - $this->purchased();
+    }
 }

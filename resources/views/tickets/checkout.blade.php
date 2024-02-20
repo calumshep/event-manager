@@ -36,7 +36,7 @@
         @foreach($tickets as $ticket)
             <hr>
 
-            <div class="row pt-3 mb-3">
+            <div class="row mb-3">
                 <div class="col-lg-4 mb-3 mb-lg-0">
                     <h3 class="h5">{{ $ticket->name }}</h3>
 
@@ -45,6 +45,8 @@
                         &middot;
                         £{{ number_format($ticket->price/100, 2) }}
                     </h4>
+
+                    <p>{!! $ticket->description !!}</p>
 
                     <input type="hidden" name="quantity_{{ $ticket->id }}" value="{{ $ticket->quantity }}">
                 </div>
@@ -88,7 +90,7 @@
                     @endfor
 
                     <small class="text-muted">
-                        To get more tickets of this type, you must start over, or complete a new order.
+                        To get more tickets of this type, you must start over, or finish and then make a new order.
                     </small>
                 </div>
             </div>

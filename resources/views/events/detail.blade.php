@@ -18,12 +18,21 @@
                 <div class="col">
                     <div class="card shadow">
                         <div class="card-body">
-                            <h3 class="h5 card-title">{{ $ticket->name }}</h3>
-                            <h4 class="h6 card-subtitle">
-                                {{ $ticket->time->format('D j M Y') }}
-                                &middot;
-                                £{{ number_format($ticket->price/100, 2) }}
-                            </h4>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <h3 class="h5 card-title">{{ $ticket->name }}</h3>
+                                    <h4 class="h6 card-subtitle">
+                                        {{ $ticket->time->format('D j M Y') }}
+                                        &middot;
+                                        £{{ number_format($ticket->price/100, 2) }}
+                                    </h4>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <span class="badge text-bg-primary">
+                                        {{ $ticket->remaining() }} / {{ $ticket->capacity }} tickets left
+                                    </span>
+                                </div>
+                            </div>
 
                             <hr>
                             <p>{!! $ticket->description !!}</p>
@@ -34,6 +43,7 @@
                                 <span class="input-group-text" id="quantity_{{ $ticket->id }}_label">Quantity</span>
                                 <input type="number"
                                        min="0"
+                                       max="{{ $ticket->remaining() }}"
                                        step="1"
                                        name="quantity_{{ $ticket->id }}"
                                        id="quantity_{{ $ticket->id }}"

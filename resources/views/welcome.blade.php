@@ -5,10 +5,6 @@
     <div class="text-center py-4">
         <h1>{{ config('app.name') }}</h1>
 
-        <p class="lead mb-4">
-            Events and tickets, done right...
-        </p>
-
         <!--
         <div class="input-group mb-3 w-75 mx-auto">
             <div class="form-floating">
@@ -58,15 +54,13 @@
     @forelse($events as $event)
         <!--<img src="https://placehold.co/50" class="rounded" alt="placeholder">-->
 
-        <div class="d-flex align-items-start rounded shadow p-3 mb-3">
+        <div class="d-flex align-items-start rounded shadow p-3 mb-3" style="transform: rotate(0);">
             <div class="flex-fill">
                 <h5>
-                    <a class="text-decoration-none" href="{{ route('home.event', $event) }}">
-                        {{ $event->name }} &middot;
-                        <span class="text-muted fs-6">
+                    {{ $event->name }} &middot;
+                    <span class="text-muted fs-6">
                         {{ $event->start->format('D j M Y') }} {{ isset($event->end) ? 'to ' . $event->end->format('D j M Y') : null }}
                     </span>
-                    </a>
                 </h5>
 
                 <p>
@@ -87,7 +81,7 @@
                 -->
             </div>
 
-            <a href="{{ route('home.event', $event) }}" class="btn btn-primary">
+            <a href="{{ route('home.event', $event) }}" class="btn btn-primary stretched-link">
                 View &raquo;
             </a>
         </div>
@@ -99,7 +93,7 @@
 
     {{ $events->links() }}
 
-    <hr class="my-5">
+    <!--<hr class="my-5">
 
     <div class="row align-items-center mb-5">
         <div class="col-md-4">
@@ -133,6 +127,6 @@
                 @endauth
             </div>
         </div>
-    </div>
+    </div>-->
 
 @endsection

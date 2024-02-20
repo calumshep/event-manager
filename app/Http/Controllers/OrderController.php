@@ -64,9 +64,16 @@ class OrderController extends Controller
         for ($i = 1; $i < count($quantities); $i++) {
             $key = $keys[$i];
 
-            if($quantities[$key]) {
+            if ($quantities[$key]) {
                 $ticket = TicketType::find(explode('_', $key)[1]);
                 $ticket->quantity = $quantities[$key];
+
+                // Do not proceed if more tickets are requested than available
+                if ($ticket->quantity > $ticket->remaining()) {
+                    return redirect()->back()
+                        ->withErrors("You cannot purchase more tickets than are available.");
+                }
+
                 $total += $ticket->price * $ticket->quantity;
                 $tickets[$i] = $ticket;
             }
@@ -100,7 +107,7 @@ class OrderController extends Controller
      * @param \App\Models\Event $event
      * @param \Illuminate\Http\Request $request
      *
-     * @return Checkout
+     * @return \Illuminate\Http\RedirectResponse|\Laravel\Cashier\Checkout
      * @throws \Exception
      */
     public function purchase(Event $event, Request $request)
@@ -140,6 +147,12 @@ class OrderController extends Controller
 
                 // Get the number of tickets purchased
                 $quantity = $input[$key];
+
+                // Do not proceed if more tickets are requested than available
+                if ($quantity > $ticket_type->remaining()) {
+                    return redirect()->back()
+                        ->withErrors("You cannot purchase more tickets than are available.");
+                }
 
                 // For each ticket ordered...
                 for ($j = 0; $j < $quantity; $j++) {
