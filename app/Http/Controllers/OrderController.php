@@ -123,7 +123,8 @@ class OrderController extends Controller
             $order->orderable()->associate(auth()->user());
         } else {
             // Otherwise, try to find a guest record for the given email address
-            $guest = Guest::where('email', $request->email)->first();
+            $guest = Guest::where('email', $request->buyer_email)->first();
+
             if ($guest) {
                 $order->orderable()->associate($guest);
             } else {
@@ -186,6 +187,7 @@ class OrderController extends Controller
                 route('event.tickets.purchase.success', $event) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' =>
                 route('event.tickets.cancelled', $event),
+            'customer_email' => $request->buyer_email,
 
             // Pass order ID to Stripe
             'metadata' => [
