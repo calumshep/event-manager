@@ -179,6 +179,8 @@ namespace App\Models{
  * @property array $metadata
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Order|null $order
+ * @property-read \App\Models\TicketType|null $ticketType
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket query()
@@ -238,6 +240,7 @@ namespace App\Models{
  * @property string $description
  * @property \Illuminate\Support\Carbon $time
  * @property int $price
+ * @property int|null $capacity
  * @property array|null $details
  * @property int $event_id
  * @property string $stripe_id
@@ -250,6 +253,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereCapacity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereDescription($value)
