@@ -8,6 +8,7 @@ use App\Http\Controllers\HelpArticleController;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\TicketTypeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 // Auth routes
 require __DIR__.'/auth.php';
 
-// Home and event detail routes
+// Home and event detail
 Route::controller(HomeController::class)
     ->name('home')
     ->group(function ()
@@ -33,7 +34,7 @@ Route::controller(HomeController::class)
     Route::get('event/{event:slug}', 'event')->name('.event');
 });
 
-// Event ticket ordering routes
+// Event ticket ordering
 Route::controller(OrderController::class)
     ->prefix('/event/{event:slug}/')
     ->name('event.tickets.')
@@ -46,47 +47,54 @@ Route::controller(OrderController::class)
 });
 Route::resource('orders', OrderController::class)->only(['index', 'show']);
 
-// Account management
-Route::controller(AccountController::class)
-    ->middleware(['auth'])
-    ->prefix('/account')
-    ->name('account.')
-    ->group(function ()
+/*
+ * Routes which require being authenticated
+ */
+Route::middleware(Authenticate::class)
+    ->group(function()
+{
+    // Account management
+    Route::controller(AccountController::class)
+        ->prefix('/account')
+        ->name('account.')
+        ->group(function ()
     {
         Route::get('/', 'showOwn')->name('show-own');
         Route::get('/{user}', 'show')->name('show'); // TODO: apply admin check middleware
         Route::get('/{user}/edit', 'edit')->name('edit');
         Route::put('/{user}', 'update')->name('update');
+    });
+
+    // Event ticket resource management
+    Route::resource('events.tickets', TicketTypeController::class)
+        ->parameters(['tickets' => 'ticket_type'])
+        ->except(['index']);
+
+    // Ticket sales reporting
+    Route::controller(EventSalesController::class)
+        ->prefix('/events/{event}')
+        ->name('events.')
+        ->group(function ()
+        {
+            Route::get('/sales', 'sales')->name('sales');
+            Route::get('/sales/export', 'exportSales')->name('sales.export');
+            Route::get('/attendees', 'attendees')->name('attendees');
+            Route::get('/attendees/export', 'exportAttendees')->name('attendees.export');
+        });
+
+    // Event and organisation resource management
+    Route::resources([
+        'organisations' => OrganisationController::class,
+        'events'        => EventController::class,
+    ]);
+
+    // Help article management
+    Route::resource('help', HelpArticleController::class)
+        ->parameters('helpArticle')
+        ->except('show');
 });
 
-// Event ticket resource routes
-Route::resource('events.tickets', TicketTypeController::class)
-    ->parameters(['tickets' => 'ticket_type'])
-    ->except(['index']);
-
-// Ticket sales routes
-Route::controller(EventSalesController::class)
-    ->middleware(['auth'])
-    ->prefix('/events/{event}')
-    ->name('events.')
-    ->group(function ()
-    {
-        Route::get('/sales', 'sales')->name('sales');
-        Route::get('/sales/export', 'exportSales')->name('sales.export');
-        Route::get('/attendees', 'attendees')->name('attendees');
-        Route::get('/attendees/export', 'exportAttendees')->name('attendees.export');
-});
-
-// Event and organisation resource routes
-Route::resources([
-    'organisations' => OrganisationController::class,
-    'events'        => EventController::class,
-]);
-
-Route::resource('help', HelpArticleController::class)
-    ->parameters('helpArticle')
-    ->except('show');
-
+// Help article viewing
 Route::controller(HelpArticleController::class)
     ->prefix('/help')
     ->name('help.')
