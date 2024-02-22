@@ -11,7 +11,8 @@ class EventController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        // Use the App\Policies\EventPolicy class to authorize
+        $this->authorizeResource(Event::class, 'event');
     }
 
     /**

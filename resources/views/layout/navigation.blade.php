@@ -19,7 +19,7 @@
                     </a>
                 </li>
 
-                @auth
+                @can('manage own events')
                     <li class="nav-item">
                         <a @class([
                                'nav-link',
@@ -31,7 +31,9 @@
                             Manage Events
                         </a>
                     </li>
+                @endcan
 
+                @auth
                     <li class="nav-item">
                         <a @class([
                                'nav-link',
@@ -61,7 +63,7 @@
             </ul>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                @auth
+                @can('manage own events')
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-plus fa-fw"></i>
@@ -89,7 +91,7 @@
                         <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
                         <hr class="d-lg-none my-2 text-white-50">
                     </li>
-                @endauth
+                @endcan
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"

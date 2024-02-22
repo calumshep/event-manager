@@ -309,9 +309,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User onGenericTrial()
- * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions, $without = false)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null, $without = false)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
@@ -325,6 +325,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStripeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTrialEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User withoutPermission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|User withoutRole($roles, $guard = null)
  */
 	class User extends \Eloquent {}
 }
