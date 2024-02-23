@@ -14,7 +14,8 @@ class TicketTypeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        // Use the App\Policies\TicketTypePolicy class to authorize
+        $this->authorizeResource(TicketType::class, 'ticket_type');
     }
 
     /**

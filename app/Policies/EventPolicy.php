@@ -11,7 +11,7 @@ class EventPolicy
     /**
      * Perform pre-authorization checks.
      */
-    public function before(User $user): bool|null
+    public function before(User $user): ?bool
     {
         if ($user->can('administer events')) {
             return true;
