@@ -26,6 +26,12 @@ class DatabaseSeeder extends Seeder
                 Permission::create(['name' => 'administer orders']),
         ]);
 
+        // Create event organiser role
+        Role::create(['name' => 'event organiser'])
+            ->syncPermissions([
+                Permission::where('name', 'manage own events')->first(),
+        ]);
+
         if (App::environment('local')) {
             // Create specific testing account (for logging in with)
             User::factory()
