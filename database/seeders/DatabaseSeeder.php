@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
                 // Create permissions (and assign all to administrator role
                 Permission::create(['name' => 'administer events']),
                 Permission::create(['name' => 'manage own events']),
+                Permission::create(['name' => 'administer orders']),
         ]);
 
         if (App::environment('local')) {

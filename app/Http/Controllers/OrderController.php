@@ -14,6 +14,12 @@ use Stripe\Exception\ApiErrorException;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        // Use the App\Policies\EventPolicy class to authorize
+        $this->authorizeResource(Order::class, 'order');
+    }
+
     /**
      * Show all the user's paid orders including tickets.
      *
