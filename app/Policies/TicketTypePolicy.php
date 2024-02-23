@@ -56,7 +56,7 @@ class TicketTypePolicy
      */
     public function restore(User $user, Event $event): Response
     {
-        return $this->authByEvent($user, $event);
+        return false;
     }
 
     /**
