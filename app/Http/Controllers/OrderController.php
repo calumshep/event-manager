@@ -193,7 +193,6 @@ class OrderController extends Controller
                 route('event.tickets.purchase.success', $event) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' =>
                 route('event.tickets.cancelled', $event),
-            'customer_email' => $request->buyer_email,
 
             // Pass order ID to Stripe
             'metadata' => [
@@ -205,6 +204,7 @@ class OrderController extends Controller
         if (auth()->user()) {
             return auth()->user()->checkout($checkout_items, $checkout_options);
         } else {
+            $checkout_options['customer_email'] = $request->buyer_email;
             return Checkout::guest()->create($checkout_items, $checkout_options);
         }
     }
