@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
-    <div class="container-fluid">
+    <div class="container">
         <a class="navbar-brand" href="{{ route('home') }}">{{ config('app.name') }}</a>
         <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -207,7 +207,7 @@
     @elseif(Route::is('home*', 'event.*', 'orders*'))
         <div class="container">
             <nav class="p-2" aria-label="breadcrumb">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb mb-0">
                     @unless(Route::is('orders*'))
                         <li @class([
                             'breadcrumb-item',
@@ -265,12 +265,12 @@
             </nav>
         </div>
     @else
-        <nav class="nav" aria-label="Secondary navigation" data-bs-theme="light">
+        <nav class="nav container" aria-label="Secondary navigation" data-bs-theme="light">
             @if(Route::is(['events*', 'organisations*']))
                 <a @class([
-                       'nav-link',
-                       'active' => Route::is(['events.*'])
-                   ])
+                   'nav-link',
+                   'active' => Route::is(['events.*'])
+               ])
                    {{ Route::is(['events.*']) ?'aria-current="page"' :'' }}
                    href="{{ route('events.index') }}">
                     <i class="fa-solid fa-rectangle-list fa-fw"></i>
@@ -278,18 +278,18 @@
                 </a>
 
                 <a @class([
-                       'nav-link',
-                       'active' => Route::is('organisations*')
-                   ]) {{ Route::is('organisations*') ? 'aria-current="page"' : '' }}
+                   'nav-link',
+                   'active' => Route::is('organisations*')
+               ]) {{ Route::is('organisations*') ? 'aria-current="page"' : '' }}
                    href="{{ route('organisations.index') }}">
                     <i class="fa-solid fa-building fa-fw"></i>
                     My Organisations
                 </a>
             @elseif(Route::is(['account.show-own', 'account.edit']))
                 <a @class([
-                       'nav-link',
-                       'active' => Route::is(['account.show-own', 'account.edit'])
-                   ]) {{ ['account.show-own', 'account.edit'] ? 'aria-current="page"' : '' }}
+                   'nav-link',
+                   'active' => Route::is(['account.show-own', 'account.edit'])
+               ]) {{ ['account.show-own', 'account.edit'] ? 'aria-current="page"' : '' }}
                    href="{{ route('account.show-own') }}">
                     <i class="fa-solid fa-user-gear fa-fw me-1"></i>
                     My Account
