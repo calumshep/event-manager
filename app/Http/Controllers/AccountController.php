@@ -54,7 +54,7 @@ class AccountController extends Controller
     {
         $input = $request->validated();
 
-        if (! Hash::check($input['current_password'], auth()->user()->password)) {
+        if (! Hash::check($input['current_password'], $user->password)) {
             return redirect()->back()->withErrors(['Your password was incorrect.']);
         }
 
@@ -62,10 +62,11 @@ class AccountController extends Controller
             'first_name'    => $input['first_name'],
             'last_name'     => $input['last_name'],
             'email'         => $input['email'],
+            'phone_number'  => $input['phone_number'],
         ]);
 
         if ($input['new_password']) {
-            $user->password = Hash::make('new_password');
+            $user->password = Hash::make($input['new_password']);
         }
 
         $user->save();
