@@ -144,6 +144,18 @@
                             <input class="form-check-input"
                                    type="checkbox"
                                    value="1"
+                                   name="dietary"
+                                   id="dietary"
+                                   @checked(key_exists('dietary', $details))>
+                            <label class="form-check-label" for="dietary">
+                                Dietary Requirements
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
                                    name="dob"
                                    id="dob"
                                    @checked(key_exists('dob', $details))>

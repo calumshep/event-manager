@@ -134,23 +134,30 @@ class TicketTypeController extends Controller
         $details = [];
         if ($request->dob) {
             $details['dob'] = [
-                'label' => 'Date of birth',
-                'type' => 'date',
-                'required' => true,
+                'label'     => 'Date of birth',
+                'type'      => 'date',
+                'required'  => true,
             ];
         }
         if ($request->bass_no) {
             $details['bass_no'] = [
-                'label' => 'BASS number',
-                'type' => 'text',
-                'required' => false,
+                'label'     => 'BASS number',
+                'type'      => 'text',
+                'required'  => false,
             ];
         }
         if ($request->university) {
             $details['university'] = [
-                'label' => 'Education institution',
-                'type' => 'text',
-                'required' => false,
+                'label'     => 'Education institution',
+                'type'      => 'text',
+                'required'  => false,
+            ];
+        }
+        if ($request->dietary) {
+            $details['dietary'] = [
+                'label'     => 'Dietary Requirements',
+                'type'      => 'text',
+                'required'  => false,
             ];
         }
         return $details;

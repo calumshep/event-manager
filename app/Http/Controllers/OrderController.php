@@ -118,96 +118,88 @@ class OrderController extends Controller
      */
     public function purchase(Event $event, Request $request)
     {
-        // Start a new order
-        $order = new Order([
-            'checkout_id'   => '',
-            'total_amount'  => 0,
+        /*
+         * Process a new order
+         */
+        $input = $request->validate([
+            'buyer_email'       => 'sometimes|required|email',
+            'buyer_phone'       => 'sometimes|required',
+            'special_requests'  => 'nullable',
         ]);
 
-        if (auth()->user()) {
-            // If logged in, associate the authenticated user with the order
-            $order->orderable()->associate(auth()->user());
-        } else {
-            // Otherwise, try to find a guest record for the given email address
-            $guest = Guest::where('email', $request->buyer_email)->first();
+        $order = new Order([ // start a new order
+            'checkout_id'       => '',
+            'total_amount'      => 0,
+            'special_requests'  => $input['special_requests'],
+        ]);
 
-            if ($guest) {
-                $order->orderable()->associate($guest);
-            } else {
-                // If no guest record exists, create it and associate with that
-                $order->orderable()->associate(Guest::create(['email' => $request->buyer_email]));
-            }
+        if (auth()->user()) {   // if logged in, associate the authenticated user with the order
+            $order->orderable()->associate(auth()->user());
+        } else {                // if not logged in, associate with existing or new Guest instance
+            $order->orderable()->associate(Guest::updateOrCreate(
+                ['email'         => $input['buyer_email']], // use these values to find an existing Guest record
+                ['phone_number'  => $input['buyer_phone']]  // update the existing Guest or create a new one with these
+            ));
         }
         $order->save();
 
-        $input = $request->toArray();
+        $checkout_items = []; // create empty array to store items to send to Stripe Checkout
+        $tickets = $request->toArray();
 
-        // Create empty array to store items to send to Stripe Checkout
-        $checkout_items = [];
-
-        // Iterate through all the possible ticket types for the event to find purchased ones
-        foreach($event->tickets as $ticket_type) {
-
-            // Check if ticket type has been ordered at least once
+        /*
+         * Process selected tickets
+         */
+        foreach($event->tickets as $ticket_type) {  // iterate through all the possible ticket types for purchased ones
             $key = 'quantity_'.$ticket_type->id;
-            if (key_exists($key, $input)) {
+            if (key_exists($key, $tickets)) {       // check if ticket type has been ordered at least once
+                $quantity = $tickets[$key];         // get the number of tickets purchased
 
-                // Get the number of tickets purchased
-                $quantity = $input[$key];
-
-                // Do not proceed if more tickets are requested than available
-                if ($quantity > $ticket_type->remaining()) {
+                if ($quantity > $ticket_type->remaining()) { // do not proceed if more tickets requested than available
                     return redirect()->back()
                         ->withErrors("You cannot purchase more tickets than are available.");
                 }
 
-                // For each ticket ordered...
-                for ($j = 0; $j < $quantity; $j++) {
-
-                    // Iterate through all required ticket details and set metadata on ticket instance
+                /*
+                 * Process any relevant ticket details
+                 */
+                for ($j = 0; $j < $quantity; $j++) {                      // iterate through each ticket
                     $metadata = [];
-                    foreach ($ticket_type->details as $name => $detail) {
-                        $metadata[$name] = $input[$name.'_'.$ticket_type->id][$j];
+                    foreach ($ticket_type->details as $name => $detail) { // process selected ticket details as metadata
+                        $metadata[$name] = $tickets[$name.'_'.$ticket_type->id][$j];
                     }
                     $ticket_type->metadata = $metadata;
 
-                    // Attach the ticket to the order with the ticket holder's name and any supplied metadata
-                    $order->tickets()->attach($ticket_type->id, [
-                        'ticket_holder_name'    => $input['name_'.$ticket_type->id][$j],
+                    $order->tickets()->attach($ticket_type->id, [         // attach ticket to order with name + metadata
+                        'ticket_holder_name'    => $tickets['name_'.$ticket_type->id][$j],
                         'metadata'              => $metadata,
                     ]);
 
-                    // Update order total and save
-                    $order->total_amount += $ticket_type->price;
-                    $order->save();
+                    $order->total_amount += $ticket_type->price;          // update rolling order total
+                    $order->save();                                       // save order to database
                 }
 
-                // Add the total quantity of this ticket to the checkout items for Stripe
-                $checkout_items[$ticket_type->stripe_id] = $quantity;
+                $checkout_items[$ticket_type->stripe_id] = $quantity;     // add ticket type with quantity to checkout
             }
         }
 
-        // Checkout options
+        /*
+         * Create Stripe checkout session
+         */
         $checkout_options = [
-            'success_url' =>
+            'success_url'   =>      // redirect after successful checkout
                 route('event.tickets.purchase.success', $event) . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' =>
+            'cancel_url'    =>      // redirect if checkout actively cancelled by user
                 route('event.tickets.cancelled', $event),
-
-            // Pass order ID to Stripe
-            'metadata' => [
-                'order_id' => $order->id,
-            ],
-
-            // Set checkout session expiry to 1 hour from now
-            'expires_at' => now()->addHour()->timestamp
+            'metadata'      => [    // give Stripe the order ID so it can pass this back in the webhook after payment
+                'order_id' => $order->id],
+            'expires_at' =>         // set checkout session expiry to 1 hour from now
+                now()->addHour()->timestamp
         ];
 
-        // Redirect to Stripe to process payment
-        if (auth()->user()) {
+        if (auth()->user()) {       // start a checkout session on the authenticated user
             return auth()->user()->checkout($checkout_items, $checkout_options);
-        } else {
-            $checkout_options['customer_email'] = $request->buyer_email;
+        } else {                    // otherwise start a guest checkout and pass the email along autocompleted
+            $checkout_options['customer_email'] = $input['buyer_email'];
             return Checkout::guest()->create($checkout_items, $checkout_options);
         }
     }

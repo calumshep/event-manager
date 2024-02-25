@@ -73,4 +73,9 @@ import * as bootstrap from 'bootstrap'
                 })
             })
     })
+
+    if (window.location.href.indexOf('attendees') > -1) {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    }
 })()

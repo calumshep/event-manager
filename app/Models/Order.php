@@ -19,6 +19,7 @@ class Order extends Model
         'checkout_id',
         'total_amount',
         'paid',
+        'special_requests',
         'orderable_id',
         'orderable_type',
     ];

@@ -74,21 +74,30 @@ class EventSalesController extends Controller
 
     public function exportAttendees(Event $event)
     {
+
         $this->prepareFile(filename: 'event_' . $event->id . '_attendees_' . now()->toDateTimeLocalString() . '.csv',
             headers: [
-                'ticket_id', 'order_id', 'order_email', 'ticket_type_id', 'ticket_type', 'ticket_holder_name',
-                'ticket_data', 'created_at', 'updated_at',
+                'ticket_id', 'order_id', 'order_email', 'order_phone', 'special_requests', 'ticket_type_id',
+                'ticket_type', 'ticket_holder_name', 'ticket_data', 'last_updated',
             ],
             data: $event->getTickets()->map(function (OrderTicket $t) {
+                $metadata = implode(';', array_map(function ($k, $v) {
+                        return $v ? $k.': '.$v : '';
+                    },
+                    array_keys($t->metadata),
+                    array_values($t->metadata)
+                ));
+
                 return [
                     $t->id,
                     $t->order_id,
                     $t->order->orderable->email,
+                    $t->order->orderable->phone_number,
+                    $t->order->special_requests,
                     $t->ticket_type_id,
                     $t->ticketType->name,
                     $t->ticket_holder_name,
-                    $t->metadata ? $t->metadata->toString() : '',
-                    $t->created_at->toDateTimeLocalString(),
+                    $t->metadata ? $metadata : '',
                     $t->updated_at->toDateTimeLocalString(),
                 ];
             })->toArray()
