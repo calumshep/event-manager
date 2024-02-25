@@ -41,12 +41,13 @@ class TicketTypeController extends Controller
         $input = $request->validated();
 
         $ticket_type = $event->tickets()->create([
-            'name'          => $input['name'],
-            'description'   => clean($request->description),
-            'time'          => $request->time,
-            'price'         => $input['price']*100,
-            'capacity'      => $input['capacity'],
-            'details'       => $this->computeDetails($request),
+            'name'              => $input['name'],
+            'description'       => clean($request->description),
+            'time'              => $request->time,
+            'price'             => $input['price']*100,
+            'show_remaining'    => $request->show_remaining,
+            'capacity'          => $input['capacity'],
+            'details'           => $this->computeDetails($request),
         ]);
 
         return redirect()->route('events.tickets.show', [$event, $ticket_type])->with([
@@ -92,12 +93,13 @@ class TicketTypeController extends Controller
         $input = $request->validated();
 
         $ticket_type->fill([
-            'name'          => $input['name'],
-            'description'   => clean($request->description),
-            'time'          => $request->time,
-            'price'         => $input['price']*100,
-            'capacity'      => $input['capacity'],
-            'details'       => $this->computeDetails($request),
+            'name'              => $input['name'],
+            'description'       => clean($request->description),
+            'time'              => $request->time,
+            'price'             => $input['price']*100,
+            'show_remaining'    => (bool) $request->show_remaining,
+            'capacity'          => $input['capacity'],
+            'details'           => $this->computeDetails($request),
         ]);
         $ticket_type->save();
 

@@ -137,6 +137,20 @@
                         </div>
                     </div>
 
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               role="switch"
+                               id="show_remaining"
+                               name="show_remaining"
+                               @checked(old('show_remaining', $ticket->show_remaining))>
+                        <label class="form-check-label" for="show_remaining">Show remaining tickets</label>
+                        <div id="show_remainingHelp" class="form-text">
+                            When enabled, the number of tickets remaining out of the total capacity above will be shown.
+                            This setting is ignored for tickets with unlimited capacity.
+                        </div>
+                    </div>
+
                     <div class="mb-3">
                         <p>Collect:</p>
 

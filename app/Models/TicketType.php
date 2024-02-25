@@ -21,13 +21,15 @@ class TicketType extends Model
         'time',
         'price',
         'capacity',
+        'show_remaining',
         'details',
         'stripe_id',
     ];
 
     protected $casts = [
-        'time'      => 'datetime',
-        'details'   => 'array',
+        'time'              => 'datetime',
+        'details'           => 'array',
+        'show_remaining'    => 'bool',
     ];
 
     /**

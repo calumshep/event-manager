@@ -27,11 +27,13 @@
                                         £{{ number_format($ticket->price/100, 2) }}
                                     </h4>
                                 </div>
-                                <div class="col-sm-auto">
-                                    <span class="badge text-bg-primary">
-                                        {{ $ticket->remaining() }} / {{ $ticket->capacity }} tickets left
-                                    </span>
-                                </div>
+                                @if($ticket->capacity && $ticket->show_remaining)
+                                    <div class="col-sm-auto">
+                                        <span class="badge text-bg-primary">
+                                            {{ $ticket->remaining() }} / {{ $ticket->capacity }} tickets left
+                                        </span>
+                                    </div>
+                                @endif
                             </div>
 
                             <hr>
