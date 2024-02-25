@@ -198,6 +198,9 @@ class OrderController extends Controller
             'metadata' => [
                 'order_id' => $order->id,
             ],
+
+            // Set checkout session expiry to 1 hour from now
+            'expires_at' => now()->addHour()->timestamp
         ];
 
         // Redirect to Stripe to process payment

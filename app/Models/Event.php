@@ -111,6 +111,7 @@ class Event extends Model
         return
             OrderTicket
                 ::whereIn('ticket_type_id', $this->tickets->pluck('id'))
+                ->whereRelation('order', 'paid', true)
                 ->get();
     }
 }

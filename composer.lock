@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "648df4b1be3675b43c3e823b04a642a2",
+    "content-hash": "6a1d9905b27d94359190a0a392109ada",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -1869,56 +1869,6 @@
                 "source": "https://github.com/Jean85/pretty-package-versions/tree/2.0.5"
             },
             "time": "2021-10-08T21:21:46+00:00"
-        },
-        {
-            "name": "kyzegs/prunable",
-            "version": "v0.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Kyzegs/prunable.git",
-                "reference": "ce3f1c4489b39d25c1e24d0f7c87c066f7f82d23"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Kyzegs/prunable/zipball/ce3f1c4489b39d25c1e24d0f7c87c066f7f82d23",
-                "reference": "ce3f1c4489b39d25c1e24d0f7c87c066f7f82d23",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/console": "^8.0|^9.0|^10.0",
-                "illuminate/database": "^8.0|^9.0|^10.0",
-                "illuminate/events": "^8.0|^9.0|^10.0",
-                "illuminate/support": "^8.0|^9.0|^10.0"
-            },
-            "require-dev": {
-                "laravel/pint": "^1.5"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Kyzegs\\Prunable\\Providers\\PrunableProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Kyzegs\\Prunable\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Sebastiaan \"Kyzegs\" Zegers",
-                    "email": "kyzegs@gmail.com"
-                }
-            ],
-            "description": "Laravel's prunable traits without force deleting",
-            "support": {
-                "issues": "https://github.com/Kyzegs/prunable/issues",
-                "source": "https://github.com/Kyzegs/prunable/tree/v0.1.1"
-            },
-            "time": "2023-02-14T22:26:07+00:00"
         },
         {
             "name": "laravel/cashier",

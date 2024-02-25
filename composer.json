@@ -12,7 +12,6 @@
         "barryvdh/laravel-ide-helper": "^2.13",
         "biscolab/laravel-recaptcha": "^6.0",
         "guzzlehttp/guzzle": "^7.2",
-        "kyzegs/prunable": "^0.1.1",
         "laravel/cashier": "^14.14",
         "laravel/framework": "^10.8",
         "laravel/sanctum": "^3.2",
