@@ -26,6 +26,7 @@ class OrderPaid extends Mailable
     public Order $order;
 
     public $url;
+    public $room_url;
 
     /**
      * Create a new message instance.
@@ -38,6 +39,7 @@ class OrderPaid extends Mailable
         $this->event    = $event;
         $this->order    = $order;
         $this->url      = route('orders.show', $order);
+        $this->room_url = "https://www.hilton.com/en/attend-my-event/edidudi-90t-38063552-4d54-440b-960f-0e6cff53899d/";
     }
 
     /**
