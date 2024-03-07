@@ -45,7 +45,7 @@ class TicketTypeController extends Controller
             'description'       => clean($request->description),
             'time'              => $request->time,
             'price'             => $input['price']*100,
-            'show_remaining'    => $request->show_remaining,
+            'show_remaining'    => (bool) $request->show_remaining,
             'capacity'          => $input['capacity'],
             'details'           => $this->computeDetails($request),
         ]);
