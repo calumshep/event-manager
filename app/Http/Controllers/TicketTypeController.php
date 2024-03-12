@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
-use App\Http\Support\StripeHelper;
 use App\Models\Event;
 use App\Models\TicketType;
 use Illuminate\Foundation\Http\FormRequest;
-use Stripe\Exception\ApiErrorException;
 
 class TicketTypeController extends Controller
 {
@@ -139,6 +137,17 @@ class TicketTypeController extends Controller
                 'label'     => 'Date of birth',
                 'type'      => 'date',
                 'required'  => true,
+            ];
+        }
+        if ($request->gender) {
+            $details['gender'] = [
+                'label'     => 'Gender',
+                'type'      => 'select',
+                'required'  => true,
+                'options'   => [
+                    'female'    => 'Female',
+                    'male'      => 'Male',
+                ],
             ];
         }
         if ($request->bass_no) {

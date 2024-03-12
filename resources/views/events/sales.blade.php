@@ -54,7 +54,7 @@
                         <div class="progress-bar overflow-visible"
                              style="width: {{ ($sale->count() / $sale->first()->ticketType->capacity) *100 }}%">
                             {{ $sale->count() }} / {{ $sale->first()->ticketType->capacity }}
-                            ({{ number_format(($sale->count() / $sale->first()->ticketType->capacity) * 100, 0) }}%)
+                            ({{ number_format(($sale->count() / $sale->first()->ticketType->capacity) * 100) }}%)
                         </div>
                     @else
                         <p class="mb-0">
