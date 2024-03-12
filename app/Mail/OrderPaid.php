@@ -7,6 +7,7 @@ use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -47,8 +48,14 @@ class OrderPaid extends Mailable
      */
     public function envelope(): Envelope
     {
+        if ($this->event->id === 1) {
+            return new Envelope(
+                from: new Address('2024ball@scottishskiclub.org.uk', 'Scottish Ski Club'),
+                subject: 'Your Tickets for ' . $this->event->name,
+            );
+        }
         return new Envelope(
-            from: new Address('president@scottishskiclub.org.uk', 'Scottish Ski Club'),
+            from: new Address('secretary@scottishskiclub.org.uk', 'Scottish Ski Club'),
             subject: 'Your Tickets for ' . $this->event->name,
         );
     }
@@ -58,9 +65,15 @@ class OrderPaid extends Mailable
      */
     public function content(): Content
     {
-        return new Content(
-            markdown: 'mail.orders.paid',
-        );
+        if ($this->event->id === 1) {
+            return new Content(
+                markdown: 'mail.orders.ball',
+            );
+        } else {
+            return new Content(
+                markdown: 'mail.orders.paid',
+            );
+        }
     }
 
     /**
@@ -70,6 +83,13 @@ class OrderPaid extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        if ($this->event->id === 1) {
+            return [
+                Attachment::fromStorageDisk('public', 'pdf/SSC SNOW BALL ticket.pdf')
+                    ->withMime('application/pdf'),
+            ];
+        } else {
+            return [];
+        }
     }
 }

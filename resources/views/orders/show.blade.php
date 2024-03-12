@@ -24,34 +24,34 @@
 
             <table class="table table-hover">
                 <thead>
-                <tr>
-                    <th>Ticket</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Subtotal</th>
-                </tr>
+                    <tr>
+                        <th>Ticket</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
                 </thead>
 
                 <tbody>
-                @foreach($order->tickets->groupBy('id') as $ticket_type)
-                    <tr>
-                        <td>{{ $ticket_type->first()->name }}</td>
-                        <td>£{{ number_format($ticket_type->first()->price / 100, 2) }}</td>
-                        <td>{{ $ticket_type->count() }}</td>
-                        <td>£{{ number_format(($ticket_type->first()->price*$ticket_type->count()) / 100, 2) }}</td>
-                    </tr>
-                @endforeach
+                    @foreach($order->tickets->groupBy('id') as $ticket_type)
+                        <tr>
+                            <td>{{ $ticket_type->first()->name }}</td>
+                            <td>£{{ number_format($ticket_type->first()->price / 100, 2) }}</td>
+                            <td>{{ $ticket_type->count() }}</td>
+                            <td>£{{ number_format(($ticket_type->first()->price*$ticket_type->count()) / 100, 2) }}</td>
+                        </tr>
+                    @endforeach
 
-                <tr>
-                    <th colspan="3" class="text-end">Total</th>
-                    <th>£{{ number_format($order->total_amount/100, 2) }}</th>
-                </tr>
+                    <tr>
+                        <th colspan="3" class="text-end">Total</th>
+                        <th>£{{ number_format($order->total_amount/100, 2) }}</th>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
         <div class="col-md-6">
-            <h3 class="h5">Download Tickets</h3>
+            <h3 class="h5">Tickets</h3>
 
             <div class="list-group">
                 @foreach($order->tickets as $ticket)

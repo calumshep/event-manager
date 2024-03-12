@@ -2,23 +2,7 @@
 # Your Tickets
 ## Order #{{ $order->id }}
 
-Thank you for your recent order for the SSC Snow Ball and thanks for supporting your Club! Your tickets are attached to
-this email.
-
-The ticket price covers the costs of the Ball. Check out our SSC Bursary fundraising video below. We will be raising
-money on the night for this and raffle tickets will be available to purchase to support it.  Please reply to this email
-if you have any raffle prizes to offer or sponsorship.
-
-<a href="https://www.facebook.com/reel/934996931526385">
-    <img src="{{ asset('img/thumbnail.jpg') }}" alt="SSC Bursary fundraising video">
-</a>
-
-We have a special room rate of £140 for a double room for two people. There are 30 rooms set aside for the Club.
-Please click the link below to book this.
-
-<x-mail::button :url="$room_url">
-Book a Room
-</x-mail::button>
+Thank you for your recent order for the {{ $event->name }} event.
 
 <hr>
 
