@@ -45,7 +45,7 @@
                                 <span class="input-group-text" id="quantity_{{ $ticket->id }}_label">Quantity</span>
                                 <input type="number"
                                        min="0"
-                                       max="{{ $ticket->remaining() }}"
+                                       @if($ticket->capacity) max="{{ $ticket->remaining() }}" @endif
                                        step="1"
                                        name="quantity_{{ $ticket->id }}"
                                        id="quantity_{{ $ticket->id }}"

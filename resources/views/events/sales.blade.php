@@ -42,19 +42,26 @@
         <div class="col-lg-6">
             <h3 class="h6">Sales progress</h3>
             @foreach($sales_progress as $sale)
-                <p class="mb-0">{{ $sale->first()->ticketType->name }}</p>
+                @if($sale->first()->ticketType->capacity)
+                    <p class="mb-0">{{ $sale->first()->ticketType->name }}</p>
 
-                <div class="progress"
-                     role="progressbar"
-                     aria-label="{{ $sale->first()->name }} sales"
-                     aria-valuenow="{{ ($sale->count() / $sale->first()->ticketType->capacity) * 100 }}"
-                     aria-valuemin="0"
-                     aria-valuemax="100">
-                    <div class="progress-bar overflow-visible"
-                         style="width: {{ ($sale->count() / $sale->first()->ticketType->capacity) *100 }}%">
-                        {{ $sale->count() }} / {{ $sale->first()->ticketType->capacity }}
-                        ({{ number_format(($sale->count() / $sale->first()->ticketType->capacity) * 100, 0) }}%)
-                    </div>
+                    <div class="progress"
+                         role="progressbar"
+                         aria-label="{{ $sale->first()->name }} sales"
+                         aria-valuenow="{{ ($sale->count() / $sale->first()->ticketType->capacity) * 100 }}"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                        <div class="progress-bar overflow-visible"
+                             style="width: {{ ($sale->count() / $sale->first()->ticketType->capacity) *100 }}%">
+                            {{ $sale->count() }} / {{ $sale->first()->ticketType->capacity }}
+                            ({{ number_format(($sale->count() / $sale->first()->ticketType->capacity) * 100, 0) }}%)
+                        </div>
+                    @else
+                        <p class="mb-0">
+                            {{ $sale->first()->ticketType->name }}
+                            <span class="badge text-bg-primary">{{ $sale->count() }}</span>
+                        </p>
+                    @endif
                 </div>
             @endforeach
         </div>

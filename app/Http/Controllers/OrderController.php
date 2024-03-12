@@ -75,7 +75,7 @@ class OrderController extends Controller
                 $ticket->quantity = $quantities[$key];
 
                 // Do not proceed if more tickets are requested than available
-                if ($ticket->quantity > $ticket->remaining()) {
+                if ($ticket->capacity && $ticket->quantity > $ticket->remaining()) {
                     return redirect()->back()
                         ->withErrors("You cannot purchase more tickets than are available.");
                 }
@@ -154,8 +154,8 @@ class OrderController extends Controller
             if (key_exists($key, $tickets)) {       // check if ticket type has been ordered at least once
                 $quantity = $tickets[$key];         // get the number of tickets purchased
 
-                if ($quantity > $ticket_type->remaining()) { // do not proceed if more tickets requested than available
-                    return redirect()->back()
+                if ($ticket_type->capacity && $quantity > $ticket_type->remaining()) {
+                    return redirect()->back()       // do not proceed if more tickets requested than available
                         ->withErrors("You cannot purchase more tickets than are available.");
                 }
 
