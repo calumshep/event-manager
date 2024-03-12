@@ -99,11 +99,22 @@
                                                 @endif
                                             </label>
 
-                                            <input type="{{ $detail['type'] }}"
-                                                   name="{{ $name }}_{{ $ticket->id }}[]"
-                                                   id="{{ $name }}_{{ $ticket->id . '_' . $i }}"
-                                                   class="form-control"
-                                                @required($detail['required'])>
+                                            @if($detail['type'] === 'select')
+                                                <select name="{{ $name }}_{{ $ticket->id }}[]"
+                                                        id="{{ $name }}_{{ $ticket->id . '_' . $i }}"
+                                                        class="form-select"
+                                                        @required($detail['required'])>
+                                                    @foreach($detail['options'] as $value => $title)
+                                                        <option value="{{ $value }}">{{ $title }}</option>
+                                                    @endforeach
+                                                </select>
+                                            @else
+                                                <input type="{{ $detail['type'] }}"
+                                                       name="{{ $name }}_{{ $ticket->id }}[]"
+                                                       id="{{ $name }}_{{ $ticket->id . '_' . $i }}"
+                                                       class="form-control"
+                                                       @required($detail['required'])>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>

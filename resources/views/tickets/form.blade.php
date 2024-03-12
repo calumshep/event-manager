@@ -182,6 +182,18 @@
                             <input class="form-check-input"
                                    type="checkbox"
                                    value="1"
+                                   name="gender"
+                                   id="gender"
+                                   @checked(key_exists('gender', $details))>
+                            <label class="form-check-label" for="gender">
+                                Gender
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
                                    name="bass_no"
                                    id="bass_no"
                                    @checked(key_exists('bass_no', $details))>
