@@ -114,31 +114,33 @@
             </div>
         @endforeach
 
-        <hr>
+        @if($event->id === 1)
+            <hr>
 
-        <div class="row pt-3 mb-4">
-            <div class="col-lg-4 mb-3 mb-lg-0">
-                <h3 class="h5">Special Requests</h3>
+            <div class="row pt-3 mb-4">
+                <div class="col-lg-4 mb-3 mb-lg-0">
+                    <h3 class="h5">Special Requests</h3>
 
-                <p>
-                    Let the organiser know if you have any particular requests. They will contact you to let you know if
-                    they can be fulfilled.
-                </p>
-            </div>
+                    <p>
+                        Let the organiser know if you have any particular requests. They will contact you to let you know if
+                        they can be fulfilled.
+                    </p>
+                </div>
 
-            <div class="col-lg-8">
-                <div>
-                    <label for="special_requests">
-                        Seating requests
-                    </label>
-                    <textarea name="special_requests" id="special_requests" class="form-control" required></textarea>
+                <div class="col-lg-8">
+                    <div>
+                        <label for="special_requests">
+                            Seating requests
+                        </label>
+                        <textarea name="special_requests" id="special_requests" class="form-control" required></textarea>
 
-                    <small class="form-text">
-                        Let us know who you want to sit with.
-                    </small>
+                        <small class="form-text">
+                            Let us know who you want to sit with.
+                        </small>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
         <hr>
 

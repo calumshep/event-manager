@@ -130,7 +130,7 @@ class OrderController extends Controller
         $order = new Order([ // start a new order
             'checkout_id'       => '',
             'total_amount'      => 0,
-            'special_requests'  => $input['special_requests'],
+            'special_requests'  => $input['special_requests'] ?? '',
         ]);
 
         if (auth()->user()) {   // if logged in, associate the authenticated user with the order
