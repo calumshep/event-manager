@@ -9,7 +9,7 @@
             Your ticket purchase is complete - thank you!
         </p>
         <p>
-            Your tickets will be emailed to you. You will also receipt a receipt from Stripe.
+            Your tickets will be emailed to you. You will also receive a receipt from Stripe.
         </p>
 
         <dl>
