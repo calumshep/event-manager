@@ -37,9 +37,11 @@ $ticket_type->count() }} | £{{ number_format(($ticket_type->first()->price*$tic
 
 ### Completed at: {{ $order->updated_at->format('H:i d/m/Y') }}
 
+@if($order->orderable_type === 'App\Models\User')
 <x-mail::button :url="$url">
 View Order
 </x-mail::button>
+@endif
 
 <hr>
 
