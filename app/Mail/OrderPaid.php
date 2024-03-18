@@ -55,7 +55,7 @@ class OrderPaid extends Mailable
             );
         }
         return new Envelope(
-            from: new Address('secretary@scottishskiclub.org.uk', 'Scottish Ski Club'),
+            from: new Address('2024ball@scottishskiclub.org.uk', 'Scottish Ski Club'),
             subject: 'Your Tickets for ' . $this->event->name,
         );
     }
