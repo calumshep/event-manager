@@ -9,7 +9,7 @@ The ticket price covers the costs of the Ball. Check out our SSC Bursary fundrai
 money on the night for this and raffle tickets will be available to purchase to support it.  Please reply to this email
 if you have any raffle prizes to offer or sponsorship.
 
-<a href="https://www.facebook.com/reel/934996931526385">
+<a href="https://www.youtube.com/watch?v=aAa8AQalWBA">
     <img src="{{ asset('img/thumbnail.jpg') }}" alt="SSC Bursary fundraising video">
 </a>
 
