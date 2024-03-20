@@ -5,17 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Order;
 use App\Models\OrderTicket;
+use Illuminate\Contracts\View\View;
 
 class EventSalesController extends Controller
 {
     /**
      * Show the event sales view.
-     *
-     * @param \App\Models\Event $event
-     *
-     * @return \Illuminate\Contracts\View\View
      */
-    public function sales(Event $event)
+    public function sales(Event $event): View
     {
         return view('events.sales', [
             'event'             => $event,
@@ -30,12 +27,8 @@ class EventSalesController extends Controller
 
     /**
      * Export event sales to a CSV file and download to the browser.
-     *
-     * @param \App\Models\Event $event
-     *
-     * @return void
      */
-    public function exportSales(Event $event)
+    public function exportSales(Event $event): void
     {
         $this->prepareFile(
             filename: 'event_' . $event->id . '_sales_' . now()->toDateTimeLocalString() . '.csv',
@@ -59,12 +52,8 @@ class EventSalesController extends Controller
 
     /**
      * Show the attendee list view.
-     *
-     * @param \App\Models\Event $event
-     *
-     * @return \Illuminate\Contracts\View\View
      */
-    public function attendees(Event $event)
+    public function attendees(Event $event): View
     {
         return view('events.attendees', [
             'event'     => $event,
@@ -72,7 +61,10 @@ class EventSalesController extends Controller
         ]);
     }
 
-    public function exportAttendees(Event $event)
+    /**
+     * Export attendee list to a CSV file and download to the browser.
+     */
+    public function exportAttendees(Event $event): void
     {
 
         $this->prepareFile(filename: 'event_' . $event->id . '_attendees_' . now()->toDateTimeLocalString() . '.csv',
@@ -104,7 +96,14 @@ class EventSalesController extends Controller
         );
     }
 
-    public function prepareFile(string $filename, array $headers, array $data)
+    /**
+     * Prepare a file stream for output.
+     *
+     * @param string $filename The name of the file to be downloaded, including extension (.csv).
+     * @param array $headers Array of column headers to be used for the header row. Must be in the same order as data.
+     * @param array $data 2D array of data (row-by-row).
+     */
+    public function prepareFile(string $filename, array $headers, array $data): void
     {
         ob_start();
 

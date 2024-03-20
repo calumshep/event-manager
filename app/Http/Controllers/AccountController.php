@@ -15,7 +15,9 @@ class AccountController extends Controller
      */
     public function show(User $user): View
     {
-        return view('accounts.form', $user);
+        return view('accounts.form', [
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -23,7 +25,9 @@ class AccountController extends Controller
      */
     public function showOwn(): View
     {
-        return view('accounts.form', auth()->user());
+        return view('accounts.form', [
+            'user' => auth()->user()
+        ]);
     }
 
     /**
@@ -31,7 +35,9 @@ class AccountController extends Controller
      */
     public function edit(User $user): View
     {
-        return view('accounts.form', $user);
+        return view('accounts.form', [
+            'user' => $user
+        ]);
     }
 
     /**
