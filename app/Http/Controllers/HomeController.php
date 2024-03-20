@@ -25,6 +25,8 @@ class HomeController extends Controller
      */
     public function event(Event $event): View
     {
-        return view('events.detail', $event);
+        return view('events.detail', [
+            'event'     => $event,
+        ]);
     }
 }
