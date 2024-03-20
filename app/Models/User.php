@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -76,5 +77,19 @@ class User extends Authenticatable
     public function orders(): MorphMany
     {
         return $this->morphMany(Order::class, 'orderable');
+    }
+
+
+    /**
+     * Get the organisations this user is a member of.
+     */
+    public function orgMemberships(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            related: Organisation::class,
+            table: 'organisations_users',
+            foreignPivotKey: 'user_id',
+            relatedPivotKey: 'organisation_id'
+        );
     }
 }

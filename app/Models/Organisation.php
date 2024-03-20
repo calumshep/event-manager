@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,8 +21,6 @@ class Organisation extends Model
 
     /**
      * Get the user that owns this organisation.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -30,11 +29,22 @@ class Organisation extends Model
 
     /**
      * Get the events belonging to this organisation.
-     *
-     * @return HasMany
      */
     public function events(): HasMany
     {
         return $this->hasMany(Event::class);
+    }
+
+    /**
+     * Get the users in the team for this organisation.
+     */
+    public function team(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            related: User::class,
+            table: 'organisations_users',
+            foreignPivotKey: 'organisation_id',
+            relatedPivotKey: 'user_id'
+        );
     }
 }
