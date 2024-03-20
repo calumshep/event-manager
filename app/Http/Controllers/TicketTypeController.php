@@ -6,7 +6,9 @@ use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Event;
 use App\Models\TicketType;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\RedirectResponse;
 
 class TicketTypeController extends Controller
 {
@@ -19,7 +21,7 @@ class TicketTypeController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Event $event)
+    public function create(Event $event): View
     {
         return view('tickets.form', [
             'ticket'        => new TicketType(),
@@ -34,7 +36,7 @@ class TicketTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Event $event, StoreTicketRequest $request)
+    public function store(Event $event, StoreTicketRequest $request): RedirectResponse
     {
         $input = $request->validated();
 
@@ -49,14 +51,14 @@ class TicketTypeController extends Controller
         ]);
 
         return redirect()->route('events.tickets.show', [$event, $ticket_type])->with([
-            'status' => 'Ticket successfully created.'
+            'status' => 'Ticket created successfully.'
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Event $event, TicketType $ticket_type)
+    public function show(Event $event, TicketType $ticket_type): View
     {
         return view('tickets.form', [
             'ticket'        => $ticket_type,
@@ -71,7 +73,7 @@ class TicketTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Event $event, TicketType $ticket_type)
+    public function edit(Event $event, TicketType $ticket_type): View
     {
         return view('tickets.form', [
             'ticket'        => $ticket_type,
@@ -86,7 +88,7 @@ class TicketTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTicketRequest $request, Event $event, TicketType $ticket_type)
+    public function update(UpdateTicketRequest $request, Event $event, TicketType $ticket_type): RedirectResponse
     {
         $input = $request->validated();
 
@@ -102,34 +104,32 @@ class TicketTypeController extends Controller
         $ticket_type->save();
 
         return redirect()->route('events.tickets.show', [$event, $ticket_type])->with([
-            'status' => 'Ticket details updated successfully.'
+            'status' => 'Ticket updated successfully.'
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Event $event, TicketType $ticket_type)
+    public function destroy(Event $event, TicketType $ticket_type): RedirectResponse
     {
         if ($ticket_type->orders->count()) {
             return redirect()->back()->withErrors([
-                "You cannot delete a ticket which has orders."
+                'You cannot delete a ticket which has orders.'
             ]);
         }
 
         $ticket_type->delete();
 
         return redirect()->route('events.show', $event)->with([
-            'warning' => "Ticket successfully deleted.",
+            'warning' => 'Ticket deleted.',
         ]);
     }
 
     /**
      * Compute details for information collection on ticket.
-     *
-     * @return array
      */
-    public function computeDetails(FormRequest $request)
+    public function computeDetails(FormRequest $request): array
     {
         $details = [];
         if ($request->dob) {

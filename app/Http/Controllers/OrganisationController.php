@@ -49,8 +49,8 @@ class OrganisationController extends Controller
             'website'       => $input['website'],
         ]);
 
-        return redirect()->route('organisations.index', [
-            'organisation' => $organisation,
+        return redirect()->route('organisations.show', $organisation)->with([
+            'status' => 'Organisation created successfully.',
         ]);
     }
 
@@ -92,8 +92,8 @@ class OrganisationController extends Controller
         ]);
         $organisation->save();
 
-        return redirect()->route('organisations.show', [
-            'organisation' => $organisation,
+        return redirect()->route('organisations.show', $organisation)->with([
+            'status' => 'Organisation updated successfully.',
         ]);
     }
 
@@ -104,14 +104,14 @@ class OrganisationController extends Controller
     {
         if ($organisation->events->count()) {
             return redirect()->back()->withErrors([
-                "You cannot delete an organisation which has events associated with it. Try deleting the events first."
+                'You cannot delete an organisation which has events associated with it. Try deleting the events first.',
             ]);
         }
 
         $organisation->delete();
 
         return redirect()->route('organisations.index')->with([
-            'warning' => 'Organisation deleted.'
+            'warning' => 'Organisation deleted successfully.',
         ]);
     }
 }

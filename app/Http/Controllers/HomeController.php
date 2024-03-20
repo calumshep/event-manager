@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Date;
+use Illuminate\Contracts\View\View;
 
 class HomeController extends Controller
 {
     /**
      * Display the dashboard.
      */
-    public function dashboard()
+    public function dashboard(): View
     {
         return view('welcome', [
             'events' => Event::where('start', '>=', Date::now())
@@ -21,15 +22,9 @@ class HomeController extends Controller
 
     /**
      * Display the detailed view of an event.
-     *
-     * @param \App\Models\Event $event
-     *
-     * @return \Illuminate\Contracts\View\View
      */
-    public function event(Event $event)
+    public function event(Event $event): View
     {
-        return view('events.detail', [
-            'event'     => $event,
-        ]);
+        return view('events.detail', $event);
     }
 }

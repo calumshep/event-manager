@@ -6,6 +6,8 @@ use App\Models\Event;
 use App\Models\Guest;
 use App\Models\Order;
 use App\Models\TicketType;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Cashier;
@@ -22,10 +24,8 @@ class OrderController extends Controller
 
     /**
      * Show all the user's paid orders including tickets.
-     *
-     * @return \Illuminate\Contracts\View\View
      */
-    public function index()
+    public function index(): View
     {
         return view('orders.index', [
             'orders' => auth()->user()->orders
@@ -40,12 +40,8 @@ class OrderController extends Controller
 
     /**
      * Show the specified order.
-     *
-     * @param \App\Models\Order $order
-     *
-     * @return \Illuminate\Contracts\View\View
      */
-    public function show(Order $order)
+    public function show(Order $order): View
     {
         return view('orders.show', [
             'order' => $order->load('tickets'),
@@ -55,10 +51,8 @@ class OrderController extends Controller
 
     /**
      * Show the checkout page for the specified event.
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function checkout(Event $event, Request $request)
+    public function checkout(Event $event, Request $request): RedirectResponse|View
     {
         $tickets = [];
 
@@ -77,7 +71,9 @@ class OrderController extends Controller
                 // Do not proceed if more tickets are requested than available
                 if ($ticket->capacity && $ticket->quantity > $ticket->remaining()) {
                     return redirect()->back()
-                        ->withErrors("You cannot purchase more tickets than are available.");
+                        ->withErrors([
+                            'You cannot purchase more tickets than are available.',
+                    ]);
                 }
 
                 $total += $ticket->price * $ticket->quantity;
@@ -86,7 +82,9 @@ class OrderController extends Controller
         }
 
         if (sizeof($tickets) == 0) {
-            return redirect()->back()->withErrors("You must select at least 1 ticket.");
+            return redirect()->back()->withErrors([
+                'You must select at least 1 ticket.',
+            ]);
         }
 
         return view('tickets.checkout', [
@@ -109,14 +107,8 @@ class OrderController extends Controller
      *      "name_2" => array:1 [▼
      *          0 => "test 3"
      *      ]
-     *
-     * @param \App\Models\Event $event
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Laravel\Cashier\Checkout
-     * @throws \Exception
      */
-    public function purchase(Event $event, Request $request)
+    public function purchase(Event $event, Request $request): RedirectResponse|Checkout
     {
         /*
          * Process a new order
@@ -191,9 +183,9 @@ class OrderController extends Controller
             'cancel_url'    =>      // redirect if checkout actively cancelled by user
                 route('event.tickets.cancelled', $event),
             'metadata'      => [    // give Stripe the order ID so it can pass this back in the webhook after payment
-                'order_id' => $order->id],
-            'expires_at' =>         // set checkout session expiry to 1 hour from now
-                now()->addHour()->timestamp
+                'order_id'  => $order->id],
+            'expires_at'    =>      // set checkout session expiry to 1 hour from now
+                now()->addHour()->timestamp,
         ];
 
         if (auth()->user()) {       // start a checkout session on the authenticated user
@@ -206,27 +198,18 @@ class OrderController extends Controller
 
     /**
      * Handle Stripe redirecting back form a cancelled Checkout session.
-     *
-     * @param \App\Models\Event $event
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function cancelled(Event $event)
+    public function cancelled(Event $event): RedirectResponse
     {
         return redirect()->route('home.event', $event)->with([
-            'warning' => "Your ticket purchase was cancelled.",
+            'warning' => 'Your ticket purchase was cancelled.',
         ]);
     }
 
     /**
      * Handle successful completion of a Stripe Checkout session.
-     *
-     * @param \App\Models\Event $event
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function success(Event $event, Request $request)
+    public function success(Event $event, Request $request): View|RedirectResponse
     {
         try {
             return view('tickets.success', [
@@ -237,7 +220,7 @@ class OrderController extends Controller
             Log::error($e);
 
             return redirect()->route('home.event', $event)->withErrors([
-                "An unknown error occurred."
+                'An unknown error occurred.'
             ]);
         }
     }
