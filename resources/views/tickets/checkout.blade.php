@@ -92,10 +92,11 @@
                                            placeholder="Start typing to find racer...">
                                 </div>
 
-                                <div class="list-group list-group-radio d-grid gap-2 w-auto mb-3 p-2 rounded border"
-                                     style="max-height: 200px; overflow:scroll; -webkit-overflow-scrolling: touch;"
-                                     id="competitorList">
-                                    <span>Enter three or more characters to search.</span>
+                                <div class="rounded border p-2 mb-3"
+                                     style="max-height: 200px; overflow:scroll; -webkit-overflow-scrolling: touch;">
+                                    <div class="list-group" id="competitorList">
+                                        <span>Enter three or more characters to search.</span>
+                                    </div>
                                 </div>
                             @endif
 
@@ -227,38 +228,15 @@
                 for (const dataKey in data) {
                     let competitor = data[dataKey];
 
-                    let item = document.createElement('div');
-                    item.className = 'position-relative';
-
-                    let input = document.createElement('input');
-                    input.className = 'form-check-input position-absolute top-50 start-0 ms-3 fs-5';
-                    input.type = 'radio';
-                    input.id = competitor.REGNO;
-                    input.value = competitor.REGNO;
-
-                    item.append(input);
-
-                    let label = document.createElement('label');
-                    label.className = 'list-group-item py-2 ps-5';
-                    label.for = input.id;
-
-                    let span1 = document.createElement('span');
-                    span1.innerHTML = '<strong>'+competitor.FIRSTNAME+' '+competitor.LASTNAME+'</strong> &middot ' +
-                        ''+competitor.REGNO;
-
-                    label.append(span1);
-                    label.append(document.createElement('br'));
-
-                    let span2 = document.createElement('span');
-                    span2.innerHTML = competitor.GENDER === "M" ? 'Male' : 'Female';
-
-                    label.append(span2);
-
-                    item.append(label);
-
-                    item.addEventListener('click', updateDetails);
-
-                    list.appendChild(item);
+                    list.insertAdjacentHTML('beforeend', '' +
+                        '<a href="#" class="list-group-item list-group-item-action">' +
+                            '<div class="d-flex w-100 justify-content-between">' +
+                                `<p class="h6 mb-1">${competitor.FIRSTNAME} ${competitor.LASTNAME} &middot;
+                                    ${competitor.REGNO}</p>` +
+                                `<small>${competitor.GENDER === "M" ? 'Male' : 'Female'}</small>` +
+                            '</div>' +
+                        '</a>'
+                    );
                 }
             }
         }
