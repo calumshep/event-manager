@@ -194,11 +194,23 @@
                             <input class="form-check-input"
                                    type="checkbox"
                                    value="1"
-                                   name="bass_no"
-                                   id="bass_no"
-                                   @checked(key_exists('bass_no', $details))>
-                            <label class="form-check-label" for="bass_no">
-                                BASS Number
+                                   name="gbr_no"
+                                   id="gbr_no"
+                                   @checked(key_exists('gbr_no', $details))>
+                            <label class="form-check-label" for="gbr_no">
+                                GBR registration number
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
+                                   name="club"
+                                   id="club"
+                                   @checked(key_exists('club', $details))>
+                            <label class="form-check-label" for="club">
+                                Club
                             </label>
                         </div>
 

@@ -22,6 +22,10 @@
                         We need your details so we can send you your tickets, and so the event organiser can contact
                         you.
                     </p>
+                    <p>
+                        Why not <a href="{{ route('register') }}">make an account</a> to keep your order history in one
+                        place, and to save these details?
+                    </p>
                 </div>
 
                 <div class="col-lg-8">
@@ -65,7 +69,8 @@
                     <p>{!! $ticket->description !!}</p>
 
                     <small class="text-muted">
-                        To get more tickets of this type, you must start over, or finish and then make a new order.
+                        To get more {{ $event->isRace() ? 'entries' : 'tickets' }} of this type, you must start
+                        over, or finish and then make a new order.
                     </small>
 
                     <input type="hidden" name="quantity_{{ $ticket->id }}" value="{{ $ticket->quantity }}">

@@ -7,7 +7,8 @@
     @include('components.event-detail-header')
 
     <p>
-        Specify how many of each ticket type you want to purchase. You can enter further details on the next page.
+        Specify how many {{ $event->isRace() ? 'entries' : 'of each ticket type' }} you want to purchase. You can enter
+        further details on the next page.
     </p>
 
     <form method="POST" action="{{ route('event.tickets.checkout', $event) }}">

@@ -150,11 +150,21 @@ class TicketTypeController extends Controller
                 ],
             ];
         }
-        if ($request->bass_no) {
-            $details['bass_no'] = [
-                'label'     => 'BASS number',
+        if ($request->gbr_no) {
+            $details['gbr_no'] = [
+                'label'     => 'GBR registration number',
                 'type'      => 'text',
                 'required'  => false,
+            ];
+        }
+        if ($request->club) {
+            $details['club'] = [
+                'label'     => 'Club',
+                'type'      => 'select',
+                'required'  => true,
+                'options'   => [
+
+                ],
             ];
         }
         if ($request->university) {
