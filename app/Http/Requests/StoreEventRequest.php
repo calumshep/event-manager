@@ -27,6 +27,7 @@ class StoreEventRequest extends FormRequest
             'start'         => 'required|date|after:today',
             'end'           => 'nullable|date|after:start',
             'short_desc'    => 'required|string',
+            'type'          => 'required|string',
         ];
     }
 }

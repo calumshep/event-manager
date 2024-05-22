@@ -27,6 +27,7 @@ class Event extends Model
         'long_desc',
         'organisation_id',
         'stripe_id',
+        'type',
     ];
 
     protected $casts = [
@@ -113,5 +114,13 @@ class Event extends Model
                 ::whereIn('ticket_type_id', $this->tickets->pluck('id'))
                 ->whereRelation('order', 'paid', true)
                 ->get();
+    }
+
+    /**
+     * Returns true if the event is of type ski race.
+     */
+    public function isRace(): bool
+    {
+        return $this->type == 'race';
     }
 }
