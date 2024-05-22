@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class EventController extends Controller
@@ -23,7 +24,7 @@ class EventController extends Controller
     public function index(): View
     {
         return view('events.index', [
-            'events' => auth()->user()->events->sortBy('start')->paginate(6),
+            'events' => auth()->user()->getManagableEvents()->paginate(9),
         ]);
     }
 

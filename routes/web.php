@@ -68,8 +68,7 @@ Route::middleware(Authenticate::class)
 
     // Event ticket resource management
     Route::resource('events.tickets', TicketTypeController::class)
-        ->parameters(['tickets' => 'ticket_type'])
-        ->except(['index']);
+        ->parameters(['tickets' => 'ticket_type']);
 
     // Organisation team management
     Route::controller(OrganisationTeamController::class)

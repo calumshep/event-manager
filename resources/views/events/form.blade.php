@@ -1,21 +1,16 @@
-@extends('layout.app')
+@extends('layout.sidebar-form')
 
 @section('head')
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 @endsection
 
-@section('content')
+@section('title', $creating ? 'New Event' : $event->name)
 
-    <div class="d-flex justify-content-between align-items-baseline">
-        <h1>{{ $creating ? "New" : null }} Event</h1>
+@section('sidebar')
+    @include('layout.event-nav')
+@endsection
 
-        @unless($creating)
-            <a class="btn btn-success" href="{{ route('events.sales', $event) }}">
-                <i class="fa-solid fa-sterling-sign me-2"></i>Ticket Sales
-            </a>
-        @endunless
-    </div>
-
+@section('form')
     <p>
         Required fields are marked with an asterisk (<span class="text-danger">*</span>).
     </p>
@@ -27,7 +22,7 @@
         </p>
     @endif
 
-    @include('components.status')
+    <hr>
 
     <form method="POST"
           action="{{ $creating ? route('events.store') : route('events.update', $event) }}">
@@ -36,7 +31,6 @@
 
         <fieldset @disabled($readonly)>
             <!-- basics -->
-            <hr>
             <div class="row pt-3 mb-3">
                 <div class="col-lg-4">
                     <h2 class="h5">Basics</h2>
@@ -144,61 +138,6 @@
             </div>
         </fieldset>
 
-        @unless($creating)
-            <!-- tickets -->
-            <hr>
-
-            <div class="row pt-3 mb-3">
-                <div class="col-lg-4">
-                    <h2 class="h5">Tickets</h2>
-
-                    <p>
-                        Tickets allow your attendees to register or pay for the event. Add tickets for different days,
-                        different price points, concessions, extras you're selling, etc.
-                        <strong>Your event should have at least one ticket type.</strong>
-                    </p>
-                </div>
-
-                <div class="col-lg-8">
-                    <p>
-                        <a href="{{ route('events.tickets.create', $event)  }}" class="btn btn-primary">
-                            <i class="fa-solid fa-plus me-2"></i>New Ticket
-                        </a>
-                    </p>
-
-                    <table class="table table-hover table-striped border card-text">
-                        <thead class="table-light">
-                        <tr>
-                            <th>Name</th>
-                            <th>Time</th>
-                            <th>Price</th>
-                            <th>Capacity</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        @forelse($event->tickets as $ticket)
-                            <tr>
-                                <td><a href="{{ route('events.tickets.show', [$event, $ticket]) }}">{{
-                                        $ticket->name
-                                        }}</a></td>
-                                <td>{{ $ticket->time->format('d/m/Y') }}</td>
-                                <td>£{{ number_format($ticket->price/100, 2) }}</td>
-                                <td>{{ $ticket->capacity ?? 'Not set' }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4">
-                                    No tickets found for this event.
-                                </td>
-                            </tr>
-                        @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        @endunless
-
         <hr>
 
         <div class="d-flex justify-content-between">
@@ -231,7 +170,9 @@
             </div>
         </div>
     </form>
+@endsection
 
+@section('modals')
     @if($readonly)
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -271,7 +212,6 @@
             </div>
         </div>
     @endif
-
 @endsection
 
 @section('scripts')

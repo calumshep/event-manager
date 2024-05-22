@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -91,5 +92,16 @@ class User extends Authenticatable
             foreignPivotKey: 'user_id',
             relatedPivotKey: 'organisation_id'
         );
+    }
+
+    /**
+     * Returns the events that this user owns, as well as events belonging to organisations which this user is a
+     * member of.
+     */
+    public function getManagableEvents(): Collection
+    {
+        return $this->events->merge(
+            auth()->user()->orgMemberships->pluck('events')
+        )->sortBy('start');
     }
 }
