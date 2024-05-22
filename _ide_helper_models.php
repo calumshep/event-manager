@@ -148,6 +148,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property string|null $special_requests
+ * @property mixed|null $order_requests
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $orderable
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $tickets
  * @property-read int|null $tickets_count
@@ -160,6 +161,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderRequests($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaid($value)
@@ -213,6 +215,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Event> $events
  * @property-read int|null $events_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $team
+ * @property-read int|null $team_count
  * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\OrganisationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Organisation newModelQuery()
@@ -249,6 +253,7 @@ namespace App\Models{
  * @property int $event_id
  * @property string $stripe_id
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property bool $show_remaining
  * @property-read \App\Models\Event|null $event
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
  * @property-read int|null $orders_count
@@ -266,6 +271,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereShowRemaining($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereStripeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereUpdatedAt($value)
@@ -299,6 +305,8 @@ namespace App\Models{
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
  * @property-read int|null $orders_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Organisation> $orgMemberships
+ * @property-read int|null $org_memberships_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Organisation> $organisations
  * @property-read int|null $organisations_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
