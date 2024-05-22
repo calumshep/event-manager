@@ -17,5 +17,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(GBSkiController::class)->group(function ()
 {
-    Route::get('/active-registrations', 'activeRegistrations');
+    Route::get('/active-registrations/{query?}', 'activeRegistrations');
 });
