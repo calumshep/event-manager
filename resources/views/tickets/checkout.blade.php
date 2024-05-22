@@ -95,60 +95,7 @@
                                 <div class="list-group list-group-radio d-grid gap-2 w-auto mb-3 p-2 rounded border"
                                      style="max-height: 200px; overflow:scroll; -webkit-overflow-scrolling: touch;"
                                      id="competitorList">
-
-                                    <div class="d-flex align-items-center">
-                                        <strong role="status">Loading...</strong>
-                                        <div class="spinner-border ms-auto" aria-hidden="true"></div>
-                                    </div>
-
-                                    <p>
-                                        No racers found. Try searching something else, or enter details manually below.
-                                    </p>
-
-                                    <div class="position-relative">
-                                        <input class="form-check-input position-absolute top-50 start-0 ms-3 fs-5"
-                                               type="radio"
-                                               id="31488"
-                                               value="31488">
-
-                                        <label class="list-group-item py-2 ps-5" for="31488">
-                                            <span><strong>Calum Shepherd</strong> &middot; 06/09/2000</span><br>
-                                            <span>31488 &middot; Male &middot; ATC</span>
-                                        </label>
-                                    </div>
-                                    <div class="position-relative">
-                                        <input class="form-check-input position-absolute top-50 start-0 ms-3 fs-5"
-                                               type="radio"
-                                               id="31488"
-                                               value="31488">
-
-                                        <label class="list-group-item py-2 ps-5" for="31488">
-                                            <span><strong>Calum Shepherd</strong> &middot; 06/09/2000</span><br>
-                                            <span>31488 &middot; Male &middot; ATC</span>
-                                        </label>
-                                    </div>
-                                    <div class="position-relative">
-                                        <input class="form-check-input position-absolute top-50 start-0 ms-3 fs-5"
-                                               type="radio"
-                                               id="31488"
-                                               value="31488">
-
-                                        <label class="list-group-item py-2 ps-5" for="31488">
-                                            <span><strong>Calum Shepherd</strong> &middot; 06/09/2000</span><br>
-                                            <span>31488 &middot; Male &middot; ATC</span>
-                                        </label>
-                                    </div>
-                                    <div class="position-relative">
-                                        <input class="form-check-input position-absolute top-50 start-0 ms-3 fs-5"
-                                               type="radio"
-                                               id="31488"
-                                               value="31488">
-
-                                        <label class="list-group-item py-2 ps-5" for="31488">
-                                            <span><strong>Calum Shepherd</strong> &middot; 06/09/2000</span><br>
-                                            <span>31488 &middot; Male &middot; ATC</span>
-                                        </label>
-                                    </div>
+                                    <span>Enter three or more characters to search.</span>
                                 </div>
                             @endif
 
@@ -259,53 +206,78 @@
 
 @section('scripts')
     <script>
+        const list = document.getElementById('competitorList');
+
+        function updateDetails(data)
+        {
+            // TODO
+        }
+
         function updateCompetitorList(data)
         {
-            let list = document.getElementById('competitorList');
             list.innerHTML = '';
 
-            for (const dataKey in data) {
-                let competitor = data[dataKey];
+            if (data.length === 0) {
+                list.innerHTML = '' +
+                    '<span>' +
+                        'No racers found. Try searching something else, or enter details manually ' +
+                        'below.' +
+                    '</span>';
+            } else {
+                for (const dataKey in data) {
+                    let competitor = data[dataKey];
 
-                let item = document.createElement('div');
-                item.className = 'position-relative';
+                    let item = document.createElement('div');
+                    item.className = 'position-relative';
 
-                let input = document.createElement('input');
-                input.className = 'form-check-input position-absolute top-50 start-0 ms-3 fs-5';
-                input.type = 'radio';
-                input.id = competitor.REGNO;
-                input.value = competitor.REGNO;
+                    let input = document.createElement('input');
+                    input.className = 'form-check-input position-absolute top-50 start-0 ms-3 fs-5';
+                    input.type = 'radio';
+                    input.id = competitor.REGNO;
+                    input.value = competitor.REGNO;
 
-                item.append(input);
+                    item.append(input);
 
-                let label = document.createElement('label');
-                label.className = 'list-group-item py-2 ps-5';
-                label.for = input.id;
+                    let label = document.createElement('label');
+                    label.className = 'list-group-item py-2 ps-5';
+                    label.for = input.id;
 
-                let span1 = document.createElement('span');
-                span1.innerHTML = '<strong>'+competitor.FIRSTNAME+' '+competitor.LASTNAME+'</strong> &middot ' +
-                    ''+competitor.REGNO;
+                    let span1 = document.createElement('span');
+                    span1.innerHTML = '<strong>'+competitor.FIRSTNAME+' '+competitor.LASTNAME+'</strong> &middot ' +
+                        ''+competitor.REGNO;
 
-                label.append(span1);
-                label.append(document.createElement('br'));
+                    label.append(span1);
+                    label.append(document.createElement('br'));
 
-                let span2 = document.createElement('span');
-                let gender = competitor.GENDER === "M" ? 'Male' : 'Female';
-                span2.innerHTML = gender;
+                    let span2 = document.createElement('span');
+                    span2.innerHTML = competitor.GENDER === "M" ? 'Male' : 'Female';
 
-                label.append(span2);
+                    label.append(span2);
 
-                item.append(label);
+                    item.append(label);
 
-                list.appendChild(item);
+                    item.addEventListener('click', updateDetails);
+
+                    list.appendChild(item);
+                }
             }
         }
 
         document.getElementById('racer_search').addEventListener('keyup', function () {
-            let url = '{{ config('app.url') }}/api/active-registrations/' + this.value;
-            fetch(url)
-                .then((res) => res.json())
-                .then(updateCompetitorList);
+            if (this.value.length < 3) {
+                list.innerHTML = '<span>Enter three or more characters to search.</span>';
+            } else {
+                list.innerHTML = '' +
+                    '<div class="d-flex align-items-center">' +
+                        '<strong role="status">Loading...</strong>' +
+                        '<div class="spinner-border ms-auto" aria-hidden="true"></div>' +
+                    '</div>';
+
+                let url = '{{ config('app.url') }}/api/active-registrations/' + this.value;
+                fetch(url)
+                    .then((res) => res.json())
+                    .then(updateCompetitorList);
+            }
         });
     </script>
 @endsection
