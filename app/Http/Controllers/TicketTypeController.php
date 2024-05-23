@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Event;
 use App\Models\TicketType;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
@@ -139,6 +140,14 @@ class TicketTypeController extends Controller
                 'required'  => true,
             ];
         }
+        if ($request->yob) {
+            $details['yob'] = [
+                'label'     => 'Year of birth',
+                'type'      => 'number',
+                'required'  => true,
+                'max'       => Carbon::now()->month >= 5 ? Carbon::now()->year - 8 : Carbon::now()->year - 7,
+            ];
+        }
         if ($request->gender) {
             $details['gender'] = [
                 'label'     => 'Gender',
@@ -160,11 +169,10 @@ class TicketTypeController extends Controller
         if ($request->club) {
             $details['club'] = [
                 'label'     => 'Club',
-                'type'      => 'select',
+                'type'      => 'text',
                 'required'  => true,
-                'options'   => [
-
-                ],
+                'help'      => 'Your UK club is automatically taken from the GB seed list - to change,
+                                contact your HNGB.'
             ];
         }
         if ($request->university) {

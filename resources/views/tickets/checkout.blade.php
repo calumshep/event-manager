@@ -85,16 +85,16 @@
 
                             @if($event->isRace())
                                 <div class="mb-2">
-                                    <label for="racer_search">Pick a registered racer to enter</label>
+                                    <label for="racer_search_{{ $i }}">Pick a registered racer to enter</label>
                                     <input type="search"
-                                           id="racer_search"
+                                           id="racer_search_{{ $i }}"
                                            class="form-control"
                                            placeholder="Start typing to find racer...">
                                 </div>
 
                                 <div class="rounded border p-2 mb-3"
                                      style="max-height: 200px; overflow:scroll; -webkit-overflow-scrolling: touch;">
-                                    <div class="list-group" id="competitorList">
+                                    <div class="list-group" id="competitor_list_{{ $i }}">
                                         <span>Enter three or more characters to search.</span>
                                     </div>
                                 </div>
@@ -139,6 +139,9 @@
                                                        id="{{ $name }}_{{ $ticket->id . '_' . $i }}"
                                                        class="form-control"
                                                        @required($detail['required'])>
+                                            @endif
+                                            @if(array_key_exists('help', $detail))
+                                                <small class="form-text">{{ $detail['help'] }}</small>
                                             @endif
                                         </div>
                                     @endforeach
@@ -207,55 +210,119 @@
 
 @section('scripts')
     <script>
-        const list = document.getElementById('competitorList');
-
-        function updateDetails(data)
+        /**
+         * Render a selectable list of competitors to display search query results.
+         *
+         * @param data JSON response to API call for competitor data
+         * @param node The element to render the data in
+         */
+        function renderCompetitorList(data, node)
         {
-            // TODO
-        }
-
-        function updateCompetitorList(data)
-        {
-            list.innerHTML = '';
+            // Clear the competitor list
+            node.innerHTML = '';
 
             if (data.length === 0) {
-                list.innerHTML = '' +
+                // Display 0 results
+                node.innerHTML = '' +
                     '<span>' +
                         'No racers found. Try searching something else, or enter details manually ' +
                         'below.' +
                     '</span>';
             } else {
-                for (const dataKey in data) {
-                    let competitor = data[dataKey];
+                // For each result
+                for (let key in data) {
+                    // Get competitor data
+                    let competitor = data[key];
+                    let node_id = node.id.split('_')[2];
 
-                    list.insertAdjacentHTML('beforeend', '' +
-                        '<a href="#" class="list-group-item list-group-item-action">' +
-                            '<div class="d-flex w-100 justify-content-between">' +
+                    // Render the competitor entry
+                    node.insertAdjacentHTML('beforeend', '' +
+                        `<button type="button" id="entry_${node_id}_competitor_${competitor.REGNO}" ` +
+                           'class="list-group-item list-group-item-action">' +
+                            '<div class="d-md-flex w-100 justify-content-between">' +
                                 `<p class="h6 mb-1">${competitor.FIRSTNAME} ${competitor.LASTNAME} &middot;
                                     ${competitor.REGNO}</p>` +
-                                `<small>${competitor.GENDER === "M" ? 'Male' : 'Female'}</small>` +
+                                `<small>${competitor.GENDER === "M" ? 'Male' : 'Female'} &middot
+                                    ${competitor.YOB} &middot; <em>UK Club:</em> ${competitor.CLUB_UK}</small>` +
                             '</div>' +
-                        '</a>'
+                        '</button>'
                     );
+
+                    // Add event listener for populating entry data
+                    node.lastElementChild.addEventListener('click', function() {
+                        this.parentElement.childNodes.forEach(function(self) {
+                            self.classList.remove('active');
+                        })
+
+                        this.classList.add('active');
+                        autofillCompetitor(
+                            // hack-y way to get ticket type ID...lol
+                            this.parentElement.parentElement.parentElement.childNodes[7].childNodes[3].id.split('_')[1],
+                            // sequential order of this entry within the ticket type
+                            node_id,
+                            competitor.FIRSTNAME,
+                            competitor.LASTNAME,
+                            competitor.REGNO,
+                            competitor.GENDER,
+                            competitor.YOB,
+                            competitor.CLUB_UK);
+                    });
                 }
             }
         }
 
-        document.getElementById('racer_search').addEventListener('keyup', function () {
-            if (this.value.length < 3) {
-                list.innerHTML = '<span>Enter three or more characters to search.</span>';
-            } else {
-                list.innerHTML = '' +
-                    '<div class="d-flex align-items-center">' +
-                        '<strong role="status">Loading...</strong>' +
-                        '<div class="spinner-border ms-auto" aria-hidden="true"></div>' +
-                    '</div>';
+        /*
+         * Attach an event listener to all search fields to implement live competitor search
+         */
+        document.querySelectorAll('[id^="racer_search_"]').forEach(function (search) {
+            // Find corresponding competitor list box to populate
+            let list = document.querySelector('#competitor_list_' + search.id.split('_')[2]);
 
-                let url = '{{ config('app.url') }}/api/active-registrations/' + this.value;
-                fetch(url)
-                    .then((res) => res.json())
-                    .then(updateCompetitorList);
-            }
+            search.addEventListener('keyup', function ()
+            {
+                if (this.value.length < 3) {
+                    list.innerHTML = '<span>Enter three or more characters to search.</span>';
+                } else {
+                    list.innerHTML = '' +
+                        '<div class="d-flex align-items-center">' +
+                            '<strong role="status">Loading...</strong>' +
+                            '<div class="spinner-border ms-auto" aria-hidden="true"></div>' +
+                        '</div>';
+
+                    fetch('{{ config('app.url') }}/api/active-registrations/' + this.value)
+                        .then((response) => response.json())
+                        .then(function(data) {
+                            renderCompetitorList(data, list);
+                    });
+                }
+            });
         });
+
+        /**
+         * Autofill the selected competitior's details into the entry form.
+         *
+         * @param ticket_id ID of the ticket type that the entry is for
+         * @param entryno   Sequential number within the ticket types that the entry is for
+         * @param firstname Competitor's first name
+         * @param lastname  Competitor's last name
+         * @param regno     Competitor's GBR registration number
+         * @param gender    Competitor's gender (M/F only)
+         * @param yob       Competitor's year of birth
+         * @param club      Competitor's UK club (abbreviation)
+         */
+        function autofillCompetitor(ticket_id, entryno, firstname, lastname, regno, gender, yob, club)
+        {
+            document.getElementById('name_' + ticket_id + '_' + entryno).value = firstname + ' ' + lastname;
+            if (regno > 0) {
+                document.getElementById('gbr_no_' + ticket_id + '_' + entryno).value = regno;
+            }
+            if (gender === 'M') {
+                document.getElementById('gender_' + ticket_id + '_' + entryno).selectedIndex = 1;
+            } else {
+                document.getElementById('gender_' + ticket_id + '_' + entryno).selectedIndex = 2;
+            }
+            document.getElementById('yob_' + ticket_id + '_' + entryno).value = yob;
+            document.getElementById('club_' + ticket_id + '_' + entryno).value = club ?? '';
+        }
     </script>
 @endsection
