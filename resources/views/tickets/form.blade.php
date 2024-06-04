@@ -174,7 +174,7 @@
                                    id="dob"
                                    @checked(key_exists('dob', $details))>
                             <label class="form-check-label" for="dob">
-                                Date of Birth
+                                Date of birth
                             </label>
                         </div>
 
@@ -186,7 +186,7 @@
                                    id="yob"
                                    @checked(key_exists('yob', $details))>
                             <label class="form-check-label" for="yob">
-                                Year of Birth
+                                Year of birth
                             </label>
                         </div>
 

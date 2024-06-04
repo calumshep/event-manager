@@ -138,6 +138,7 @@ class TicketTypeController extends Controller
                 'label'     => 'Date of birth',
                 'type'      => 'date',
                 'required'  => true,
+                'readonly'  => false,
             ];
         }
         if ($request->yob) {
@@ -145,7 +146,8 @@ class TicketTypeController extends Controller
                 'label'     => 'Year of birth',
                 'type'      => 'number',
                 'required'  => true,
-                'max'       => Carbon::now()->month >= 5 ? Carbon::now()->year - 8 : Carbon::now()->year - 7,
+                'readonly'  => false,
+                'max'       => Carbon::now()->month >= 5 ? Carbon::now()->year - 6 : Carbon::now()->year - 5,
             ];
         }
         if ($request->gender) {
@@ -153,6 +155,7 @@ class TicketTypeController extends Controller
                 'label'     => 'Gender',
                 'type'      => 'select',
                 'required'  => true,
+                'readonly'  => false,
                 'options'   => [
                     'female'    => 'Female',
                     'male'      => 'Male',
@@ -164,6 +167,8 @@ class TicketTypeController extends Controller
                 'label'     => 'GBR registration number',
                 'type'      => 'text',
                 'required'  => false,
+                'readonly'  => true,
+                'tooltip'   => 'If you have a registration number, you must search for your competitor profile above.',
             ];
         }
         if ($request->club) {
@@ -171,8 +176,7 @@ class TicketTypeController extends Controller
                 'label'     => 'Club',
                 'type'      => 'text',
                 'required'  => true,
-                'help'      => 'Your UK club is automatically taken from the GB seed list - to change,
-                                contact your HNGB.'
+                'readonly'  => false,
             ];
         }
         if ($request->university) {
@@ -180,6 +184,7 @@ class TicketTypeController extends Controller
                 'label'     => 'Education institution',
                 'type'      => 'text',
                 'required'  => false,
+                'readonly'  => false,
             ];
         }
         if ($request->dietary) {
@@ -187,6 +192,7 @@ class TicketTypeController extends Controller
                 'label'     => 'Dietary Requirements',
                 'type'      => 'text',
                 'required'  => false,
+                'readonly'  => false,
             ];
         }
         return $details;

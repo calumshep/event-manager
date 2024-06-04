@@ -8,6 +8,10 @@
         This form <strong>does not save as you go</strong>, so please complete your checkout in one go!
     </p>
 
+    <p>
+        Required fields are marked with an asterisk (<span class="text-danger">*</span>).
+    </p>
+
     <form method="POST" action="{{ route('event.tickets.purchase', $event) }}">
         @csrf
 
@@ -28,6 +32,7 @@
                     </p>
                 </div>
 
+                {{-- Buyer details --}}
                 <div class="col-lg-8">
                     <div class="mb-3">
                         <label for="buyer_email">Email address<span class="text-danger">*</span></label>
@@ -83,23 +88,47 @@
                         <div @class(['pt-3' => $i !== 0])>
                             <h5>{{ $event->isRace() ? 'Entry' : 'Ticket' }} {{ $i + 1 }}</h5>
 
+                            {{-- Racer search --}}
                             @if($event->isRace())
-                                <div class="mb-2">
-                                    <label for="racer_search_{{ $i }}">Pick a registered racer to enter</label>
-                                    <input type="search"
-                                           id="racer_search_{{ $i }}"
-                                           class="form-control"
-                                           placeholder="Start typing to find racer...">
+                                <div id="search_{{ $ticket->id . '_' . $i }}">
+                                    <div class="mb-2">
+                                        <label for="racer_search_{{ $ticket->id . '_' . $i }}">Pick a registered racer to enter</label>
+                                        <input type="search"
+                                               id="racer_search_{{ $ticket->id . '_' . $i }}"
+                                               class="form-control"
+                                               placeholder="Start typing to find racer...">
+                                    </div>
+
+                                    <div class="rounded border p-2 mb-3"
+                                         style="max-height: 200px; overflow:scroll; -webkit-overflow-scrolling: touch;">
+                                        <div class="list-group" id="competitor_list_{{ $ticket->id . '_' . $i }}">
+                                            <span>Enter three or more characters to search.</span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="rounded border p-2 mb-3"
-                                     style="max-height: 200px; overflow:scroll; -webkit-overflow-scrolling: touch;">
-                                    <div class="list-group" id="competitor_list_{{ $i }}">
-                                        <span>Enter three or more characters to search.</span>
+                                {{-- Locked message --}}
+                                <div id="locked_{{ $ticket->id . '_' . $i }}"
+                                     class="row d-none">
+                                    <div class="col-md mb-3">
+                                        <small>
+                                            These details are populated from the GBR database and cannot be changed
+                                            here. To change them, contact your HNGB.
+                                        </small>
+                                    </div>
+
+                                    <div class="col-md-auto mb-3">
+                                        {{-- Reset button --}}
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-danger"
+                                                id="reset_{{ $ticket->id . '_' . $i }}">
+                                            <i class="fa-solid fa-rotate-left me-2"></i>Reset
+                                        </button>
                                     </div>
                                 </div>
                             @endif
 
+                            {{-- Ticket holder name --}}
                             <div class="mb-3">
                                 <label for="name_{{ $ticket->id . '_' . $i }}">
                                     Full name<span class="text-danger">*</span>
@@ -112,10 +141,19 @@
                                        required>
                             </div>
 
+                            {{-- Ticket holder details --}}
                             @if($ticket->details)
                                 <div class="row row-cols-1 row-cols-md-2">
                                     @foreach($ticket->details as $name => $detail)
-                                        <div class="col mb-3">
+                                        <div class="col mb-3"
+                                             {{-- Tooltip --}}
+                                             @if(array_key_exists('tooltip', $detail))
+                                                 tabindex="0"
+                                                 data-bs-toggle="tooltip"
+                                                 data-bs-title="{{ $detail['tooltip'] }}"
+                                             @endif>
+
+                                            {{-- Label --}}
                                             <label for="{{ $name }}_{{ $ticket->id . '_' . $i }}">
                                                 {{ $detail['label'] }}
                                                 @if($detail['required'])
@@ -124,22 +162,31 @@
                                             </label>
 
                                             @if($detail['type'] === 'select')
+                                                {{-- Select element --}}
                                                 <select name="{{ $name }}_{{ $ticket->id }}[]"
                                                         id="{{ $name }}_{{ $ticket->id . '_' . $i }}"
                                                         class="form-select"
-                                                        @required($detail['required'])>
-                                                        <option value disabled selected>Select...</option>
+                                                        @required($detail['required'])
+                                                        @readonly($detail['readonly'])>
+                                                    {{-- Default option --}}
+                                                    <option value disabled selected>Select...</option>
+
+                                                    {{-- Possible options --}}
                                                     @foreach($detail['options'] as $value => $title)
                                                         <option value="{{ $value }}">{{ $title }}</option>
                                                     @endforeach
                                                 </select>
                                             @else
+                                                {{-- Input element --}}
                                                 <input type="{{ $detail['type'] }}"
                                                        name="{{ $name }}_{{ $ticket->id }}[]"
                                                        id="{{ $name }}_{{ $ticket->id . '_' . $i }}"
                                                        class="form-control"
-                                                       @required($detail['required'])>
+                                                       @required($detail['required'])
+                                                       @readonly($detail['readonly'])>
                                             @endif
+
+                                            {{-- Help text --}}
                                             @if(array_key_exists('help', $detail))
                                                 <small class="form-text">{{ $detail['help'] }}</small>
                                             @endif
@@ -218,47 +265,49 @@
          */
         function renderCompetitorList(data, node)
         {
-            // Clear the competitor list
-            node.innerHTML = '';
-
             if (data.length === 0) {
                 // Display 0 results
-                node.innerHTML = '' +
-                    '<span>' +
-                        'No racers found. Try searching something else, or enter details manually ' +
-                        'below.' +
-                    '</span>';
+                node.innerHTML = `` +
+                    `<span>` +
+                        `No racers found. Try searching something else, or enter details manually ` +
+                        `below.` +
+                    `</span>`;
             } else {
+                // Clear the competitor list
+                node.innerHTML = '';
+
                 // For each result
                 for (let key in data) {
                     // Get competitor data
                     let competitor = data[key];
-                    let node_id = node.id.split('_')[2];
+
+                    // Compute the ticket and node IDs
+                    let id = node.id.split('_');
+                    let ticket_id = id[2];
+                    let node_id = id[3];
 
                     // Render the competitor entry
-                    node.insertAdjacentHTML('beforeend', '' +
+                    node.insertAdjacentHTML('beforeend', `` +
                         `<button type="button" id="entry_${node_id}_competitor_${competitor.REGNO}" ` +
-                           'class="list-group-item list-group-item-action">' +
-                            '<div class="d-md-flex w-100 justify-content-between">' +
+                           `class="list-group-item list-group-item-action">` +
+                            `<div class="d-md-flex w-100 justify-content-between">` +
                                 `<p class="h6 mb-1">${competitor.FIRSTNAME} ${competitor.LASTNAME} &middot;
                                     ${competitor.REGNO}</p>` +
-                                `<small>${competitor.GENDER === "M" ? 'Male' : 'Female'} &middot
+                                `<small>${competitor.GENDER === "M" ? `Male` : `Female`} &middot
                                     ${competitor.YOB} &middot; <em>UK Club:</em> ${competitor.CLUB_UK}</small>` +
-                            '</div>' +
-                        '</button>'
+                            `</div>` +
+                        `</button>`
                     );
 
                     // Add event listener for populating entry data
-                    node.lastElementChild.addEventListener('click', function() {
-                        this.parentElement.childNodes.forEach(function(self) {
-                            self.classList.remove('active');
-                        })
-
+                    node.lastElementChild.addEventListener('click', function()
+                    {
+                        // Remove all active classes to deselect all rows, then mark the current one as active
+                        this.parentElement.childNodes.forEach(function(self) { self.classList.remove('active'); });
                         this.classList.add('active');
+
                         autofillCompetitor(
-                            // hack-y way to get ticket type ID...lol
-                            this.parentElement.parentElement.parentElement.childNodes[7].childNodes[3].id.split('_')[1],
-                            // sequential order of this entry within the ticket type
+                            ticket_id,
                             node_id,
                             competitor.FIRSTNAME,
                             competitor.LASTNAME,
@@ -266,37 +315,46 @@
                             competitor.GENDER,
                             competitor.YOB,
                             competitor.CLUB_UK);
+                        lockCompetitorFields(ticket_id, node_id);
                     });
                 }
             }
         }
 
-        /*
-         * Attach an event listener to all search fields to implement live competitor search
+        /**
+         * 'Lock' (make readonly) the form fields for the competitor when a competitor search result is selected.
          */
-        document.querySelectorAll('[id^="racer_search_"]').forEach(function (search) {
-            // Find corresponding competitor list box to populate
-            let list = document.querySelector('#competitor_list_' + search.id.split('_')[2]);
+        function lockCompetitorFields(ticket, node)
+        {
+            let id = ticket + '_' + node;
 
-            search.addEventListener('keyup', function ()
+            // Hide the racer search
+            let search = document.querySelector(`#racer_search_${id}`);
+            search.classList.add('d-none');
+            search.parentElement.classList.add('d-none');
+            search.parentElement.nextElementSibling.classList.add('d-none');
+
+            // Show the locked message
+            document.querySelector(`#locked_${id}`).classList.remove('d-none');
+
+            // Lock relevant competitor fields
+            document.querySelectorAll(`[id*="${id}"]`).forEach(function(n)
             {
-                if (this.value.length < 3) {
-                    list.innerHTML = '<span>Enter three or more characters to search.</span>';
-                } else {
-                    list.innerHTML = '' +
-                        '<div class="d-flex align-items-center">' +
-                            '<strong role="status">Loading...</strong>' +
-                            '<div class="spinner-border ms-auto" aria-hidden="true"></div>' +
-                        '</div>';
+                switch (n.tagName.toLowerCase()) {
+                    case 'input':
+                        // Make inputs readonly
+                        n.readOnly = true;
+                        break;
+                    case 'select':
+                        // Disable all but selected option for selects
+                        let options = n.options;
 
-                    fetch('{{ config('app.url') }}/api/active-registrations/' + this.value)
-                        .then((response) => response.json())
-                        .then(function(data) {
-                            renderCompetitorList(data, list);
-                    });
+                        for (let option of options) {
+                            if (option.value !== options[n.selectedIndex].value) option.disabled = true;
+                        }
                 }
-            });
-        });
+            })
+        }
 
         /**
          * Autofill the selected competitior's details into the entry form.
@@ -312,17 +370,74 @@
          */
         function autofillCompetitor(ticket_id, entryno, firstname, lastname, regno, gender, yob, club)
         {
-            document.getElementById('name_' + ticket_id + '_' + entryno).value = firstname + ' ' + lastname;
-            if (regno > 0) {
-                document.getElementById('gbr_no_' + ticket_id + '_' + entryno).value = regno;
-            }
-            if (gender === 'M') {
-                document.getElementById('gender_' + ticket_id + '_' + entryno).selectedIndex = 1;
-            } else {
-                document.getElementById('gender_' + ticket_id + '_' + entryno).selectedIndex = 2;
-            }
-            document.getElementById('yob_' + ticket_id + '_' + entryno).value = yob;
-            document.getElementById('club_' + ticket_id + '_' + entryno).value = club ?? '';
+            let id = ticket_id + '_' + entryno;
+
+            document.querySelector(`#name_${id}`).value = firstname + ' ' + lastname;
+            document.querySelector(`#yob_${id}`).value = yob;
+            document.querySelector(`#club_${id}`).value = club ?? '';
+
+            if (regno > 0) document.querySelector(`#gbr_no_${id}`).value = regno;
+
+            if (gender === 'M') document.querySelector(`#gender_${id}`).selectedIndex = 1;
+            else document.querySelector(`#gender_${id}`).selectedIndex = 2;
         }
+
+        /*
+         * Attach an event listener to all search fields to implement live competitor search.
+         */
+        document.querySelectorAll(`[id^="racer_search_"]`).forEach(function(search)
+        {
+            // Find corresponding competitor list box to populate
+            let id = search.id.split('_');
+            let list = document.querySelector(`#competitor_list_${id[2]}_${id[3]}`);
+
+            search.addEventListener('keyup', function()
+            {
+                if (this.value.length < 3) {
+                    list.innerHTML = '<span>Enter three or more characters to search.</span>';
+                } else {
+                    list.innerHTML = '' +
+                        '<div class="d-flex align-items-center">' +
+                            '<strong role="status">Loading...</strong>' +
+                            '<div class="spinner-border ms-auto" aria-hidden="true"></div>' +
+                        '</div>';
+
+                    fetch(`{{ config('app.url') }}/api/active-registrations/${this.value}`)
+                        .then((response) => response.json())
+                        .then(function(data) { renderCompetitorList(data, list); });
+                }
+            });
+        });
+
+        /*
+         * Attach an event listener to all reset buttons to implement unlocking of competitor fields
+         */
+        document.querySelectorAll('[id^="reset_"]').forEach(function(reset)
+        {
+            // Build ID of entry from reset button ID
+            let id = reset.id.split('_');
+            id = id[1] + '_' + id[2];
+
+            reset.addEventListener('click', function()
+            {
+                // Clear and enable relevant form fields
+                document.querySelectorAll(`[id*="${id}"]`).forEach(function(n)
+                {
+                    if (['input'].includes(n.tagName.toLowerCase())) {
+                        n.value = '';
+                        n.readOnly = false;
+                    }
+                });
+
+                // Show the racer search
+                let search = document.querySelector(`#racer_search_${id}`);
+                search.classList.remove('d-none');
+                search.parentElement.classList.remove('d-none');
+                search.parentElement.nextElementSibling.classList.remove('d-none');
+
+                // Hide the locked message
+                document.querySelector(`#locked_${id}`).classList.add('d-none');
+            });
+        });
     </script>
 @endsection
