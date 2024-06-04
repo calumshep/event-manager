@@ -162,8 +162,10 @@ class OrderController extends Controller
                     $ticket_type->metadata = $metadata;
 
                     $order->tickets()->attach($ticket_type->id, [         // attach ticket to order with name + metadata
-                        'ticket_holder_name'    => $tickets['name_'.$ticket_type->id][$j],
-                        'metadata'              => $metadata,
+                        'ticket_holder_name' => null,
+                        'first_name'    => $tickets['firstname_'.$ticket_type->id][$j],
+                        'last_name'     => $tickets['lastname_'.$ticket_type->id][$j],
+                        'metadata'      => $metadata,
                     ]);
 
                     $order->total_amount += $ticket_type->price;          // update rolling order total

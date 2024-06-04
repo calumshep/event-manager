@@ -66,33 +66,54 @@ class EventSalesController extends Controller
      */
     public function exportAttendees(Event $event): void
     {
+        $headers = [
+            'ticket_id',
+            'order_id',
+            'last_updated',
+            'order_email',
+            'order_phone',
+            'special_requests',
+            'ticket_type_id',
+            'ticket_type',
+            'first_name',
+            'last_name',
+        ];
+
+        // Get all possible metadata headers
+        $metadata_headers = [];
+        foreach ($event->getTickets() as $ticket) {
+            if ($ticket->details) {
+                foreach ($ticket->details as $detail) {
+                    $metadata_headers[] = array_search($detail, $ticket->details);
+                }
+            }
+        }
+
+
+        $data = $event->getTickets()->map(function (OrderTicket $t) {
+            $data = [
+                $t->id,
+                $t->order_id,
+                $t->updated_at->toDateTimeLocalString(),
+                $t->order->orderable->email,
+                $t->order->orderable->phone_number,
+                $t->order->special_requests,
+                $t->ticket_type_id,
+                $t->ticketType->name,
+                $t->first_name,
+                $t->last_name,
+            ];
+
+            foreach ($t->metadata as $metadatum) {
+                $data[array_search($metadatum, $t->metadata)] = $metadatum;
+            }
+
+            return $data;
+        })->toArray();
 
         $this->prepareFile(filename: 'event_' . $event->id . '_attendees_' . now()->toDateTimeLocalString() . '.csv',
-            headers: [
-                'ticket_id', 'order_id', 'order_email', 'order_phone', 'special_requests', 'ticket_type_id',
-                'ticket_type', 'ticket_holder_name', 'ticket_data', 'last_updated',
-            ],
-            data: $event->getTickets()->map(function (OrderTicket $t) {
-                $metadata = implode(';', array_map(function ($k, $v) {
-                        return $v ? $k.': '.$v : '';
-                    },
-                    array_keys($t->metadata),
-                    array_values($t->metadata)
-                ));
-
-                return [
-                    $t->id,
-                    $t->order_id,
-                    $t->order->orderable->email,
-                    $t->order->orderable->phone_number,
-                    $t->order->special_requests,
-                    $t->ticket_type_id,
-                    $t->ticketType->name,
-                    $t->ticket_holder_name,
-                    $t->metadata ? $metadata : '',
-                    $t->updated_at->toDateTimeLocalString(),
-                ];
-            })->toArray()
+            headers: array_merge($headers, $metadata_headers),
+            data: $data,
         );
     }
 

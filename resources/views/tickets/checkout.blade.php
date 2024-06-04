@@ -90,20 +90,21 @@
 
                             {{-- Racer search --}}
                             @if($event->isRace())
-                                <div id="search_{{ $ticket->id . '_' . $i }}">
-                                    <div class="mb-2">
-                                        <label for="racer_search_{{ $ticket->id . '_' . $i }}">Pick a registered racer to enter</label>
+                                <div class="rounded border p-2 mb-3"
+                                     style="max-height: 200px; overflow:scroll; -webkit-overflow-scrolling: touch;"
+                                     id="search_{{ $ticket->id . '_' . $i }}">
+                                    <div class="form-floating mb-2">
                                         <input type="search"
                                                id="racer_search_{{ $ticket->id . '_' . $i }}"
                                                class="form-control"
-                                               placeholder="Start typing to find racer...">
+                                               placeholder="Search for a registered racer">
+                                        <label for="racer_search_{{ $ticket->id . '_' . $i }}">
+                                            Search for a registered racer
+                                        </label>
                                     </div>
 
-                                    <div class="rounded border p-2 mb-3"
-                                         style="max-height: 200px; overflow:scroll; -webkit-overflow-scrolling: touch;">
-                                        <div class="list-group" id="competitor_list_{{ $ticket->id . '_' . $i }}">
-                                            <span>Enter three or more characters to search.</span>
-                                        </div>
+                                    <div class="list-group" id="competitor_list_{{ $ticket->id . '_' . $i }}">
+                                        <span>Enter three or more characters above to search.</span>
                                     </div>
                                 </div>
 
@@ -129,16 +130,30 @@
                             @endif
 
                             {{-- Ticket holder name --}}
-                            <div class="mb-3">
-                                <label for="name_{{ $ticket->id . '_' . $i }}">
-                                    Full name<span class="text-danger">*</span>
-                                </label>
+                            <div class="row g-3">
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstname_{{ $ticket->id . '_' . $i }}">
+                                        First name<span class="text-danger">*</span>
+                                    </label>
 
-                                <input type="text"
-                                       name="name_{{ $ticket->id }}[]"
-                                       id="name_{{ $ticket->id . '_' . $i }}"
-                                       class="form-control"
-                                       required>
+                                    <input type="text"
+                                           name="firstname_{{ $ticket->id }}[]"
+                                           id="firstname_{{ $ticket->id . '_' . $i }}"
+                                           class="form-control"
+                                           required>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastname_{{ $ticket->id . '_' . $i }}">
+                                        Last name<span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="text"
+                                           name="lastname_{{ $ticket->id }}[]"
+                                           id="lastname_{{ $ticket->id . '_' . $i }}"
+                                           class="form-control"
+                                           required>
+                                </div>
                             </div>
 
                             {{-- Ticket holder details --}}
@@ -329,10 +344,7 @@
             let id = ticket + '_' + node;
 
             // Hide the racer search
-            let search = document.querySelector(`#racer_search_${id}`);
-            search.classList.add('d-none');
-            search.parentElement.classList.add('d-none');
-            search.parentElement.nextElementSibling.classList.add('d-none');
+            document.querySelector(`#racer_search_${id}`).parentElement.parentElement.classList.add('d-none');
 
             // Show the locked message
             document.querySelector(`#locked_${id}`).classList.remove('d-none');
@@ -372,9 +384,10 @@
         {
             let id = ticket_id + '_' + entryno;
 
-            document.querySelector(`#name_${id}`).value = firstname + ' ' + lastname;
-            document.querySelector(`#yob_${id}`).value = yob;
-            document.querySelector(`#club_${id}`).value = club ?? '';
+            document.querySelector(`#firstname_${id}`).value    = firstname;
+            document.querySelector(`#lastname_${id}`).value     = lastname;
+            document.querySelector(`#yob_${id}`).value          = yob;
+            document.querySelector(`#club_${id}`).value         = club ?? '';
 
             if (regno > 0) document.querySelector(`#gbr_no_${id}`).value = regno;
 
@@ -394,7 +407,7 @@
             search.addEventListener('keyup', function()
             {
                 if (this.value.length < 3) {
-                    list.innerHTML = '<span>Enter three or more characters to search.</span>';
+                    list.innerHTML = '<span>Enter three or more characters above to search.</span>';
                 } else {
                     list.innerHTML = '' +
                         '<div class="d-flex align-items-center">' +
@@ -430,10 +443,7 @@
                 });
 
                 // Show the racer search
-                let search = document.querySelector(`#racer_search_${id}`);
-                search.classList.remove('d-none');
-                search.parentElement.classList.remove('d-none');
-                search.parentElement.nextElementSibling.classList.remove('d-none');
+                document.querySelector(`#racer_search_${id}`).parentElement.parentElement.classList.remove('d-none');
 
                 // Hide the locked message
                 document.querySelector(`#locked_${id}`).classList.add('d-none');
