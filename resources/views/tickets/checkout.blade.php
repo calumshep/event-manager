@@ -193,12 +193,26 @@
                                                 </select>
                                             @else
                                                 {{-- Input element --}}
-                                                <input type="{{ $detail['type'] }}"
-                                                       name="{{ $name }}_{{ $ticket->id }}[]"
-                                                       id="{{ $name }}_{{ $ticket->id . '_' . $i }}"
-                                                       class="form-control"
-                                                       @required($detail['required'])
-                                                       @readonly($detail['readonly'])>
+                                                @if($name === 'yob')
+                                                    <div class="input-group">
+                                                        <input type="{{ $detail['type'] }}"
+                                                               name="{{ $name }}_{{ $ticket->id }}[]"
+                                                               id="{{ $name }}_{{ $ticket->id . '_' . $i }}"
+                                                               class="form-control"
+                                                               max="{{ $detail['max'] }}"
+                                                               @required($detail['required'])
+                                                               @readonly($detail['readonly'])>
+                                                        <span id="agecat_{{ $ticket->id . '_' . $i }}"
+                                                              class="input-group-text">Category</span>
+                                                    </div>
+                                                @else
+                                                    <input type="{{ $detail['type'] }}"
+                                                           name="{{ $name }}_{{ $ticket->id }}[]"
+                                                           id="{{ $name }}_{{ $ticket->id . '_' . $i }}"
+                                                           class="form-control"
+                                                           @required($detail['required'])
+                                                           @readonly($detail['readonly'])>
+                                                @endif
                                             @endif
 
                                             {{-- Help text --}}
@@ -271,7 +285,8 @@
 @endsection
 
 @section('scripts')
-    <script>
+    @if($event->isRace())
+        <script>
         /**
          * Render a selectable list of competitors to display search query results.
          *
@@ -386,14 +401,196 @@
 
             document.querySelector(`#firstname_${id}`).value    = firstname;
             document.querySelector(`#lastname_${id}`).value     = lastname;
-            document.querySelector(`#yob_${id}`).value          = yob;
             document.querySelector(`#club_${id}`).value         = club ?? '';
+
+            let yob_input = document.querySelector(`#yob_${id}`)
+            yob_input.value = yob;
+            renderAgeCat(yob_input);
 
             if (regno > 0) document.querySelector(`#gbr_no_${id}`).value = regno;
 
             if (gender === 'M') document.querySelector(`#gender_${id}`).selectedIndex = 1;
             else document.querySelector(`#gender_${id}`).selectedIndex = 2;
         }
+
+        /**
+         * Age categories, ordered from youngest to oldest
+         */
+        const CATEGORIES = ["U8", "U10", "U12", "U14", "U16", "U18", "U21", "SEN", "MAS"];
+        const  U8_AGES   = [ 6,  7];
+        const U10_AGES   = [ 8,  9];
+        const U12_AGES   = [10, 11];
+        const U14_AGES   = [12, 13];
+        const U16_AGES   = [14, 15];
+        const U18_AGES   = [16, 17];
+        const U21_AGES   = [18, 19, 20];
+        const SEN_AGES   = [21, 22, 23, 24, 25, 26, 27, 28, 29];
+
+        /**
+         * Get the category-adjusted years of birth corresponding to the given array of ages.
+         * Will return years of birth which would put trainees in new-season categories if the current system date is 1st
+         * May or later.
+         *
+         * @param ages
+         * @returns {*[]}
+         */
+        function years(ages)
+        {
+            let years = [];
+
+            for (let age of ages) {
+                let now = new Date();
+                if (now.getTime() > new Date(now.getFullYear(), 5, 1)) {
+                    // Categories have switched over, calculate using higher age bands
+                    years.push(now.getFullYear() - age);
+                } else {
+                    // Categories are still on old season, calculate using lower bands
+                    years.push(now.getFullYear() - age - 1);
+                }
+            }
+
+            return years;
+        }
+
+        /**
+         * Get the category corresponding to the given year of birth
+         *
+         * @param year
+         * @returns {string}
+         */
+        function category(year)
+        {
+            if        (years(U8_AGES).includes(Number(year)))  {
+                return CATEGORIES[0];
+            } else if (years(U10_AGES).includes(Number(year))) {
+                return CATEGORIES[1];
+            } else if (years(U12_AGES).includes(Number(year))) {
+                return CATEGORIES[2];
+            } else if (years(U14_AGES).includes(Number(year))) {
+                return CATEGORIES[3];
+            } else if (years(U16_AGES).includes(Number(year))) {
+                return CATEGORIES[4];
+            } else if (years(U18_AGES).includes(Number(year))) {
+                return CATEGORIES[5];
+            } else if (years(U21_AGES).includes(Number(year))) {
+                return CATEGORIES[6];
+            } else if (years(SEN_AGES).includes(Number(year))) {
+                return CATEGORIES[7];
+            } else {
+                return CATEGORIES[8];
+            }
+        }
+
+        /**
+         * Get years of birth corresponding to U8 category
+         * @returns {*[]} array of years
+         */
+        function u8()
+        {
+            return years(U8_AGES);
+        }
+
+        /**
+         * Get years of birth corresponding to U10 category
+         * @returns {*[]} array of years
+         */
+        function u10()
+        {
+            return years(U10_AGES);
+        }
+
+        /**
+         * Get years of birth corresponding to U12 category
+         * @returns {*[]} array of years
+         */
+        function u12()
+        {
+            return years(U12_AGES);
+        }
+
+        /**
+         * Get years of birth corresponding to U14 category
+         * @returns {*[]} array of years
+         */
+        function u14()
+        {
+            return years(U14_AGES);
+        }
+
+        /**
+         * Get years of birth corresponding to U16 category
+         * @returns {*[]} array of years
+         */
+        function u16()
+        {
+            return years(U16_AGES);
+        }
+
+        /**
+         * Get years of birth corresponding to U18 category
+         * @returns {*[]} array of years
+         */
+        function u18()
+        {
+            return years(U18_AGES);
+        }
+
+        /**
+         * Get years of birth corresponding to U21 category
+         * @returns {*[]} array of years
+         */
+        function u21()
+        {
+            return years(U21_AGES);
+        }
+
+        /**
+         * Get years of birth corresponding to SEN category
+         * @returns {*[]} array of years
+         */
+        function sen()
+        {
+            return years(SEN_AGES);
+        }
+
+        /**
+         * Get years of birth corresponding to MAS category
+         * @returns {*[]} array of years
+         */
+        function mas()
+        {
+            return years(SEN_AGES);
+        }
+
+        function renderAgeCat(yob_input)
+        {
+            // Build ID of entry from reset button ID
+            let id = yob_input.id.split('_');
+            id = id[1] + '_' + id[2];
+
+            // Find the corresponding age category span element
+            document.querySelector(`#agecat_${id}`).innerHTML =
+                (yob_input.value.length > 3)
+                    // If valid YOB, find and output category
+                    ? category(yob_input.value)
+                    // Otherwise leave placeholder
+                    : 'Category';
+        }
+
+        /*
+         * Attach an event listener to fetch and display category for each YOB field.
+         */
+        document.querySelectorAll('[id^="yob"]').forEach(function(node)
+        {
+            // Add event listener on keyup *and* change to account for non-keyboard changes to input
+            ['change', 'keyup'].forEach(function(event)
+            {
+                node.addEventListener(event, function()
+                {
+                    renderAgeCat(node);
+                });
+            });
+        });
 
         /*
          * Attach an event listener to all search fields to implement live competitor search.
@@ -450,4 +647,5 @@
             });
         });
     </script>
+    @endif
 @endsection
