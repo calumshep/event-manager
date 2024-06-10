@@ -22,12 +22,13 @@ class StoreEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          => 'required|max:255',
-            'org'           => 'required',
-            'start'         => 'required|date|after:today',
-            'end'           => 'nullable|date|after:start',
-            'short_desc'    => 'required|string',
-            'type'          => 'required|string',
+            'name'              => 'required|string|max:255',
+            'org'               => 'required',
+            'start'             => 'required|date|after:today',
+            'end'               => 'nullable|date|after:start',
+            'short_desc'        => 'required|string|max:255',
+            'type'              => 'required|string|max:255',
+            'special_requests'  => 'nullable|string|max:255',
         ];
     }
 }

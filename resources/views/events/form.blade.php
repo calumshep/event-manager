@@ -160,6 +160,19 @@
                             {!! $event ? $event->long_desc : '' !!}
                         </div>
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="special_requests">Special requests text</label>
+                        <input type="text"
+                               name="special_requests"
+                               id="special_requests"
+                               value="{{ old('special_requests', $event->special_requests) }}"
+                               class="form-control">
+                        <small class="form-text">
+                            If blank, there will be no special requests field on the order form
+                            for your event.
+                        </small>
+                    </div>
                 </div>
             </div>
         </fieldset>

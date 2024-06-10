@@ -28,6 +28,7 @@ class Event extends Model
         'organisation_id',
         'stripe_id',
         'type',
+        'special_requests',
     ];
 
     protected $casts = [

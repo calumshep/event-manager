@@ -229,29 +229,25 @@
             </div>
         @endforeach
 
-        @if($event->id === 1)
+        @if($event->special_requests)
             <hr>
 
             <div class="row pt-3 mb-4">
                 <div class="col-lg-4 mb-3 mb-lg-0">
-                    <h3 class="h5">Special Requests</h3>
+                    <h3 class="h5">Additional information</h3>
 
                     <p>
-                        Let the organiser know if you have any particular requests. They will contact you to let you know if
-                        they can be fulfilled.
+                        Let the organiser know if you have any extra information or requests. They will contact you
+                        directly about this.
                     </p>
                 </div>
 
                 <div class="col-lg-8">
                     <div>
                         <label for="special_requests">
-                            Seating requests
+                            {{ $event->special_requests }}
                         </label>
                         <textarea name="special_requests" id="special_requests" class="form-control" required></textarea>
-
-                        <small class="form-text">
-                            Let us know who you want to sit with.
-                        </small>
                     </div>
                 </div>
             </div>
