@@ -47,9 +47,13 @@
                 <th>Order ID</th>
                 <th>Order Email</th>
                 <th>Order Phone Number</th>
-                <th>Special Requests</th>
+                <th>{{ $event->isRace()
+                    ? 'YOB'
+                    : 'Special Requests'
+                }}</th>
                 <th>Ticket Type</th>
-                <th>Attendee Name</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Last Updated</th>
             </tr>
         </thead>
@@ -61,7 +65,9 @@
                     <td>{{ $ticket->order->orderable->email }}</td>
                     <td>{{ $ticket->order->orderable->phone_number }}</td>
                     <td class="text-start">
-                        @if($ticket->order->special_requests)
+                        @if($event->isRace())
+                            {{ $ticket->metadata['yob'] }}
+                        @elseif($ticket->order->special_requests)
                             <i class="fa-solid fa-circle-exclamation"
                                data-bs-toggle="tooltip"
                                data-bs-placement="right"
@@ -69,7 +75,8 @@
                         @endif
                     </td>
                     <td>{{ $ticket->ticketType->name }}</td>
-                    <td>{{ $ticket->ticket_holder_name }}</td>
+                    <td>{{ $ticket->first_name }}</td>
+                    <td>{{ $ticket->last_name }}</td>
                     <td>{{ $ticket->updated_at->format('H:i:s d/m/Y') }}</td>
                 </tr>
             @endforeach

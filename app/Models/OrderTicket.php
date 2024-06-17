@@ -9,6 +9,8 @@ class OrderTicket extends Pivot
 {
     protected $fillable = [
         'ticket_holder_name',
+        'first_name',
+        'last_name',
         'metadata',
     ];
 

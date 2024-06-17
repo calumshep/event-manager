@@ -42,8 +42,7 @@
 
                 <div class="col-lg-8">
                     <div class="mb-3">
-                        <label class="form-label" for="name">Event name<span
-                                class="text-danger">*</span></label>
+                        <label class="form-label" for="name">Event name<span class="text-danger">*</span></label>
                         <input type="text"
                                name="name"
                                id="name"
@@ -54,8 +53,30 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="org">Event organiser<span
-                                class="text-danger">*</span></label>
+                        <div class="form-label">Event type<span class="text-danger">*</span></div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name="type"
+                                   id="type_generic"
+                                   value="generic"
+                                   @checked($event->type === 'generic')>
+                            <label class="form-check-label" for="type_generic">Generic</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name="type"
+                                   id="type_race"
+                                   value="race"
+                                   @checked($event->type === 'race')>
+                            <label class="form-check-label" for="type_race">Ski Race</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="org">Event organiser<span class="text-danger">*</span></label>
                         <select name="org" id="org" class="form-select" required>
                             @forelse($orgs as $org)
                                 <option value="{{ $org->id }}"
@@ -76,8 +97,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="start">Start date<span
-                                class="text-danger">*</span></label>
+                        <label class="form-label" for="start">Start date<span class="text-danger">*</span></label>
                         <input type="date"
                                name="start"
                                id="start"
@@ -133,6 +153,19 @@
                         <div id="quill_editor">
                             {!! $event ? $event->long_desc : '' !!}
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="special_requests">Special requests text</label>
+                        <input type="text"
+                               name="special_requests"
+                               id="special_requests"
+                               value="{{ old('special_requests', $event->special_requests) }}"
+                               class="form-control">
+                        <small class="form-text">
+                            If blank, there will be no special requests field on the order form
+                            for your event.
+                        </small>
                     </div>
                 </div>
             </div>

@@ -28,6 +28,7 @@ namespace App\Models{
  * @property int $organisation_id
  * @property string $stripe_id
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string $type
  * @property-read \App\Models\Organisation|null $organisation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $tickets
  * @property-read int|null $tickets_count
@@ -48,6 +49,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereStripeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event withTrashed()

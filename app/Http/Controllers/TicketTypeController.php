@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Event;
 use App\Models\TicketType;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
@@ -145,6 +146,16 @@ class TicketTypeController extends Controller
                 'label'     => 'Date of birth',
                 'type'      => 'date',
                 'required'  => true,
+                'readonly'  => false,
+            ];
+        }
+        if ($request->yob) {
+            $details['yob'] = [
+                'label'     => 'Year of birth',
+                'type'      => 'number',
+                'required'  => true,
+                'readonly'  => false,
+                'max'       => Carbon::now()->month >= 5 ? Carbon::now()->year - 6 : Carbon::now()->year - 5,
             ];
         }
         if ($request->gender) {
@@ -152,17 +163,28 @@ class TicketTypeController extends Controller
                 'label'     => 'Gender',
                 'type'      => 'select',
                 'required'  => true,
+                'readonly'  => false,
                 'options'   => [
                     'female'    => 'Female',
                     'male'      => 'Male',
                 ],
             ];
         }
-        if ($request->bass_no) {
-            $details['bass_no'] = [
-                'label'     => 'BASS number',
+        if ($request->gbr_no) {
+            $details['gbr_no'] = [
+                'label'     => 'GBR registration number',
                 'type'      => 'text',
                 'required'  => false,
+                'readonly'  => true,
+                'tooltip'   => 'If you have a registration number, you must search for your competitor profile above.',
+            ];
+        }
+        if ($request->club) {
+            $details['club'] = [
+                'label'     => 'Club',
+                'type'      => 'text',
+                'required'  => true,
+                'readonly'  => false,
             ];
         }
         if ($request->university) {
@@ -170,6 +192,7 @@ class TicketTypeController extends Controller
                 'label'     => 'Education institution',
                 'type'      => 'text',
                 'required'  => false,
+                'readonly'  => false,
             ];
         }
         if ($request->dietary) {
@@ -177,6 +200,7 @@ class TicketTypeController extends Controller
                 'label'     => 'Dietary Requirements',
                 'type'      => 'text',
                 'required'  => false,
+                'readonly'  => false,
             ];
         }
         return $details;

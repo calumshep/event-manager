@@ -10,4 +10,4 @@
 
 <hr>
 
-<h2 class="h3 mb-3">Get Tickets</h2>
+<h2 class="h3 mb-3">{{ $event->isRace() ? 'Enter Now' : 'Get Tickets' }}</h2>

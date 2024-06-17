@@ -94,7 +94,9 @@
                         <a href="#" class="list-group-item list-group-item-action">
                             <span class="h6">{{ $ticket->ticketType->name }}</span>
                             &middot;
-                            {{ $ticket->ticket_holder_name }}
+                            {{ $ticket->first_name
+                               ? $ticket->first_name . ' ' . $ticket->last_name
+                               : $ticket->ticket_holder_name }}
                         </a>
                     @endforeach
                 </div>

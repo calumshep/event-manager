@@ -9,8 +9,6 @@ class GBSkiAPITest extends TestCase
     public function __construct(string $name)
     {
         parent::__construct($name);
-
-
     }
 
     /**
@@ -22,6 +20,6 @@ class GBSkiAPITest extends TestCase
     {
         $response = $this->get('/api/active-registrations');
 
-        dd($response->exception);
+        $response->assertOk();
     }
 }

@@ -51,7 +51,9 @@ class EventController extends Controller
         $event = auth()->user()->events()->create([
             'name'              => $input['name'],
             'start'             => $input['start'],
+            'type'              => $input['type'],
             'end'               => $input['end'],
+            'special_requests'  => $input['special_requests'],
             'slug'              => Str::of($input['name'])->slug(),
             'short_desc'        => $input['short_desc'],
             'long_desc'         => clean($request->long_desc),
@@ -99,7 +101,9 @@ class EventController extends Controller
         $event = $event->fill([
             'name'              => $input['name'],
             'start'             => $input['start'],
+            'type'              => $input['type'],
             'end'               => $input['end'],
+            'special_requests'  => $input['special_requests'],
             'slug'              => Str::of($input['name'])->slug(),
             'short_desc'        => $input['short_desc'],
             'long_desc'         => clean($request->long_desc),
