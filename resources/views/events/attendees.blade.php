@@ -42,7 +42,8 @@
                         type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
-                        data-bs-aut-close="outside">
+                        data-bs-aut-close="outside"
+                        @disabled($event->tickets->count() == 0)>
                     <i class="fa-solid fa-filter me-2"></i>
                     Filter by Ticket Type
                 </button>
@@ -87,45 +88,51 @@
         </div>
     </div>
 
-    <table class="sortable table table-hover table-striped w-100 rounded shadow">
-        <thead>
-            <tr>
-                <th>Ordered At</th>
-                <th>Order ID</th>
-                <th>Order Email</th>
-                <th>Ticket Type</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>{{ $event->isRace()
-                    ? 'YOB'
-                    : 'Special Requests'
-                }}</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach($tickets as $ticket)
+    <div class="table-responsive">
+        <table class="sortable table table-hover table-striped w-100 rounded shadow">
+            <thead>
                 <tr>
-                    <td>{{ $ticket->updated_at->format('H:i:s d/m/Y') }}</td>
-                    <td>{{ $ticket->order->id }}</td>
-                    <td>{{ $ticket->order->orderable->email }}</td>
-                    <td>{{ $ticket->ticketType->name }}</td>
-                    <td>{{ $ticket->first_name }}</td>
-                    <td>{{ $ticket->last_name }}</td>
-                    <td>
-                        @if($event->isRace())
-                            {{ $ticket->metadata['yob'] }}
-                        @elseif($ticket->order->special_requests)
-                            <i class="fa-solid fa-circle-exclamation"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="right"
-                               data-bs-title="{{ $ticket->order->special_requests }}"></i>
-                        @endif
-                    </td>
+                    <th>Ordered At</th>
+                    <th>Order ID</th>
+                    <th>Order Email</th>
+                    <th>Ticket Type</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>{{ $event->isRace()
+                        ? 'YOB'
+                        : 'Special Requests'
+                    }}</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+                @forelse($tickets as $ticket)
+                    <tr>
+                        <td>{{ $ticket->updated_at->format('H:i:s d/m/Y') }}</td>
+                        <td>{{ $ticket->order->id }}</td>
+                        <td>{{ $ticket->order->orderable->email }}</td>
+                        <td>{{ $ticket->ticketType->name }}</td>
+                        <td>{{ $ticket->first_name }}</td>
+                        <td>{{ $ticket->last_name }}</td>
+                        <td class="text-truncate">
+                            @if($event->isRace())
+                                {{ $ticket->metadata['yob'] }}
+                            @elseif($ticket->order->special_requests)
+                                <i class="fa-solid fa-circle-exclamation"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="right"
+                                   data-bs-title="{{ $ticket->order->special_requests }}"></i>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7">No attendees yet.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 @endsection
 
 @section('scripts')

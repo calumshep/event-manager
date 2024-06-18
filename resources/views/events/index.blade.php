@@ -17,11 +17,11 @@
 
     <hr>
 
-    @php /*@if($events->count() == 0)
+    {{-- @if($events->count() == 0)
         <p>
             First time running an event with us? Check out our <a href="{{ route('help.index') }}">help section</a>.
         </p>
-    @endif */ @endphp
+    @endif --}}
 
     @include('components.status')
 
