@@ -1,6 +1,12 @@
-<div>
-    Showing {{ ($paginator->firstItem() )}} to {{ $paginator->lastItem() }} of {{ $paginator->total() }} entries
-</div>
+@if($paginator->total() > 0)
+    <div>
+        Showing {{ ($paginator->firstItem() )}} to {{ $paginator->lastItem() }} of {{ $paginator->total() }} entries
+    </div>
+@else
+    <div>
+        Showing 0 of 0 entries
+    </div>
+@endif
 
 @if ($paginator->hasPages())
     <nav class="d-flex justify-items-center justify-content-between">
