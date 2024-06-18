@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('head')
-    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.0.0/datatables.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.css" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -40,31 +40,32 @@
         </div>
     </div>
 
-    <table id="attendee-table" class="table table-striped table-hover rounded shadow">
+    <table class="sortable table table-hover table-striped w-100 rounded shadow">
         <thead>
             <tr>
-                <th>Ticket ID</th>
+                <th>Ordered At</th>
                 <th>Order ID</th>
                 <th>Order Email</th>
-                <th>Order Phone Number</th>
+                <th>Ticket Type</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>{{ $event->isRace()
                     ? 'YOB'
                     : 'Special Requests'
                 }}</th>
-                <th>Ticket Type</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Last Updated</th>
             </tr>
         </thead>
+
         <tbody>
             @foreach($tickets as $ticket)
                 <tr>
-                    <td>{{ $ticket->id }}</td>
+                    <td>{{ $ticket->updated_at->format('H:i:s d/m/Y') }}</td>
                     <td>{{ $ticket->order->id }}</td>
                     <td>{{ $ticket->order->orderable->email }}</td>
-                    <td>{{ $ticket->order->orderable->phone_number }}</td>
-                    <td class="text-start">
+                    <td>{{ $ticket->ticketType->name }}</td>
+                    <td>{{ $ticket->first_name }}</td>
+                    <td>{{ $ticket->last_name }}</td>
+                    <td>
                         @if($event->isRace())
                             {{ $ticket->metadata['yob'] }}
                         @elseif($ticket->order->special_requests)
@@ -74,20 +75,19 @@
                                data-bs-title="{{ $ticket->order->special_requests }}"></i>
                         @endif
                     </td>
-                    <td>{{ $ticket->ticketType->name }}</td>
-                    <td>{{ $ticket->first_name }}</td>
-                    <td>{{ $ticket->last_name }}</td>
-                    <td>{{ $ticket->updated_at->format('H:i:s d/m/Y') }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.0.0/datatables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.a11y.min.js"></script>
     <script>
-        let table = new DataTable('#attendee-table');
+        window.addEventListener('load', function()
+        {
+            document.querySelector('td').click();
+        });
     </script>
 @endsection
