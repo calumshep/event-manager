@@ -1,7 +1,7 @@
 @extends('layout.sidebar-form')
 
 @section('head')
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 @endsection
 
 @section('title', $creating ? 'New Event' : $event->name)
@@ -13,9 +13,7 @@
 @endunless
 
 @section('form')
-    <p>
-        Required fields are marked with an asterisk (<span class="text-danger">*</span>).
-    </p>
+    <p>Required fields are marked with an asterisk (<span class="text-danger">*</span>).</p>
 
     @if($creating)
         <p class="text-muted">
@@ -62,7 +60,7 @@
                                    name="type"
                                    id="type_generic"
                                    value="generic"
-                                   @checked($event->type === 'generic')>
+                                   {{ old('type') == 'generic' || $event->type == 'generic' ? 'checked' : '' }}>
                             <label class="form-check-label" for="type_generic">Generic</label>
                         </div>
                         <div class="form-check form-check-inline">
@@ -71,7 +69,7 @@
                                    name="type"
                                    id="type_race"
                                    value="race"
-                                   @checked($event->type === 'race')>
+                                   {{ old('type') == 'race' || $event->type == 'race' ? 'checked' : '' }}>
                             <label class="form-check-label" for="type_race">Ski Race</label>
                         </div>
                     </div>
@@ -149,10 +147,13 @@
                     <div class="mb-3">
                         <label class="form-label" for="long_desc">Long description<span
                                 class="text-danger">*</span></label>
-                        <input type="hidden" name="long_desc" id="long_desc">
+                        <input type="hidden"
+                               name="long_desc"
+                               id="long_desc"
+                               value="{{ old('long_desc', $event->long_desc) }}">
 
                         <div id="quill_editor">
-                            {!! $event ? $event->long_desc : '' !!}
+                            {!! old('long_desc', $event->long_desc) !!}
                         </div>
                     </div>
 
@@ -250,7 +251,7 @@
 
 @section('scripts')
     @unless($readonly)
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
         <script>
             let editor = new Quill('#quill_editor', {
                 modules: {

@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('head')
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -57,7 +57,7 @@
                                    value="{{ old('description', $ticket->description) }}">
 
                             <div id="quill_editor">
-                                {!! $ticket ? $ticket->description : '' !!}
+                                {{ old('description', $ticket->description) }}
                             </div>
                         </div>
                     </div>
@@ -320,7 +320,7 @@
 
 @section('scripts')
     @unless($readonly)
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
         <script>
             let editor = new Quill('#quill_editor', {
                 modules: {
