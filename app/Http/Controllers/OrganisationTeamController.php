@@ -27,6 +27,10 @@ class OrganisationTeamController extends Controller
             return redirect()->back()->withErrors([
                 'No user could be found with the email address "' . $request->email . '"' . ". Are you sure it's right?",
             ]);
+        } elseif ($user == $organisation->user || $organisation->team->contains($user)) {
+            return redirect()->back()->withErrors([
+                'This user already belongs to this organisation.',
+            ]);
         }
 
         $organisation->team()->attach($user);
@@ -50,7 +54,7 @@ class OrganisationTeamController extends Controller
         $organisation->team()->detach($user);
 
         return redirect()->back()->with([
-            'status' => $user->first_name . ' ' . $user->last_name . ' removed from organisation team.',
+            'warning' => $user->first_name . ' ' . $user->last_name . ' removed from organisation team.',
         ]);
     }
 }
