@@ -66,7 +66,7 @@
         </div>
 
         <div class="col-lg-8">
-            <table class="table table-hover table-striped rounded shadow">
+            <table class="table table-hover table-striped border card-text">
                 <thead>
                 <tr>
                     <th>Name</th>

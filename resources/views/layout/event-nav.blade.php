@@ -1,4 +1,4 @@
-<nav class="nav nav-pills flex-column">
+<nav class="nav nav-pills flex-md-column">
     <a @class([
         'nav-link',
         'active' => Route::is(['events.show','events.edit'])

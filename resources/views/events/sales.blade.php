@@ -15,7 +15,7 @@
 
     {{-- Sales progres --}}
     <div class="row row-cols-4">
-        @foreach($sales_progress as $sale)
+        @forelse($sales_progress as $sale)
             <div class="col">
                 <div class="card shadow mb-3">
                     <div class="card-body">
@@ -45,7 +45,9 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <p>You need to <a href="{{ route('events.tickets.index', $event) }}">add some tickets</a> to this event.</p>
+        @endforelse
     </div>
 
     <hr>

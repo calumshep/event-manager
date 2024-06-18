@@ -1,4 +1,4 @@
-<nav class="nav nav-pills flex-column">
+<nav class="nav nav-pills flex-md-column">
     <a @class([
         'nav-link',
         'active' => Route::is(['organisations.show','organisations.edit'])
@@ -12,6 +12,6 @@
         'active' => Route::is('organisations.team.*')
     ]) @if(Route::is('organisations.team.*')) aria-current="page" @endif
     href="{{ route('organisations.team.index', $organisation) }}">
-        <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>Management Team
+        <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>Team Members
     </a>
 </nav>
