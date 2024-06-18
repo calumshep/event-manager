@@ -65,7 +65,7 @@ class TicketTypePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Event $event): Response
+    public function restore(User $user, Event $event): bool
     {
         return false;
     }

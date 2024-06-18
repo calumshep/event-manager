@@ -97,7 +97,7 @@
                     <div class="mb-3">
                         <label class="form-label" for="time">Validity<span class="text-danger">*</span></label>
                         <select class="form-select" name="time" id="time" required>
-                            <option value disabled selected>Select a day...</option>
+                            <option value disabled selected>Select...</option>
 
                             @foreach($event_days as $day)
                                 @if($ticket->time)

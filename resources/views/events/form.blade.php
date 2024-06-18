@@ -77,9 +77,10 @@
                     <div class="mb-3">
                         <label class="form-label" for="org">Event organiser<span class="text-danger">*</span></label>
                         <select name="org" id="org" class="form-select" required>
+                            <option value disabled @selected($creating)>Select...</option>
+
                             @forelse($orgs as $org)
-                                <option value="{{ $org->id }}"
-                                    @selected(old('org') ? old('org') == $org->id : $event->org == $org->id)>
+                                <option value="{{ $org->id }}" @selected(old('org', $event->organisation->id) ==  $org->id)>
                                     {{ $org->name }}
                                 </option>
                             @empty

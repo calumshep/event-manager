@@ -100,8 +100,14 @@ class User extends Authenticatable
      */
     public function getManagableEvents(): Collection
     {
-        return $this->events->merge(
-            auth()->user()->orgMemberships->pluck('events')
-        )->sortBy('start');
+        return Event::whereIn('organisation_id', $this->orgMemberships->pluck('id'))->get()->merge($this->events);
+    }
+
+    /**
+     * Returns true if the user is in the event organisation's team.
+     */
+    public function canManageEvent(Event $event): bool
+    {
+        return $event->organisation->team->contains($this) || $event->user == $this;
     }
 }

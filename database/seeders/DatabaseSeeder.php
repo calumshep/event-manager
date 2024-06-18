@@ -40,6 +40,14 @@ class DatabaseSeeder extends Seeder
                 'last_name'     => 'User',
                 'email'         => 'test@example.com'
             ])->assignRole('administrator');
+
+            // Create regular user who can manage events
+            User::factory()
+                ->create([
+                    'first_name'    => 'Test',
+                    'last_name'     => 'User',
+                    'email'         => 'user@example.com'
+            ])->assignRole('event organiser');
         }
     }
 }
