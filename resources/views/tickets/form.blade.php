@@ -25,8 +25,6 @@
             Tickets</a>
     </div>
 
-    @include('components.status')
-
     <form method="POST"
           action="{{ $creating ?
               route('events.tickets.store', $event) :
@@ -70,7 +68,7 @@
                                    value="{{ old('description', $ticket->description) }}">
 
                             <div id="quill_editor">
-                                {{ old('description', $ticket->description) }}
+                                {!! old('description', $ticket->description) !!}
                             </div>
                         </div>
                     </div>

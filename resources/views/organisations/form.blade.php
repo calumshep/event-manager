@@ -77,7 +77,7 @@
                                value="{{ old('description', $organisation->description) }}">
 
                         <div id="quill_editor">
-                            {{ old('description', $organisation->description) }}
+                            {!! old('description', $organisation->description) !!}
                         </div>
                     </div>
                 </div>
