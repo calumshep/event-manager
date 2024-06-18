@@ -16,7 +16,7 @@
 
     <div class="row pt-3 mb-3">
         <div class="col-lg-4">
-            <h2 class="h5">Tickets</h2>
+            <h2 class="h5">Ticket Types</h2>
 
             <p>
                 These are the ticket types that exist for your event.

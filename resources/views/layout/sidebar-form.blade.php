@@ -2,16 +2,22 @@
 
 @section('content')
 
-    <h1>@yield('title')</h1>
+    <div class="d-flex justify-content-between align-items-baseline">
+        <h1>@yield('title')</h1>
+
+        <a class="btn btn-outline-secondary" href="{{ route('events.index') }}">&laquo; Back to My Events</a>
+    </div>
 
     @include('components.status')
 
     <hr>
 
     <div class="row">
-        <div class="col-md-auto border-end-md">
-            @yield('sidebar')
-        </div>
+        @unless(Route::is('events.create'))
+            <div class="col-md-auto border-end-md">
+                @yield('sidebar')
+            </div>
+        @endunless
 
         <div class="col-md">
             @yield('form')

@@ -6,9 +6,11 @@
 
 @section('title', $creating ? 'New Event' : $event->name)
 
-@section('sidebar')
-    @include('layout.event-nav')
-@endsection
+@unless($creating)
+    @section('sidebar')
+        @include('layout.event-nav')
+    @endsection
+@endunless
 
 @section('form')
     <p>
@@ -24,8 +26,7 @@
 
     <hr>
 
-    <form method="POST"
-          action="{{ $creating ? route('events.store') : route('events.update', $event) }}">
+    <form method="POST" action="{{ $creating ? route('events.store') : route('events.update', $event) }}">
         @csrf
         {{ $creating ? null : method_field('PUT') }}
 
@@ -155,7 +156,7 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div>
                         <label class="form-label" for="special_requests">Special requests text</label>
                         <input type="text"
                                name="special_requests"
