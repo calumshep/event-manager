@@ -1,16 +1,29 @@
-@extends('layout.app')
+@extends('layout.sidebar-form')
+
+@section('title', $event->name)
+
+@section('sidebar')
+    @include('layout.event-nav')
+@endsection
 
 @section('head')
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 @endsection
 
-@section('content')
+@section('form')
 
-    <h1>{{ $creating ? "New" : null }} Ticket</h1>
+    <div class="d-flex justify-content-between">
+        <div>
+            <h2 class="h3">{{ $creating ? "New" : null }} Ticket</h2>
+            <p class="mb-0">Required fields are marked with an asterisk (<span class="text-danger">*</span>).</p>
+        </div>
 
-    <p>
-        Required fields are marked with an asterisk (<span class="text-danger">*</span>).
-    </p>
+        <a href="{{ (!$creating && !$readonly) ? route('events.tickets.show', [$event, $ticket]) :
+            route('events.tickets.index', $event) }}"
+           class="btn btn-secondary align-self-start">&laquo; Back
+            to All
+            Tickets</a>
+    </div>
 
     @include('components.status')
 
@@ -246,7 +259,7 @@
 
         <div class="d-flex justify-content-between">
             <a href="{{ (!$creating && !$readonly) ? route('events.tickets.show', [$event, $ticket]) :
-            route('events.show', $event) }}"
+            route('events.tickets.index', $event) }}"
                class="btn btn-secondary">
                 &laquo; Back
             </a>
