@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Event;
+use App\Models\Organisation;
+use App\Models\TicketType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
@@ -32,14 +35,21 @@ class DatabaseSeeder extends Seeder
                 Permission::where('name', 'manage own events')->first(),
         ]);
 
-        if (App::environment('local')) {
-            // Create specific testing account (for logging in with)
-            User::factory()
-                ->create([
-                'first_name'    => 'Test',
-                'last_name'     => 'User',
-                'email'         => 'test@example.com'
-            ])->assignRole('administrator');
+        // Create mock data
+        if (! App::environment('production')) {
+            // Create specific testing account (for logging in with) that has an organisation and associated event.
+            $event = Event::factory()->recycle(
+                User::factory()->create([
+                    'first_name'    => 'Test',
+                    'last_name'     => 'User',
+                    'email'         => 'test@example.com'
+                ])->assignRole('administrator')
+            )->create();
+
+            // Create tickets for the event
+            TicketType::factory()->for($event)->count(2)->create([
+                'time' => $event->days()[array_rand($event->days())]->format('Y-m-d'),
+            ]);
         }
     }
 }
