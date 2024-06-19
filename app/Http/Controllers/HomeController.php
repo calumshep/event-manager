@@ -15,8 +15,8 @@ class HomeController extends Controller
     {
         return view('welcome', [
             'events' => Event::where('start', '>=', Date::now())
-                             ->oldest('start')
-                             ->paginate(5),
+                ->oldest('start')
+                ->paginate(5),
         ]);
     }
 

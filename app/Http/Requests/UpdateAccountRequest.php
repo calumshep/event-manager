@@ -14,7 +14,7 @@ class UpdateAccountRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return ($this->route('user')->id === auth()->user()->id);
+        return $this->route('user')->id === auth()->user()->id;
     }
 
     /**
@@ -25,14 +25,13 @@ class UpdateAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name'        => 'required|string|max:255',
-            'last_name'         => 'required|string|max:255',
-            'email'             =>
-                ['required', 'string', 'max:255', 'email',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => ['required', 'string', 'max:255', 'email',
                 Rule::unique('users')->ignore($this->route('user'))],
-            'phone_number'      => 'nullable|string|',
-            'new_password'      => ['nullable', 'confirmed', Password::defaults()],
-            'current_password'  => 'required',
+            'phone_number' => 'nullable|string|',
+            'new_password' => ['nullable', 'confirmed', Password::defaults()],
+            'current_password' => 'required',
         ];
     }
 }

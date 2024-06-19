@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
+ *
  * @method hasTickets(\Database\Factories\TicketTypeFactory|\Illuminate\Database\Eloquent\Factories\Factory $state)
  */
 class EventFactory extends Factory
@@ -20,18 +21,18 @@ class EventFactory extends Factory
     public function definition(): array
     {
         $start = $this->faker->dateTimeBetween('+1 week', '+1 year');
-        $end = $this->faker->dateTimeBetween($start, $start->format('d-m-Y') . ' + 1 week');
+        $end = $this->faker->dateTimeBetween($start, $start->format('d-m-Y').' + 1 week');
 
         $name = $this->faker->sentence(2);
 
         return [
-            'name'              => $name,
-            'start'             => $start,
-            'end'               => rand(0,1) ? $end : null,
-            'slug'              => Str::of($name)->slug(),
-            'short_desc'        => $this->faker->paragraph(2),
-            'long_desc'         => $this->faker->paragraphs(2, true),
-            'organisation_id'   => Organisation::factory(),
+            'name' => $name,
+            'start' => $start,
+            'end' => rand(0, 1) ? $end : null,
+            'slug' => Str::of($name)->slug(),
+            'short_desc' => $this->faker->paragraph(2),
+            'long_desc' => $this->faker->paragraphs(2, true),
+            'organisation_id' => Organisation::factory(),
         ];
     }
 }

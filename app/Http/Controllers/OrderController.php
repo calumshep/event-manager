@@ -73,7 +73,7 @@ class OrderController extends Controller
                     return redirect()->back()
                         ->withErrors([
                             'You cannot purchase more tickets than are available.',
-                    ]);
+                        ]);
                 }
 
                 $total += $ticket->price * $ticket->quantity;
@@ -81,16 +81,16 @@ class OrderController extends Controller
             }
         }
 
-        if (sizeof($tickets) == 0) {
+        if (count($tickets) == 0) {
             return redirect()->back()->withErrors([
                 'You must select at least 1 ticket.',
             ]);
         }
 
         return view('orders.checkout', [
-            'event'     => $event,
-            'tickets'   => $tickets,
-            'total'     => $total,
+            'event' => $event,
+            'tickets' => $tickets,
+            'total' => $total,
         ]);
     }
 
@@ -99,7 +99,7 @@ class OrderController extends Controller
      *
      * Request should look like:
      *      "quantity_1" => "2"         // Number supplied is TicketType ID.
- *          "name_1" => array:2 [▼      // ". Number of items in name_ array should match quantity above.
+     *          "name_1" => array:2 [▼      // ". Number of items in name_ array should match quantity above.
      *          0 => "Test 1"
      *          1 => "test2"
      *      ]
@@ -114,23 +114,23 @@ class OrderController extends Controller
          * Process a new order
          */
         $input = $request->validate([
-            'buyer_email'       => 'sometimes|required|email',
-            'buyer_phone'       => 'sometimes|required',
-            'special_requests'  => 'nullable',
+            'buyer_email' => 'sometimes|required|email',
+            'buyer_phone' => 'sometimes|required',
+            'special_requests' => 'nullable',
         ]);
 
         $order = new Order([ // start a new order
-            'checkout_id'       => '',
-            'total_amount'      => 0,
-            'special_requests'  => $input['special_requests'] ?? '',
+            'checkout_id' => '',
+            'total_amount' => 0,
+            'special_requests' => $input['special_requests'] ?? '',
         ]);
 
         if (auth()->user()) {   // if logged in, associate the authenticated user with the order
             $order->orderable()->associate(auth()->user());
         } else {                // if not logged in, associate with existing or new Guest instance
             $order->orderable()->associate(Guest::updateOrCreate(
-                ['email'         => $input['buyer_email']], // use these values to find an existing Guest record
-                ['phone_number'  => $input['buyer_phone']]  // update the existing Guest or create a new one with these
+                ['email' => $input['buyer_email']], // use these values to find an existing Guest record
+                ['phone_number' => $input['buyer_phone']]  // update the existing Guest or create a new one with these
             ));
         }
         $order->save();
@@ -141,14 +141,14 @@ class OrderController extends Controller
         /*
          * Process selected tickets
          */
-        foreach($event->tickets as $ticket_type) {  // iterate through all the possible ticket types for purchased ones
+        foreach ($event->tickets as $ticket_type) {  // iterate through all the possible ticket types for purchased ones
             $key = 'quantity_'.$ticket_type->id;
-            if (key_exists($key, $tickets)) {       // check if ticket type has been ordered at least once
+            if (array_key_exists($key, $tickets)) {       // check if ticket type has been ordered at least once
                 $quantity = $tickets[$key];         // get the number of tickets purchased
 
                 if ($ticket_type->capacity && $quantity > $ticket_type->remaining()) {
                     return redirect()->back()       // do not proceed if more tickets requested than available
-                        ->withErrors("You cannot purchase more tickets than are available.");
+                        ->withErrors('You cannot purchase more tickets than are available.');
                 }
 
                 /*
@@ -163,9 +163,9 @@ class OrderController extends Controller
 
                     $order->tickets()->attach($ticket_type->id, [         // attach ticket to order with name + metadata
                         'ticket_holder_name' => null,
-                        'first_name'    => $tickets['firstname_'.$ticket_type->id][$j],
-                        'last_name'     => $tickets['lastname_'.$ticket_type->id][$j],
-                        'metadata'      => $metadata,
+                        'first_name' => $tickets['firstname_'.$ticket_type->id][$j],
+                        'last_name' => $tickets['lastname_'.$ticket_type->id][$j],
+                        'metadata' => $metadata,
                     ]);
 
                     $order->total_amount += $ticket_type->price;          // update rolling order total
@@ -180,13 +180,13 @@ class OrderController extends Controller
          * Create Stripe checkout session
          */
         $checkout_options = [
-            'success_url'   =>      // redirect after successful checkout
-                route('event.tickets.purchase.success', $event) . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url'    =>      // redirect if checkout actively cancelled by user
+            'success_url' =>      // redirect after successful checkout
+                route('event.tickets.purchase.success', $event).'?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' =>      // redirect if checkout actively cancelled by user
                 route('event.tickets.cancelled', $event),
-            'metadata'      => [    // give Stripe the order ID so it can pass this back in the webhook after payment
-                'order_id'  => $order->id],
-            'expires_at'    =>      // set checkout session expiry to 1 hour from now
+            'metadata' => [    // give Stripe the order ID so it can pass this back in the webhook after payment
+                'order_id' => $order->id],
+            'expires_at' =>      // set checkout session expiry to 1 hour from now
                 now()->addHour()->timestamp,
         ];
 
@@ -194,6 +194,7 @@ class OrderController extends Controller
             return auth()->user()->checkout($checkout_items, $checkout_options);
         } else {                    // otherwise start a guest checkout and pass the email along autocompleted
             $checkout_options['customer_email'] = $input['buyer_email'];
+
             return Checkout::guest()->create($checkout_items, $checkout_options);
         }
     }
@@ -215,14 +216,14 @@ class OrderController extends Controller
     {
         try {
             return view('orders.success', [
-                'event'     => $event,
-                'checkout'  => Cashier::stripe()->checkout->sessions->retrieve($request->get('session_id'))
+                'event' => $event,
+                'checkout' => Cashier::stripe()->checkout->sessions->retrieve($request->get('session_id')),
             ]);
         } catch (ApiErrorException $e) {
             Log::error($e);
 
             return redirect()->route('home.event', $event)->withErrors([
-                'An unknown error occurred.'
+                'An unknown error occurred.',
             ]);
         }
     }

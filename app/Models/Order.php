@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Kyzegs\Prunable\Concerns\SafePrunable;
 
 class Order extends Model
 {
@@ -25,7 +24,7 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'paid' => 'bool'
+        'paid' => 'bool',
     ];
 
     /**
@@ -46,8 +45,6 @@ class Order extends Model
 
     /**
      * Get the User or Guest object related to this order.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function orderable(): MorphTo
     {
@@ -56,8 +53,6 @@ class Order extends Model
 
     /**
      * Get the tickets associated with this order.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function tickets(): BelongsToMany
     {

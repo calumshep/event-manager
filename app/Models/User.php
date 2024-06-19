@@ -16,7 +16,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, Billable /* , MustVerifyEmail */;
+    use Billable, HasApiTokens, HasFactory, HasRoles, Notifiable /* , MustVerifyEmail */;
 
     /**
      * The attributes that are mass assignable.
@@ -52,8 +52,6 @@ class User extends Authenticatable
 
     /**
      * Get the events belonging to the user.
-     *
-     * @return HasMany
      */
     public function events(): HasMany
     {
@@ -62,8 +60,6 @@ class User extends Authenticatable
 
     /**
      * Get the organisations belonging to the user.
-     *
-     * @return HasMany
      */
     public function organisations(): HasMany
     {
@@ -72,14 +68,11 @@ class User extends Authenticatable
 
     /**
      * Get the orders belonging to the user.
-     *
-     * @return MorphMany
      */
     public function orders(): MorphMany
     {
         return $this->morphMany(Order::class, 'orderable');
     }
-
 
     /**
      * Get the organisations this user is a member of.

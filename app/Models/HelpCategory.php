@@ -10,13 +10,11 @@ class HelpCategory extends Model
     protected $fillable = [
         'name',
         'icon',
-        'description'
+        'description',
     ];
 
     /**
      * Get the help articles in this category.
-     *
-     * @return HasMany
      */
     public function articles(): HasMany
     {

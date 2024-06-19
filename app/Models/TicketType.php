@@ -27,15 +27,13 @@ class TicketType extends Model
     ];
 
     protected $casts = [
-        'time'              => 'datetime',
-        'details'           => 'array',
-        'show_remaining'    => 'bool',
+        'time' => 'datetime',
+        'details' => 'array',
+        'show_remaining' => 'bool',
     ];
 
     /**
      * Get the event this ticket belongs to.
-     *
-     * @return BelongsTo
      */
     public function event(): BelongsTo
     {
@@ -44,8 +42,6 @@ class TicketType extends Model
 
     /**
      * Get the orders containing this ticket type.
-     *
-     * @return BelongsToMany
      */
     public function orders(): BelongsToMany
     {
@@ -56,8 +52,6 @@ class TicketType extends Model
 
     /**
      * Get the number of this ticket types purchased.
-     *
-     * @return int
      */
     public function purchased(): int
     {
@@ -66,8 +60,6 @@ class TicketType extends Model
 
     /**
      * Get the number of this ticket type remaining.
-     *
-     * @return int
      */
     public function remaining(): int
     {

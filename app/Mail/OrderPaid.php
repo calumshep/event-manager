@@ -27,20 +27,18 @@ class OrderPaid extends Mailable
     public Order $order;
 
     public $url;
+
     public $room_url;
 
     /**
      * Create a new message instance.
-     *
-     * @param \App\Models\Event $event
-     * @param \App\Models\Order $order
      */
     public function __construct(Event $event, Order $order)
     {
-        $this->event    = $event;
-        $this->order    = $order;
-        $this->url      = route('orders.show', $order);
-        $this->room_url = "https://www.hilton.com/en/attend-my-event/edidudi-90t-38063552-4d54-440b-960f-0e6cff53899d/";
+        $this->event = $event;
+        $this->order = $order;
+        $this->url = route('orders.show', $order);
+        $this->room_url = 'https://www.hilton.com/en/attend-my-event/edidudi-90t-38063552-4d54-440b-960f-0e6cff53899d/';
     }
 
     /**
@@ -50,7 +48,7 @@ class OrderPaid extends Mailable
     {
         return new Envelope(
             from: new Address('2024ball@scottishskiclub.org.uk', 'Scottish Ski Club'),
-            subject: 'Your Tickets for ' . $this->event->name,
+            subject: 'Your Tickets for '.$this->event->name,
         );
     }
 

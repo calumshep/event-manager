@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Enums\Gender;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 
 class StoreOrganisationRequest extends FormRequest
 {
@@ -24,9 +22,9 @@ class StoreOrganisationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          => 'string|max:255|required',
-            'description'   => 'string|required',
-            'website'       => 'string|url|required',
+            'name' => 'string|max:255|required',
+            'description' => 'string|required',
+            'website' => 'string|url|required',
         ];
     }
 }

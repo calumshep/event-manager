@@ -12,25 +12,19 @@ class StripeHelper
 {
     /**
      * Compile details for the given event.
-     *
-     * @param \App\Models\Event $event
-     *
-     * @return array
      */
     public static function eventDetails(Event $event): array
     {
         return [
-            'name'          => $event->name,
-            'description'   => strip_tags($event->short_desc),
+            'name' => $event->name,
+            'description' => strip_tags($event->short_desc),
         ];
     }
 
     /**
      * Create a new Stripe product for the given event.
      *
-     * @param \App\Models\Event $event
      *
-     * @return Product
      * @throws \Stripe\Exception\ApiErrorException
      */
     public static function createProduct(Event $event): Product
@@ -41,9 +35,7 @@ class StripeHelper
     /**
      * Update an existing Stripe product for an existing event.
      *
-     * @param \App\Models\Event $event
      *
-     * @return Product
      * @throws \Stripe\Exception\ApiErrorException
      */
     public static function updateProduct(Event $event): Product
@@ -64,27 +56,23 @@ class StripeHelper
     /**
      * Create a new Stripe price for the given ticket type, in the product for the associated event.
      *
-     * @param \App\Models\TicketType $ticket
      *
-     * @return Price
      * @throws \Stripe\Exception\ApiErrorException
      */
     public static function createPrice(TicketType $ticket): Price
     {
         return Cashier::stripe()->prices->create([
-            'currency'      => config('cashier.currency'),
-            'unit_amount'   => $ticket->price,
-            'nickname'      => $ticket->name,
-            'product'       => $ticket->event->stripe_id,
+            'currency' => config('cashier.currency'),
+            'unit_amount' => $ticket->price,
+            'nickname' => $ticket->name,
+            'product' => $ticket->event->stripe_id,
         ]);
     }
 
     /**
      * Update the relevant Stripe price for the given ticket type, in the product for the associated event.
      *
-     * @param \App\Models\TicketType $ticket
      *
-     * @return Price
      * @throws \Stripe\Exception\ApiErrorException
      */
     public static function updatePrice(TicketType $ticket): Price
@@ -94,10 +82,10 @@ class StripeHelper
         ]);
 
         return Cashier::stripe()->prices->create([
-            'currency'      => config('cashier.currency'),
-            'unit_amount'   => $ticket->price,
-            'nickname'      => $ticket->name,
-            'product'       => $ticket->event->stripe_id,
+            'currency' => config('cashier.currency'),
+            'unit_amount' => $ticket->price,
+            'nickname' => $ticket->name,
+            'product' => $ticket->event->stripe_id,
         ]);
     }
 

@@ -23,9 +23,9 @@ class OrganisationTeamController extends Controller
     public function add(Organisation $organisation, Request $request): RedirectResponse
     {
         $user = User::whereEmail($request->email)->first();
-        if (!$user) {
+        if (! $user) {
             return redirect()->back()->withErrors([
-                'No user could be found with the email address "' . $request->email . '"' . ". Are you sure it's right?",
+                'No user could be found with the email address "'.$request->email.'"'.". Are you sure it's right?",
             ]);
         } elseif ($user == $organisation->user || $organisation->team->contains($user)) {
             return redirect()->back()->withErrors([
@@ -36,7 +36,7 @@ class OrganisationTeamController extends Controller
         $organisation->team()->attach($user);
 
         return redirect()->back()->with([
-            'status' => $user->first_name . ' ' . $user->last_name . ' added to organisation team successfully.',
+            'status' => $user->first_name.' '.$user->last_name.' added to organisation team successfully.',
         ]);
     }
 
@@ -46,7 +46,7 @@ class OrganisationTeamController extends Controller
     public function remove(Organisation $organisation, Request $request): RedirectResponse
     {
         $user = User::find($request->user_id);
-        if (!$user || !$organisation->team->contains($user)) {
+        if (! $user || ! $organisation->team->contains($user)) {
             return redirect()->back()->withErrors([
                 "That user could not be found in this organisation's team",
             ]);
@@ -54,7 +54,7 @@ class OrganisationTeamController extends Controller
         $organisation->team()->detach($user);
 
         return redirect()->back()->with([
-            'warning' => $user->first_name . ' ' . $user->last_name . ' removed from organisation team.',
+            'warning' => $user->first_name.' '.$user->last_name.' removed from organisation team.',
         ]);
     }
 }

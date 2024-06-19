@@ -6,7 +6,6 @@ use App\Models\Event;
 use App\Models\TicketType;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
-use Illuminate\Http\Request;
 
 class TicketTypePolicy
 {
@@ -43,6 +42,7 @@ class TicketTypePolicy
     {
         /** @var Event $event */
         $event = request()->route('event');
+
         return $this->authByEvent($user, $event);
     }
 

@@ -24,30 +24,30 @@ class DatabaseSeeder extends Seeder
                 Permission::create(['name' => 'administer events']),
                 Permission::create(['name' => 'manage own events']),
                 Permission::create(['name' => 'administer orders']),
-        ]);
+            ]);
 
         // Create event organiser role
         Role::create(['name' => 'event organiser'])
             ->syncPermissions([
                 Permission::where('name', 'manage own events')->first(),
-        ]);
+            ]);
 
         if (App::environment('local')) {
             // Create specific testing account (for logging in with)
             User::factory()
                 ->create([
-                'first_name'    => 'Test',
-                'last_name'     => 'User',
-                'email'         => 'test@example.com'
-            ])->assignRole('administrator');
+                    'first_name' => 'Test',
+                    'last_name' => 'User',
+                    'email' => 'test@example.com',
+                ])->assignRole('administrator');
 
             // Create regular user who can manage events
             User::factory()
                 ->create([
-                    'first_name'    => 'Test',
-                    'last_name'     => 'User',
-                    'email'         => 'user@example.com'
-            ])->assignRole('event organiser');
+                    'first_name' => 'Test',
+                    'last_name' => 'User',
+                    'email' => 'user@example.com',
+                ])->assignRole('event organiser');
         }
     }
 }

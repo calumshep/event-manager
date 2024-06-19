@@ -17,8 +17,6 @@ class Guest extends Model
 
     /**
      * Get the orders belonging to the guest.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function orders(): MorphMany
     {

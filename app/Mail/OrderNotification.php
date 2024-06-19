@@ -27,9 +27,6 @@ class OrderNotification extends Mailable
 
     /**
      * Create a new message instance.
-     *
-     * @param \App\Models\Event $event
-     * @param \App\Models\Order $order
      */
     public function __construct(Event $event, Order $order)
     {

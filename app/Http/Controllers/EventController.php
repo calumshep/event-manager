@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class EventController extends Controller
@@ -34,10 +33,10 @@ class EventController extends Controller
     public function create(): View
     {
         return view('events.form', [
-            'event'         => new Event(),
-            'orgs'          => auth()->user()->organisations,
-            'readonly'      => false,
-            'creating'      => true,
+            'event' => new Event(),
+            'orgs' => auth()->user()->organisations,
+            'readonly' => false,
+            'creating' => true,
         ]);
     }
 
@@ -49,15 +48,15 @@ class EventController extends Controller
         $input = $request->validated();
 
         $event = auth()->user()->events()->create([
-            'name'              => $input['name'],
-            'start'             => $input['start'],
-            'type'              => $input['type'],
-            'end'               => $input['end'],
-            'special_requests'  => $input['special_requests'],
-            'slug'              => Str::of($input['name'])->slug(),
-            'short_desc'        => $input['short_desc'],
-            'long_desc'         => clean($request->long_desc),
-            'organisation_id'   => $input['org'],
+            'name' => $input['name'],
+            'start' => $input['start'],
+            'type' => $input['type'],
+            'end' => $input['end'],
+            'special_requests' => $input['special_requests'],
+            'slug' => Str::of($input['name'])->slug(),
+            'short_desc' => $input['short_desc'],
+            'long_desc' => clean($request->long_desc),
+            'organisation_id' => $input['org'],
         ]);
 
         return redirect()->route('events.show', $event)->with([
@@ -71,10 +70,10 @@ class EventController extends Controller
     public function show(Event $event): View
     {
         return view('events.form', [
-            'event'         => $event,
-            'orgs'          => $event->user->organisations,
-            'readonly'      => true,
-            'creating'      => false,
+            'event' => $event,
+            'orgs' => $event->user->organisations,
+            'readonly' => true,
+            'creating' => false,
         ]);
     }
 
@@ -84,10 +83,10 @@ class EventController extends Controller
     public function edit(Event $event): View
     {
         return view('events.form', [
-            'event'         => $event,
-            'orgs'          => $event->user->organisations,
-            'readonly'      => false,
-            'creating'      => false,
+            'event' => $event,
+            'orgs' => $event->user->organisations,
+            'readonly' => false,
+            'creating' => false,
         ]);
     }
 
@@ -99,15 +98,15 @@ class EventController extends Controller
         $input = $request->validated();
 
         $event = $event->fill([
-            'name'              => $input['name'],
-            'start'             => $input['start'],
-            'type'              => $input['type'],
-            'end'               => $input['end'],
-            'special_requests'  => $input['special_requests'],
-            'slug'              => Str::of($input['name'])->slug(),
-            'short_desc'        => $input['short_desc'],
-            'long_desc'         => clean($request->long_desc),
-            'organisation_id'   => $input['org'],
+            'name' => $input['name'],
+            'start' => $input['start'],
+            'type' => $input['type'],
+            'end' => $input['end'],
+            'special_requests' => $input['special_requests'],
+            'slug' => Str::of($input['name'])->slug(),
+            'short_desc' => $input['short_desc'],
+            'long_desc' => clean($request->long_desc),
+            'organisation_id' => $input['org'],
         ]);
         $event->save();
 

@@ -11,13 +11,11 @@ class HelpArticle extends Model
         'title',
         'body',
         'author_id',
-        'category_id'
+        'category_id',
     ];
 
     /**
      * Get the category this article belongs to.
-     *
-     * @return BelongsTo
      */
     public function category(): BelongsTo
     {

@@ -5,7 +5,6 @@ namespace App\Listeners;
 use App\Mail\OrderNotification;
 use App\Mail\OrderPaid;
 use App\Models\Order;
-use Exception;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Events\WebhookReceived;
@@ -59,7 +58,7 @@ class StripeEventListener
                 break;
 
             default:
-                Log::warning("A webhook was received but not handled.");
+                Log::warning('A webhook was received but not handled.');
         }
     }
 }

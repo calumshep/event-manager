@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\GBSkiController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(GBSkiController::class)->group(function ()
-{
+Route::controller(GBSkiController::class)->group(function () {
     Route::get('/active-registrations/{query?}', 'activeRegistrations');
 });

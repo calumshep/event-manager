@@ -30,9 +30,9 @@ class OrganisationController extends Controller
     public function create()
     {
         return view('organisations.form', [
-            'organisation'  => new Organisation(),
-            'readonly'      => false,
-            'creating'      => true,
+            'organisation' => new Organisation(),
+            'readonly' => false,
+            'creating' => true,
         ]);
     }
 
@@ -44,9 +44,9 @@ class OrganisationController extends Controller
         $input = $request->validated();
 
         $organisation = auth()->user()->organisations()->create([
-            'name'          => $input['name'],
-            'description'   => $input['description'],
-            'website'       => $input['website'],
+            'name' => $input['name'],
+            'description' => $input['description'],
+            'website' => $input['website'],
         ]);
 
         return redirect()->route('organisations.show', $organisation)->with([
@@ -60,9 +60,9 @@ class OrganisationController extends Controller
     public function show(Organisation $organisation)
     {
         return view('organisations.form', [
-            'organisation'  => $organisation,
-            'readonly'      => true,
-            'creating'      => false,
+            'organisation' => $organisation,
+            'readonly' => true,
+            'creating' => false,
         ]);
     }
 
@@ -72,9 +72,9 @@ class OrganisationController extends Controller
     public function edit(Organisation $organisation)
     {
         return view('organisations.form', [
-            'organisation'  => $organisation,
-            'readonly'      => false,
-            'creating'      => false,
+            'organisation' => $organisation,
+            'readonly' => false,
+            'creating' => false,
         ]);
     }
 
@@ -86,9 +86,9 @@ class OrganisationController extends Controller
         $input = $request->validated();
 
         $organisation->fill([
-            'name'          => $input['name'],
-            'description'   => $input['description'],
-            'website'       => $input['website'],
+            'name' => $input['name'],
+            'description' => $input['description'],
+            'website' => $input['website'],
         ]);
         $organisation->save();
 

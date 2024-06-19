@@ -33,7 +33,7 @@ class Event extends Model
 
     protected $casts = [
         'start' => 'datetime',
-        'end'   => 'datetime',
+        'end' => 'datetime',
     ];
 
     /**
@@ -98,8 +98,7 @@ class Event extends Model
      */
     public function getTickets(): Collection
     {
-        return OrderTicket
-            ::whereIn('ticket_type_id', $this->tickets->pluck('id'))
+        return OrderTicket::whereIn('ticket_type_id', $this->tickets->pluck('id'))
             ->whereRelation('order', 'paid', true)
             ->get()
             ->sortByDesc('updated_at');

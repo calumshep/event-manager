@@ -26,7 +26,7 @@ class AccountController extends Controller
     public function showOwn(): View
     {
         return view('accounts.form', [
-            'user' => auth()->user()
+            'user' => auth()->user(),
         ]);
     }
 
@@ -36,7 +36,7 @@ class AccountController extends Controller
     public function edit(User $user): View
     {
         return view('accounts.form', [
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -54,10 +54,10 @@ class AccountController extends Controller
         }
 
         $user->fill([
-            'first_name'    => $input['first_name'],
-            'last_name'     => $input['last_name'],
-            'email'         => $input['email'],
-            'phone_number'  => $input['phone_number'],
+            'first_name' => $input['first_name'],
+            'last_name' => $input['last_name'],
+            'email' => $input['email'],
+            'phone_number' => $input['phone_number'],
         ]);
 
         if ($input['new_password']) {

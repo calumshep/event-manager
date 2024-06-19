@@ -32,15 +32,14 @@ class AppServiceProvider extends ServiceProvider
          * Paginate a standard Laravel Collection.
          * From https://gist.github.com/simonhamp/549e8821946e2c40a617c85d2cf5af5e.
          *
-         * @param int $perPage
-         * @param int $total
-         * @param int $page
-         * @param string $pageName
+         * @param  int  $perPage
+         * @param  int  $total
+         * @param  int  $page
+         * @param  string  $pageName
          * @return array
          */
         Collection::macro('paginate',
-            function($perPage, $total = null, $page = null, $pageName = 'page'): LengthAwarePaginator
-            {
+            function ($perPage, $total = null, $page = null, $pageName = 'page'): LengthAwarePaginator {
                 $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
 
                 return new LengthAwarePaginator(

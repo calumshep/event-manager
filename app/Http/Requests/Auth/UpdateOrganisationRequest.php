@@ -2,10 +2,6 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Enums\Gender;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
-
 class UpdateOrganisationRequest extends StoreOrganisationRequest
 {
     /**

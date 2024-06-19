@@ -15,15 +15,15 @@ class HelpArticleSeeder extends Seeder
     public function run(): void
     {
         $creating = HelpCategory::create([
-            'name'          => 'Creating Events',
-            'icon'          => 'fa-calendar-plus',
-            'description'   => 'How to create your own event'
+            'name' => 'Creating Events',
+            'icon' => 'fa-calendar-plus',
+            'description' => 'How to create your own event',
         ]);
 
         $creating->articles()->save(new HelpArticle([
-            'title'         => 'Creating Free Events',
-            'body'          => "Creating free events is easy, and it's also free to do, since we don't charge!",
-            'author_id'     => User::where('email', '=', 'test@example.com')->first()->id
+            'title' => 'Creating Free Events',
+            'body' => "Creating free events is easy, and it's also free to do, since we don't charge!",
+            'author_id' => User::where('email', '=', 'test@example.com')->first()->id,
         ]));
     }
 }
