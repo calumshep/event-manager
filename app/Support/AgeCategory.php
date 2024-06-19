@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Date;
 
 class AgeCategory

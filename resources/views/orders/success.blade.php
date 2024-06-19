@@ -17,7 +17,7 @@
             <dd>£{{ number_format($checkout->amount_total/100, 2) }}</dd>
 
             <dt>Time</dt>
-            <dd>{{ \Carbon\Carbon::createFromTimestamp($checkout->created, 'Europe/London')->toDateTimeString() }}</dd>
+            <dd>{{ \Illuminate\Support\Carbon::createFromTimestamp($checkout->created, 'Europe/London')->toDateTimeString() }}</dd>
 
             <dt>Payment</dt>
             <dd>{{ $checkout->payment_intent }}</dd>
