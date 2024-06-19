@@ -18,6 +18,17 @@ class TicketTypePolicy
     }
 
     /**
+     * Determine whether the user can view any model.
+     */
+    public function viewAny(User $user): Response
+    {
+        /** @var Event $event */
+        $event = request()->route('event');
+
+        return $this->authByEvent($user, $event);
+    }
+
+    /**
      * Determine whether the user can view the model.
      */
     public function view(User $user, TicketType $ticket): Response
@@ -54,7 +65,7 @@ class TicketTypePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Event $event): Response
+    public function restore(User $user, Event $event): bool
     {
         return false;
     }

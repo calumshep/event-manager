@@ -33,7 +33,7 @@ class EventPolicy
      */
     public function view(User $user, Event $event): Response
     {
-        return $user->id === $event->user->id
+        return $user->canManageEvent($event)
             ? Response::allow()
             : Response::denyAsNotFound();
     }
@@ -51,7 +51,7 @@ class EventPolicy
      */
     public function update(User $user, Event $event): Response
     {
-        return $user->id === $event->user->id
+        return $user->canManageEvent($event)
             ? Response::allow()
             : Response::denyAsNotFound();
     }
@@ -61,7 +61,7 @@ class EventPolicy
      */
     public function delete(User $user, Event $event): Response
     {
-        return $user->id === $event->user->id
+        return $user->canManageEvent($event)
             ? Response::allow()
             : Response::denyAsNotFound();
     }

@@ -13,7 +13,7 @@
 
 namespace App\Models{
 /**
- * App\Models\Event
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -29,6 +29,7 @@ namespace App\Models{
  * @property string $stripe_id
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property string $type
+ * @property string|null $special_requests
  * @property-read \App\Models\Organisation|null $organisation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $tickets
  * @property-read int|null $tickets_count
@@ -47,6 +48,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereOrganisationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereShortDesc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereSpecialRequests($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereStripeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereType($value)
@@ -60,7 +62,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Guest
+ * 
  *
  * @property int $id
  * @property string $email
@@ -87,7 +89,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\HelpArticle
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -113,7 +115,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\HelpCategory
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -138,7 +140,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Order
+ * 
  *
  * @property int $id
  * @property string $checkout_id
@@ -150,7 +152,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property string|null $special_requests
- * @property mixed|null $order_requests
+ * @property string|null $order_requests
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $orderable
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $tickets
  * @property-read int|null $tickets_count
@@ -178,22 +180,26 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\OrderTicket
+ * 
  *
  * @property int $id
  * @property int $order_id
  * @property int $ticket_type_id
- * @property string $ticket_holder_name
+ * @property string|null $ticket_holder_name
  * @property array $metadata
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $first_name
+ * @property string|null $last_name
  * @property-read \App\Models\Order|null $order
  * @property-read \App\Models\TicketType|null $ticketType
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket query()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereMetadata($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereTicketHolderName($value)
@@ -205,7 +211,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Organisation
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -241,7 +247,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\TicketType
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -285,7 +291,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\User
+ * 
  *
  * @property int $id
  * @property string $first_name

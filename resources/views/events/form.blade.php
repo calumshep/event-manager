@@ -1,24 +1,19 @@
-@extends('layout.app')
+@extends('layout.sidebar-form')
 
 @section('head')
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 @endsection
 
-@section('content')
+@section('title', $creating ? 'New Event' : $event->name)
 
-    <div class="d-flex justify-content-between align-items-baseline">
-        <h1>{{ $creating ? "New" : null }} Event</h1>
+@unless($creating)
+    @section('sidebar')
+        @include('layout.event-nav')
+    @endsection
+@endunless
 
-        @unless($creating)
-            <a class="btn btn-success" href="{{ route('events.sales', $event) }}">
-                <i class="fa-solid fa-sterling-sign me-2"></i>Ticket Sales
-            </a>
-        @endunless
-    </div>
-
-    <p>
-        Required fields are marked with an asterisk (<span class="text-danger">*</span>).
-    </p>
+@section('form')
+    <p>Required fields are marked with an asterisk (<span class="text-danger">*</span>).</p>
 
     @if($creating)
         <p class="text-muted">
@@ -27,16 +22,14 @@
         </p>
     @endif
 
-    @include('components.status')
+    <hr>
 
-    <form method="POST"
-          action="{{ $creating ? route('events.store') : route('events.update', $event) }}">
+    <form method="POST" action="{{ $creating ? route('events.store') : route('events.update', $event) }}">
         @csrf
         {{ $creating ? null : method_field('PUT') }}
 
         <fieldset @disabled($readonly)>
             <!-- basics -->
-            <hr>
             <div class="row pt-3 mb-3">
                 <div class="col-lg-4">
                     <h2 class="h5">Basics</h2>
@@ -67,7 +60,7 @@
                                    name="type"
                                    id="type_generic"
                                    value="generic"
-                                   @checked($event->type === 'generic')>
+                                   {{ old('type') == 'generic' || $event->type == 'generic' ? 'checked' : '' }}>
                             <label class="form-check-label" for="type_generic">Generic</label>
                         </div>
                         <div class="form-check form-check-inline">
@@ -76,7 +69,7 @@
                                    name="type"
                                    id="type_race"
                                    value="race"
-                                   @checked($event->type === 'race')>
+                                   {{ old('type') == 'race' || $event->type == 'race' ? 'checked' : '' }}>
                             <label class="form-check-label" for="type_race">Ski Race</label>
                         </div>
                     </div>
@@ -84,9 +77,10 @@
                     <div class="mb-3">
                         <label class="form-label" for="org">Event organiser<span class="text-danger">*</span></label>
                         <select name="org" id="org" class="form-select" required>
+                            <option value disabled @selected($creating)>Select...</option>
+
                             @forelse($orgs as $org)
-                                <option value="{{ $org->id }}"
-                                    @selected(old('org') ? old('org') == $org->id : $event->org == $org->id)>
+                                <option value="{{ $org->id }}" @selected(old('org', $event->organisation->id) ==  $org->id)>
                                     {{ $org->name }}
                                 </option>
                             @empty
@@ -154,14 +148,17 @@
                     <div class="mb-3">
                         <label class="form-label" for="long_desc">Long description<span
                                 class="text-danger">*</span></label>
-                        <input type="hidden" name="long_desc" id="long_desc">
+                        <input type="hidden"
+                               name="long_desc"
+                               id="long_desc"
+                               value="{{ old('long_desc', $event->long_desc) }}">
 
                         <div id="quill_editor">
-                            {!! $event ? $event->long_desc : '' !!}
+                            {!! old('long_desc', $event->long_desc) !!}
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div>
                         <label class="form-label" for="special_requests">Special requests text</label>
                         <input type="text"
                                name="special_requests"
@@ -176,61 +173,6 @@
                 </div>
             </div>
         </fieldset>
-
-        @unless($creating)
-            <!-- tickets -->
-            <hr>
-
-            <div class="row pt-3 mb-3">
-                <div class="col-lg-4">
-                    <h2 class="h5">Tickets</h2>
-
-                    <p>
-                        Tickets allow your attendees to register or pay for the event. Add tickets for different days,
-                        different price points, concessions, extras you're selling, etc.
-                        <strong>Your event should have at least one ticket type.</strong>
-                    </p>
-                </div>
-
-                <div class="col-lg-8">
-                    <p>
-                        <a href="{{ route('events.tickets.create', $event)  }}" class="btn btn-primary">
-                            <i class="fa-solid fa-plus me-2"></i>New Ticket
-                        </a>
-                    </p>
-
-                    <table class="table table-hover table-striped border card-text">
-                        <thead class="table-light">
-                        <tr>
-                            <th>Name</th>
-                            <th>Time</th>
-                            <th>Price</th>
-                            <th>Capacity</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        @forelse($event->tickets as $ticket)
-                            <tr>
-                                <td><a href="{{ route('events.tickets.show', [$event, $ticket]) }}">{{
-                                        $ticket->name
-                                        }}</a></td>
-                                <td>{{ $ticket->time->format('d/m/Y') }}</td>
-                                <td>£{{ number_format($ticket->price/100, 2) }}</td>
-                                <td>{{ $ticket->capacity ?? 'Not set' }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4">
-                                    No tickets found for this event.
-                                </td>
-                            </tr>
-                        @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        @endunless
 
         <hr>
 
@@ -264,7 +206,9 @@
             </div>
         </div>
     </form>
+@endsection
 
+@section('modals')
     @if($readonly)
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -304,12 +248,11 @@
             </div>
         </div>
     @endif
-
 @endsection
 
 @section('scripts')
     @unless($readonly)
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
         <script>
             let editor = new Quill('#quill_editor', {
                 modules: {

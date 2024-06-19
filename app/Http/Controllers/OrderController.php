@@ -87,7 +87,7 @@ class OrderController extends Controller
             ]);
         }
 
-        return view('tickets.checkout', [
+        return view('orders.checkout', [
             'event'     => $event,
             'tickets'   => $tickets,
             'total'     => $total,
@@ -214,7 +214,7 @@ class OrderController extends Controller
     public function success(Event $event, Request $request): View|RedirectResponse
     {
         try {
-            return view('tickets.success', [
+            return view('orders.success', [
                 'event'     => $event,
                 'checkout'  => Cashier::stripe()->checkout->sessions->retrieve($request->get('session_id'))
             ]);

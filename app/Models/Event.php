@@ -38,8 +38,6 @@ class Event extends Model
 
     /**
      * Get the user who owns this event.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -48,8 +46,6 @@ class Event extends Model
 
     /**
      * Get the organisation which owns this event.
-     *
-     * @return BelongsTo
      */
     public function organisation(): BelongsTo
     {
@@ -58,8 +54,6 @@ class Event extends Model
 
     /**
      * Get the tickets relevant to this event.
-     *
-     * @return HasMany
      */
     public function tickets(): HasMany
     {
@@ -68,8 +62,6 @@ class Event extends Model
 
     /**
      * Returns an array of dates (inclusive of start & end for multi-day events) on which this event occurs.
-     *
-     * @return DatePeriod|array
      */
     public function days(): DatePeriod|array
     {
@@ -86,9 +78,7 @@ class Event extends Model
     }
 
     /**
-     * Get the orders which contain tickets for this event.
-     *
-     * @return \Illuminate\Support\Collection
+     * Get the paid up orders which contain tickets for this event.
      */
     public function getOrders(): Collection
     {
@@ -100,21 +90,19 @@ class Event extends Model
                 $collated_order->tickets = $order;
 
                 return $collated_order;
-            })->sortByDesc('updated_at');
+            });
     }
 
     /**
-     * Get all the ordered ticket instances for this event.
-     *
-     * @return \Illuminate\Support\Collection
+     * Get all the ordered (and paid up) ticket instances for this event.
      */
     public function getTickets(): Collection
     {
-        return
-            OrderTicket
-                ::whereIn('ticket_type_id', $this->tickets->pluck('id'))
-                ->whereRelation('order', 'paid', true)
-                ->get();
+        return OrderTicket
+            ::whereIn('ticket_type_id', $this->tickets->pluck('id'))
+            ->whereRelation('order', 'paid', true)
+            ->get()
+            ->sortByDesc('updated_at');
     }
 
     /**
