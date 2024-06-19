@@ -155,7 +155,6 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $orderable
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $tickets
  * @property-read int|null $tickets_count
- * @method static \Database\Factories\OrderFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order onlyTrashed()

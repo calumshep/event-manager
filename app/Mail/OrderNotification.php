@@ -7,12 +7,11 @@ use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OrderPaid extends Mailable
+class OrderNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -26,9 +25,6 @@ class OrderPaid extends Mailable
      */
     public Order $order;
 
-    public $url;
-    public $room_url;
-
     /**
      * Create a new message instance.
      *
@@ -37,10 +33,8 @@ class OrderPaid extends Mailable
      */
     public function __construct(Event $event, Order $order)
     {
-        $this->event    = $event;
-        $this->order    = $order;
-        $this->url      = route('orders.show', $order);
-        $this->room_url = "https://www.hilton.com/en/attend-my-event/edidudi-90t-38063552-4d54-440b-960f-0e6cff53899d/";
+        $this->event = $event;
+        $this->order = $order;
     }
 
     /**
@@ -50,7 +44,7 @@ class OrderPaid extends Mailable
     {
         return new Envelope(
             from: new Address('2024ball@scottishskiclub.org.uk', 'Scottish Ski Club'),
-            subject: 'Your Tickets for ' . $this->event->name,
+            subject: 'Order Notification',
         );
     }
 
@@ -59,15 +53,9 @@ class OrderPaid extends Mailable
      */
     public function content(): Content
     {
-        if ($this->event->id === 1) {
-            return new Content(
-                markdown: 'mail.orders.ball',
-            );
-        } else {
-            return new Content(
-                markdown: 'mail.orders.paid',
-            );
-        }
+        return new Content(
+            markdown: 'mail.orders.notification',
+        );
     }
 
     /**
@@ -77,13 +65,6 @@ class OrderPaid extends Mailable
      */
     public function attachments(): array
     {
-        if ($this->event->id === 1) {
-            return [
-                Attachment::fromStorageDisk('public', 'pdf/SSC SNOW BALL ticket.pdf')
-                    ->withMime('application/pdf'),
-            ];
-        } else {
-            return [];
-        }
+        return [];
     }
 }

@@ -50,6 +50,13 @@ class DatabaseSeeder extends Seeder
             TicketType::factory()->for($event)->count(2)->create([
                 'time' => $event->days()[array_rand($event->days())]->format('Y-m-d'),
             ]);
+
+            // Create regular user who can manage events
+            User::factory()->create([
+                'first_name'    => 'Event',
+                'last_name'     => 'User',
+                'email'         => 'user@example.com'
+            ])->assignRole('event organiser');
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Mail\OrderNotification;
 use App\Mail\OrderPaid;
 use App\Models\Order;
 use Exception;
@@ -42,8 +43,18 @@ class StripeEventListener
                 $order->checkout_id = $stripeObject->id;
                 $order->save();
 
+                // Get the event
+                $event = $order->tickets->first()->event;
+
                 // Send confirmation/ticket email to the user
-                Mail::to($order->orderable)->send(new OrderPaid($order->tickets->first()->event, $order));
+                Mail::to($order->orderable)->send(new OrderPaid($event, $order));
+
+                // Send notification to event organisation's owner & team members
+                $org = $event->organisation;
+                Mail::to($org->user)->send(new OrderNotification($event, $order));
+                foreach ($org->team as $teammember) {
+                    Mail::to($teammember)->send(new OrderNotification($event, $order));
+                }
 
                 break;
 

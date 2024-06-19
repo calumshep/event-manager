@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HelpArticleController;
 use App\Http\Controllers\OrganisationController;
+use App\Http\Controllers\OrganisationTeamController;
 use App\Http\Controllers\TicketTypeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Middleware\Authenticate;
@@ -67,8 +68,17 @@ Route::middleware(Authenticate::class)
 
     // Event ticket resource management
     Route::resource('events.tickets', TicketTypeController::class)
-        ->parameters(['tickets' => 'ticket_type'])
-        ->except(['index']);
+        ->parameters(['tickets' => 'ticket_type']);
+
+    // Organisation team management
+    Route::controller(OrganisationTeamController::class)
+         ->prefix('/organisations/{organisation}/team')
+         ->name('organisations.')
+         ->group(function () {
+             Route::get('', 'index')->name('team.index');
+             Route::post('/add', 'add')->name('team.add');
+             Route::post('/remove', 'remove')->name('team.remove');
+     });
 
     // Ticket sales reporting
     Route::controller(EventSalesController::class)

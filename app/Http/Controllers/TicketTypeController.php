@@ -19,6 +19,14 @@ class TicketTypeController extends Controller
         $this->authorizeResource(TicketType::class, 'ticket_type');
     }
 
+    public function index(Event $event): View
+    {
+        return view('tickets.index', [
+            'event'   => $event,
+            'tickets' => $event->tickets,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
