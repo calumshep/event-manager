@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Http\Support\StripeHelper;
 use App\Models\Event;
+use App\Support\StripeHelper;
 use Illuminate\Support\Facades\Log;
 use Stripe\Exception\ApiErrorException;
 

@@ -22,6 +22,52 @@
         @csrf
         {{ $creating ? null : method_field('PUT') }}
 
+        <!-- stripe connect -->
+        <div class="row pt-3 mb-3">
+            <div class="col-lg-4">
+                <h2 class="h5">Stripe Connect</h2>
+
+                <p>
+                    Stripe Connect allows this organisation to create events and collect ticket fees for paid
+                    events.
+                </p>
+            </div>
+
+            <div class="col-lg-8">
+                @if(\App\Support\StripeHelper::accountRequirements($organisation))
+                    <div class="alert alert-warning" role="alert">
+                        <div class="d-flex justify-content-between">
+                            <span>
+                                <strong>Your Stripe Connect account is incomplete.</strong><br>
+                                You will be unable to receive payments.
+                            </span>
+
+                            <a href="{{ route('organisations.refresh', $organisation) }}"
+                               class="btn btn-primary btn-sm align-self-center">
+                                Update Stripe Connect &raquo;
+                            </a>
+                        </div>
+                    </div>
+                @else
+                    <div class="alert alert-success" role="alert">
+                        <div class="d-flex justify-content-between">
+                            <span>
+                                <strong>Your Stripe Connect account is in good standing.</strong>
+                            </span>
+
+                            <a href="https://dashboard.stripe.com/"
+                               class="btn btn-primary btn-sm align-self-center"
+                               target="_blank">
+                                Open Stripe Dashboard &raquo;
+                            </a>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        <hr>
+
         <fieldset @disabled($readonly)>
             <!-- basics -->
             <div class="row pt-3 mb-3">

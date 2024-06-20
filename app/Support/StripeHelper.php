@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Support;
+namespace App\Support;
 
 use App\Models\Event;
 use App\Models\Organisation;
@@ -124,9 +124,16 @@ class StripeHelper
      *
      * @throws \Stripe\Exception\ApiErrorException
      */
-    public static function createNewAccount(): Account
+    public static function createNewAccount(): string
     {
-        return Cashier::stripe()->accounts->create(['type' => 'standard']);
+        return Cashier::stripe()->accounts->create([
+            'type'      => Account::TYPE_STANDARD,
+            'country'   => 'GB',
+            'capabilities' => [
+                'card_payments' => ['requested' => true],
+                'transfers'     => ['requested' => true],
+            ],
+        ])->id;
     }
 
     /**
@@ -137,10 +144,21 @@ class StripeHelper
     public static function accountOnboarding(Organisation $org): AccountLink
     {
         return Cashier::stripe()->accountLinks->create([
-            'account'       => $org->stripe_id,
-            'refresh_url'   => route('organisations.refresh', ['organisation' => $org]),
-            'return_url'    => route('organisations.index', ['organisation' => $org]),
-            'type'          => 'account_onboarding',
+            'account'               => $org->stripe_id,
+            'refresh_url'           => route('organisations.refresh', $org),
+            'return_url'            => route('organisations.show', $org),
+            'type'                  => 'account_onboarding',
+            'collection_options'    => ['fields' => 'eventually_due'],
         ]);
+    }
+
+    /**
+     * Check the state of an organisation's Stripe account requirements.
+     *
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    public static function accountRequirements(Organisation $org): array
+    {
+        return Cashier::stripe()->accounts->retrieve($org->stripe_id)->requirements->currently_due;
     }
 }

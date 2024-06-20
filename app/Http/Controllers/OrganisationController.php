@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\StoreOrganisationRequest;
 use App\Http\Requests\Auth\UpdateOrganisationRequest;
-use App\Http\Support\StripeHelper;
 use App\Models\Organisation;
+use App\Support\StripeHelper;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Stripe\Exception\ApiErrorException;
 
 class OrganisationController extends Controller
 {
@@ -18,7 +21,7 @@ class OrganisationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         return view('organisations.index', [
             'organisations' => auth()->user()->organisations->sortBy('updated_at')->paginate(6),
@@ -28,7 +31,7 @@ class OrganisationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('organisations.form', [
             'organisation'  => new Organisation(),
@@ -40,26 +43,50 @@ class OrganisationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOrganisationRequest $request)
+    public function store(StoreOrganisationRequest $request): RedirectResponse
     {
         $input = $request->validated();
 
-        $organisation = auth()->user()->organisations()->create([
-            'name'          => $input['name'],
-            'description'   => $input['description'],
-            'website'       => $input['website'],
-        ]);
+        try {
+            $account = StripeHelper::createNewAccount();
 
-        // Send user to Stripe onboarding
-        return redirect(
-            to: StripeHelper::accountOnboarding($organisation)->url
-        );
+            // Create the organisation, connected to Stripe's API
+            $organisation = auth()->user()->organisations()->create([
+                'name'          => $input['name'],
+                'description'   => $input['description'],
+                'website'       => $input['website'],
+                'stripe_id'     => $account,
+            ]);
+
+            // Send user to Stripe onboarding
+            return redirect(
+                to: StripeHelper::accountOnboarding($organisation)->url
+            );
+        } catch (ApiErrorException $e) {
+            return redirect()->back()->withErrors([
+                'Stripe API error: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    public function refresh(Organisation $organisation): RedirectResponse
+    {
+        try {
+            // Send user to Stripe onboarding
+            return redirect(
+                to: StripeHelper::accountOnboarding($organisation)->url
+            );
+        } catch (ApiErrorException $e) {
+            return redirect()->back()->withErrors([
+                'Stripe API error: ' . $e->getMessage()
+            ]);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Organisation $organisation)
+    public function show(Organisation $organisation): View
     {
         return view('organisations.form', [
             'organisation'  => $organisation,
@@ -71,7 +98,7 @@ class OrganisationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Organisation $organisation)
+    public function edit(Organisation $organisation): View
     {
         return view('organisations.form', [
             'organisation'  => $organisation,
@@ -83,7 +110,7 @@ class OrganisationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOrganisationRequest $request, Organisation $organisation)
+    public function update(UpdateOrganisationRequest $request, Organisation $organisation): RedirectResponse
     {
         $input = $request->validated();
 
@@ -102,7 +129,7 @@ class OrganisationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Organisation $organisation)
+    public function destroy(Organisation $organisation): RedirectResponse
     {
         if ($organisation->events->count()) {
             return redirect()->back()->withErrors([

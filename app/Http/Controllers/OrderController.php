@@ -110,37 +110,20 @@ class OrderController extends Controller
      */
     public function purchase(Event $event, Request $request): RedirectResponse|Checkout
     {
-        /*
-         * Process a new order
-         */
+        //Process a new order
         $input = $request->validate([
             'buyer_email'       => 'sometimes|required|email',
             'buyer_phone'       => 'sometimes|required',
             'special_requests'  => 'nullable',
         ]);
+        $order = $this->createNewOrder($input);
 
-        $order = new Order([ // start a new order
-            'checkout_id'       => '',
-            'total_amount'      => 0,
-            'special_requests'  => $input['special_requests'] ?? '',
-        ]);
-
-        if (auth()->user()) {   // if logged in, associate the authenticated user with the order
-            $order->orderable()->associate(auth()->user());
-        } else {                // if not logged in, associate with existing or new Guest instance
-            $order->orderable()->associate(Guest::updateOrCreate(
-                ['email'         => $input['buyer_email']], // use these values to find an existing Guest record
-                ['phone_number'  => $input['buyer_phone']]  // update the existing Guest or create a new one with these
-            ));
-        }
-        $order->save();
-
-        $checkout_items = []; // create empty array to store items to send to Stripe Checkout
         $tickets = $request->toArray();
 
         /*
          * Process selected tickets
          */
+        $checkout_items = []; // create empty array to store items to send to Stripe Checkout
         foreach($event->tickets as $ticket_type) {  // iterate through all the possible ticket types for purchased ones
             $key = 'quantity_'.$ticket_type->id;
             if (key_exists($key, $tickets)) {       // check if ticket type has been ordered at least once
@@ -180,16 +163,12 @@ class OrderController extends Controller
          * Create Stripe checkout session
          */
         $checkout_options = [
-            'success_url'   =>      // redirect after successful checkout
-                route('event.tickets.purchase.success', $event) . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url'    =>      // redirect if checkout actively cancelled by user
-                route('event.tickets.cancelled', $event),
-            'metadata'      => [    // give Stripe the order ID so it can pass this back in the webhook after payment
-                'order_id'  => $order->id],
-            'expires_at'    =>      // set checkout session expiry to 1 hour from now
-                now()->addHour()->timestamp,
+            'success_url'       => route('event.tickets.purchase.success', $event) .'?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'        => route('event.tickets.cancelled', $event),
+            'metadata'          => ['order_id' => $order->id],
+            'expires_at'        => now()->addHour()->timestamp,
+            'stripe_account'    => $event->organisation->stripe_id,
         ];
-
         if (auth()->user()) {       // start a checkout session on the authenticated user
             return auth()->user()->checkout($checkout_items, $checkout_options);
         } else {                    // otherwise start a guest checkout and pass the email along autocompleted
@@ -225,5 +204,28 @@ class OrderController extends Controller
                 'An unknown error occurred.'
             ]);
         }
+    }
+
+    /**
+     * Create a new Order from the given input
+     */
+    public function createNewOrder(array $input): Order
+    {
+        $order = new Order([ // start a new order
+            'checkout_id' => '',
+            'total_amount' => 0,
+            'special_requests' => $input['special_requests'] ?? '',
+        ]);
+
+        if (auth()->user()) {   // if logged in, associate the authenticated user with the order
+            $order->orderable()->associate(auth()->user());
+        } else {                // if not logged in, associate with existing or new Guest instance
+            $order->orderable()->associate(Guest::updateOrCreate(
+                ['email' => $input['buyer_email']], // use these values to find an existing Guest record
+                ['phone_number' => $input['buyer_phone']]  // update the existing Guest or create a new one with these
+            ));
+        }
+        $order->save();
+        return $order;
     }
 }

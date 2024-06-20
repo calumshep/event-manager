@@ -28,6 +28,11 @@
             <div class="col">
                 <div class="card h-100 shadow">
                     <div class="card-body" style="transform: rotate(0);">
+                        @if(\App\Support\StripeHelper::accountRequirements($org))
+                            <span class="badge text-bg-warning float-end">
+                                Onboarding incomplete
+                            </span>
+                        @endif
                         <h2 class="h3 card-title">
                             <a href="{{ route('organisations.show', $org) }}" class="stretched-link text-decoration-none">
                                 {{ $org->name }}
@@ -40,12 +45,14 @@
                     <ul class="list-group list-group-flush">
                         <a href="{{ route('organisations.show', $org) }}"
                            class="list-group-item list-group-item-action list-group-item-primary">
-                            <i class="fa-solid fa-circle-info fa-fw me-2"></i>Details
+                            <i class="fa-solid fa-circle-info fa-fw me-2"></i>
+                            Details
                         </a>
 
                         <a href="{{ route('organisations.team.index', $org) }}"
                            class="list-group-item list-group-item-action list-group-item-success">
-                            <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>Team Members
+                            <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>
+                            Team Members
                         </a>
                     </ul>
                 </div>
