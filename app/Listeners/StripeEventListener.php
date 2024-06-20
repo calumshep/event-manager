@@ -5,7 +5,6 @@ namespace App\Listeners;
 use App\Mail\OrderNotification;
 use App\Mail\OrderPaid;
 use App\Models\Order;
-use Exception;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Events\WebhookReceived;
@@ -22,14 +21,14 @@ class StripeEventListener
      */
     public function handle(WebhookReceived $event): void
     {
+        // Redirect logic for different webhook events
         switch ($event->payload['type']) {
 
-            // Checkout session completed, i.e. paid.
+            /*
+             * Checkout session completed, i.e. paid.
+             */
             case 'checkout.session.completed':
-
                 /**
-                 * Constructs a StripeObject from the webhook payload for OOP access
-                 *
                  * @var \Stripe\StripeObject|null $stripeObject
                  */
                 $stripeObject = Event::constructFrom($event->payload)->data?->object;
@@ -54,6 +53,21 @@ class StripeEventListener
                 Mail::to($org->user)->send(new OrderNotification($event, $order));
                 foreach ($org->team as $teammember) {
                     Mail::to($teammember)->send(new OrderNotification($event, $order));
+                }
+
+                break;
+
+            /*
+             * Account object updated (inc. new Connect account requirements coming in to play)
+             */
+            case 'account.updated':
+                /**
+                 * @var \Stripe\Account|null $stripeObject
+                 */
+                $account = Event::constructFrom($event->payload)->data?->object;
+
+                if ($account->requirements->currently_due) {
+                    // TODO: Handle new account requirements
                 }
 
                 break;
