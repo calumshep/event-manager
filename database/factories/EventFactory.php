@@ -21,6 +21,7 @@ class EventFactory extends Factory
             'name'              => $this->faker->sentence(2),
             'start'             => $start,
             'end'               => $end,
+            'type'              => array_rand(array_flip(['generic', 'race'])),
             'slug'              => Str::of($this->faker->sentence(2))->slug(),
             'short_desc'        => $this->faker->paragraph(2),
             'long_desc'         => $this->faker->paragraphs(2, true),

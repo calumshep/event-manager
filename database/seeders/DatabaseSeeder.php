@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create mock data
-        if (! App::environment('production')) {
+        if (App::environment('local')) {
             // Create specific testing account (for logging in with) that has an organisation and associated event.
             $event = Event::factory()->recycle(
                 User::factory()->create([
