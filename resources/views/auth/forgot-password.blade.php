@@ -4,11 +4,7 @@
 
     <div class="row justify-content-center">
         <div class="col-12 col-md-6">
-            @if($errors->any())
-                @foreach($errors->all() as $error)
-                    <div class="alert alert-danger" role="alert">{{ $error }}</div>
-                @endforeach
-            @endif
+            @include('components.status')
 
             <form method="POST" action="{{ route('password.email') }}">
                 @csrf
