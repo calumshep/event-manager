@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 #[ObservedBy([EventObserver::class])]
 class Event extends Model
@@ -26,6 +27,8 @@ class Event extends Model
         'long_desc',
         'organisation_id',
         'stripe_id',
+        'type',
+        'special_requests',
     ];
 
     protected $casts = [
@@ -35,8 +38,6 @@ class Event extends Model
 
     /**
      * Get the user who owns this event.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -45,8 +46,6 @@ class Event extends Model
 
     /**
      * Get the organisation which owns this event.
-     *
-     * @return BelongsTo
      */
     public function organisation(): BelongsTo
     {
@@ -55,8 +54,6 @@ class Event extends Model
 
     /**
      * Get the tickets relevant to this event.
-     *
-     * @return HasMany
      */
     public function tickets(): HasMany
     {
@@ -65,8 +62,6 @@ class Event extends Model
 
     /**
      * Returns an array of dates (inclusive of start & end for multi-day events) on which this event occurs.
-     *
-     * @return DatePeriod|array
      */
     public function days(): DatePeriod|array
     {
@@ -80,5 +75,41 @@ class Event extends Model
         } else {
             return [$this->start];
         }
+    }
+
+    /**
+     * Get the paid up orders which contain tickets for this event.
+     */
+    public function getOrders(): Collection
+    {
+        return $this
+            ->getTickets()
+            ->groupBy('order_id')
+            ->map(function (Collection $order) {
+                $collated_order = $order->first()->order;
+                $collated_order->tickets = $order;
+
+                return $collated_order;
+            });
+    }
+
+    /**
+     * Get all the ordered (and paid up) ticket instances for this event.
+     */
+    public function getTickets(): Collection
+    {
+        return OrderTicket
+            ::whereIn('ticket_type_id', $this->tickets->pluck('id'))
+            ->whereRelation('order', 'paid', true)
+            ->get()
+            ->sortByDesc('updated_at');
+    }
+
+    /**
+     * Returns true if the event is of type ski race.
+     */
+    public function isRace(): bool
+    {
+        return $this->type == 'race';
     }
 }

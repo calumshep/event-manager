@@ -5,29 +5,33 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class EventController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        // Use the App\Policies\EventPolicy class to authorize
+        $this->authorizeResource(Event::class, 'event');
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         return view('events.index', [
-            'events' => auth()->user()->events->sortBy('start')->paginate(6),
+            'events' => auth()->user()->getManagableEvents()->paginate(9),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('events.form', [
             'event'         => new Event(),
@@ -40,14 +44,16 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreEventRequest $request)
+    public function store(StoreEventRequest $request): RedirectResponse
     {
         $input = $request->validated();
 
         $event = auth()->user()->events()->create([
             'name'              => $input['name'],
             'start'             => $input['start'],
+            'type'              => $input['type'],
             'end'               => $input['end'],
+            'special_requests'  => $input['special_requests'],
             'slug'              => Str::of($input['name'])->slug(),
             'short_desc'        => $input['short_desc'],
             'long_desc'         => clean($request->long_desc),
@@ -55,14 +61,14 @@ class EventController extends Controller
         ]);
 
         return redirect()->route('events.show', $event)->with([
-            'status' => 'Event successfully created.'
+            'status' => 'Event created successfully.',
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Event $event)
+    public function show(Event $event): View
     {
         return view('events.form', [
             'event'         => $event,
@@ -75,7 +81,7 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Event $event)
+    public function edit(Event $event): View
     {
         return view('events.form', [
             'event'         => $event,
@@ -88,14 +94,16 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEventRequest $request, Event $event)
+    public function update(UpdateEventRequest $request, Event $event): RedirectResponse
     {
         $input = $request->validated();
 
         $event = $event->fill([
             'name'              => $input['name'],
             'start'             => $input['start'],
+            'type'              => $input['type'],
             'end'               => $input['end'],
+            'special_requests'  => $input['special_requests'],
             'slug'              => Str::of($input['name'])->slug(),
             'short_desc'        => $input['short_desc'],
             'long_desc'         => clean($request->long_desc),
@@ -104,25 +112,25 @@ class EventController extends Controller
         $event->save();
 
         return redirect()->route('events.show', $event)->with([
-            'status' => 'Event successfully updated.'
+            'status' => 'Event updated successfully.',
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Event $event)
+    public function destroy(Event $event): RedirectResponse
     {
         if ($event->tickets->count()) {
             return redirect()->back()->withErrors([
-                "You cannot delete an event which contains tickets. Try deleting the tickets first."
+                'You cannot delete an event which contains tickets. Try deleting the tickets first.',
             ]);
         }
 
         $event->delete();
 
         return redirect()->route('events.index')->with([
-            'warning' => 'Event deleted.'
+            'warning' => 'Event deleted.',
         ]);
     }
 }

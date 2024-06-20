@@ -1,18 +1,29 @@
-@extends('layout.app')
+@extends('layout.sidebar-form')
 
-@section('head')
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+@section('title', $event->name)
+
+@section('sidebar')
+    @include('layout.event-nav')
 @endsection
 
-@section('content')
+@section('head')
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+@endsection
 
-    <h1>{{ $creating ? "New" : null }} Ticket</h1>
+@section('form')
 
-    <p>
-        Required fields are marked with an asterisk (<span class="text-danger">*</span>).
-    </p>
+    <div class="d-flex justify-content-between">
+        <div>
+            <h2 class="h3">{{ $creating ? "New" : null }} Ticket</h2>
+            <p class="mb-0">Required fields are marked with an asterisk (<span class="text-danger">*</span>).</p>
+        </div>
 
-    @include('components.status')
+        <a href="{{ (!$creating && !$readonly) ? route('events.tickets.show', [$event, $ticket]) :
+            route('events.tickets.index', $event) }}"
+           class="btn btn-secondary align-self-start">&laquo; Back
+            to All
+            Tickets</a>
+    </div>
 
     <form method="POST"
           action="{{ $creating ?
@@ -57,7 +68,7 @@
                                    value="{{ old('description', $ticket->description) }}">
 
                             <div id="quill_editor">
-                                {!! $ticket ? $ticket->description : '' !!}
+                                {!! old('description', $ticket->description) !!}
                             </div>
                         </div>
                     </div>
@@ -84,7 +95,7 @@
                     <div class="mb-3">
                         <label class="form-label" for="time">Validity<span class="text-danger">*</span></label>
                         <select class="form-select" name="time" id="time" required>
-                            <option value disabled selected>Select a day...</option>
+                            <option value disabled selected>Select...</option>
 
                             @foreach($event_days as $day)
                                 @if($ticket->time)
@@ -101,7 +112,7 @@
                             @endforeach
                         </select>
 
-                        <div id="validityHelp" class="form-text">
+                        <div id="timeHelp" class="form-text">
                             You must specify a date which this ticket is valid for. If your event only spans a single
                             day, then select that day.
                         </div>
@@ -123,7 +134,48 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label" for="capacity">Capacity</label>
+                        <input type="number"
+                               step="1"
+                               min="1"
+                               name="capacity"
+                               id="capacity"
+                               value="{{ old('capacity', $ticket->capacity) }}"
+                               class="form-control">
+
+                        <div id="capacityHelp" class="form-text">
+                            Leave blank for unlimited tickets.
+                        </div>
+                    </div>
+
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               role="switch"
+                               id="show_remaining"
+                               name="show_remaining"
+                               @checked(old('show_remaining', $ticket->show_remaining))>
+                        <label class="form-check-label" for="show_remaining">Show remaining tickets</label>
+                        <div id="show_remainingHelp" class="form-text">
+                            When enabled, the number of tickets remaining out of the total capacity above will be shown.
+                            This setting is ignored for tickets with unlimited capacity.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
                         <p>Collect:</p>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
+                                   name="dietary"
+                                   id="dietary"
+                                   @checked(key_exists('dietary', $details))>
+                            <label class="form-check-label" for="dietary">
+                                Dietary Requirements
+                            </label>
+                        </div>
 
                         <div class="form-check">
                             <input class="form-check-input"
@@ -133,7 +185,7 @@
                                    id="dob"
                                    @checked(key_exists('dob', $details))>
                             <label class="form-check-label" for="dob">
-                                Date of Birth
+                                Date of birth
                             </label>
                         </div>
 
@@ -141,11 +193,47 @@
                             <input class="form-check-input"
                                    type="checkbox"
                                    value="1"
-                                   name="bass_no"
-                                   id="bass_no"
-                                   @checked(key_exists('bass_no', $details))>
-                            <label class="form-check-label" for="bass_no">
-                                BASS Number
+                                   name="yob"
+                                   id="yob"
+                                   @checked(key_exists('yob', $details))>
+                            <label class="form-check-label" for="yob">
+                                Year of birth
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
+                                   name="gender"
+                                   id="gender"
+                                   @checked(key_exists('gender', $details))>
+                            <label class="form-check-label" for="gender">
+                                Gender
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
+                                   name="gbr_no"
+                                   id="gbr_no"
+                                   @checked(key_exists('gbr_no', $details))>
+                            <label class="form-check-label" for="gbr_no">
+                                GBR registration number
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
+                                   name="club"
+                                   id="club"
+                                   @checked(key_exists('club', $details))>
+                            <label class="form-check-label" for="club">
+                                Club
                             </label>
                         </div>
 
@@ -169,7 +257,7 @@
 
         <div class="d-flex justify-content-between">
             <a href="{{ (!$creating && !$readonly) ? route('events.tickets.show', [$event, $ticket]) :
-            route('events.show', $event) }}"
+            route('events.tickets.index', $event) }}"
                class="btn btn-secondary">
                 &laquo; Back
             </a>
@@ -243,7 +331,7 @@
 
 @section('scripts')
     @unless($readonly)
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
         <script>
             let editor = new Quill('#quill_editor', {
                 modules: {

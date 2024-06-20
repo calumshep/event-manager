@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
-    <div class="container-fluid">
+    <div class="container">
         <a class="navbar-brand" href="{{ route('home') }}">{{ config('app.name') }}</a>
         <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -10,7 +10,7 @@
                 <li class="nav-item">
                     <a @class([
                            'nav-link',
-                           'active' => Route::is('home'),
+                           'active' => Route::is('home', 'event.*'),
                        ])
                        {{ Route::is('home') ? 'aria-current="page"' : '' }}
                        href="{{ route('home') }}">
@@ -19,7 +19,7 @@
                     </a>
                 </li>
 
-                @auth
+                @can('manage own events')
                     <li class="nav-item">
                         <a @class([
                                'nav-link',
@@ -29,6 +29,20 @@
                            href="{{ route('events.index') }}">
                             <i class="fa-solid fa-calendar fa-fw me-1"></i>
                             Manage Events
+                        </a>
+                    </li>
+                @endcan
+
+                @auth
+                    <li class="nav-item">
+                        <a @class([
+                               'nav-link',
+                               'active' => Route::is(['orders*']),
+                           ])
+                           {{ Route::is('orders*') ? 'aria-current="page"' : '' }}
+                           href="{{ route('orders.index') }}">
+                            <i class="fa-solid fa-receipt fa-fw me-1"></i>
+                            My Orders
                         </a>
                     </li>
                 @endauth
@@ -49,7 +63,7 @@
             </ul>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                @auth
+                @can('manage own events')
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-plus fa-fw"></i>
@@ -77,7 +91,7 @@
                         <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
                         <hr class="d-lg-none my-2 text-white-50">
                     </li>
-                @endauth
+                @endcan
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
@@ -190,57 +204,92 @@
                 </ol>
             </nav>
         </div>
-    @elseif(Route::is('home*'))
+    @elseif(Route::is('home*', 'event.*', 'orders*'))
         <div class="container">
             <nav class="p-2" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li @class([
-                        'breadcrumb-item',
-                        'active' => !Route::is('home')
-                    ])>
-                        @unless(Route::is('home'))
-                            <a href="{{ route('home') }}">Upcoming Events</a>
-                        @else
-                            Upcoming Events
-                        @endunless
-                    </li>
-                    @if(Route::is('home.event'))
-                        <li class="breadcrumb-item">{{ $event->name }}</li>
+                <ol class="breadcrumb mb-0">
+                    @unless(Route::is('orders*'))
+                        <li @class([
+                            'breadcrumb-item',
+                            'active' => Route::is('home')
+                        ])>
+                            @unless(Route::is('home'))
+                                <a href="{{ route('home') }}">Upcoming Events</a>
+                            @else
+                                Upcoming Events
+                            @endunless
+                        </li>
+                    @endunless
+                    @if(Route::is('home.event', 'event.*'))
+                        <li @class([
+                            'breadcrumb-item',
+                            'active' => Route::is('home.event')
+                        ])>
+                            @if(Route::is('event.*'))
+                                <a href="{{ route('home.event', $event) }}">{{ $event->name }}</a>
+                            @else
+                                {{ $event->name }}
+                            @endif
+                        </li>
+
+                        @if(Route::is('event.tickets.*'))
+                            <li @class([
+                                'breadcrumb-item',
+                                'active'
+                            ])>
+                                Checkout
+                            </li>
+                        @endif
+                    @elseif(Route::is('orders*'))
+                        <li @class([
+                            'breadcrumb-item',
+                            'active' => Route::is('orders.index')
+                        ])>
+                            @unless(Route::is('orders.index'))
+                                <a href="{{ route('orders.index') }}">My Orders</a>
+                            @else
+                                My Orders
+                            @endunless
+                        </li>
+
+                        @if(Route::is('orders.show'))
+                            <li @class([
+                            'breadcrumb-item',
+                            'active'
+                            ])>
+                                Order #{{ $order->id }}
+                            </li>
+                        @endif
                     @endif
                 </ol>
             </nav>
         </div>
     @else
-        <nav class="nav" aria-label="Secondary navigation" data-bs-theme="light">
+        <nav class="nav container" aria-label="Secondary navigation" data-bs-theme="light">
             @if(Route::is(['events*', 'organisations*']))
                 <a @class([
-                       'nav-link',
-                       'active' => Route::is([
-                           'events.index', 'events.show', 'events.create', 'events.update', 'events.tickets*'
-                       ])
-                   ]) {{ Route::is([
-                       'events.index', 'events.show', 'events.create', 'events.update', 'events.tickets*'
-                   ]) ?
-                   'aria-current="page"' :
-                   '' }}
+                   'nav-link',
+                   'active' => Route::is(['events.*'])
+               ])
+                   {{ Route::is(['events.*']) ?'aria-current="page"' :'' }}
                    href="{{ route('events.index') }}">
                     <i class="fa-solid fa-rectangle-list fa-fw"></i>
                     My Events
                 </a>
 
                 <a @class([
-                       'nav-link',
-                       'active' => Route::is('organisations*')
-                   ]) {{ Route::is('organisations*') ? 'aria-current="page"' : '' }}
+                   'nav-link',
+                   'active' => Route::is('organisations*')
+               ]) {{ Route::is('organisations*') ? 'aria-current="page"' : '' }}
                    href="{{ route('organisations.index') }}">
                     <i class="fa-solid fa-building fa-fw"></i>
                     My Organisations
                 </a>
             @elseif(Route::is(['account.show-own', 'account.edit']))
                 <a @class([
-                       'nav-link',
-                       'active' => Route::is(['account.show-own', 'account.edit'])
-                   ]) {{ ['account.show-own', 'account.edit'] ? 'aria-current="page"' : '' }}
+                   'nav-link',
+                   'active' => Route::is(['account.show-own', 'account.edit'])
+               ]) {{ ['account.show-own', 'account.edit'] ? 'aria-current="page"' : '' }}
                    href="{{ route('account.show-own') }}">
                     <i class="fa-solid fa-user-gear fa-fw me-1"></i>
                     My Account

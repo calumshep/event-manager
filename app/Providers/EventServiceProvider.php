@@ -2,13 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\Event;
-use App\Models\TicketType;
-use App\Observers\EventObserver;
-use App\Observers\TicketTypeObserver;
+use App\Listeners\StripeEventListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Laravel\Cashier\Events\WebhookReceived;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -20,6 +18,10 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        WebhookReceived::class => [
+            StripeEventListener::class,
         ],
     ];
 

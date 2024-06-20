@@ -59,14 +59,12 @@ body {
 .nav-scroller {
     position: relative;
     z-index: 2;
-    height: 2.75rem;
     overflow-y: hidden;
 }
 
 .nav-scroller .nav {
     display: flex;
     flex-wrap: nowrap;
-    padding-bottom: 1rem;
     //margin-top: -1px;
     overflow-x: auto;
     text-align: center;
@@ -95,4 +93,50 @@ body {
     .nav-scroller .active {
         color: var(--bs-light)
     }
+}
+
+/*
+ * CSS for credit list group radio picker
+ */
+.list-group-checkable .list-group-item {
+    cursor: pointer;
+}
+.list-group-item-check:hover + .list-group-item {
+    background-color: var(--bs-light);
+}
+.list-group-item-check:checked + .list-group-item {
+    color: #fff;
+    background-color: var(--bs-blue);
+}
+.list-group-item-check[disabled] + .list-group-item,
+.list-group-item-check:disabled + .list-group-item {
+    pointer-events: none;
+    filter: none;
+    opacity: .5;
+}
+[contenteditable]:focus {
+    outline: 0;
+}
+.list-group-radio .list-group-item {
+    cursor: pointer;
+    border-radius: .5rem;
+}
+.list-group-radio .form-check-input {
+    z-index: 2;
+    margin-top: -.5em;
+}
+.list-group-radio .list-group-item:hover,
+.list-group-radio .list-group-item:focus {
+    background-color: var(--bs-light);
+}
+.list-group-radio .form-check-input:checked + .list-group-item {
+    background-color: var(--bs-white);
+    border-color: var(--bs-blue);
+    box-shadow: 0 0 0 2px var(--bs-blue);
+}
+.list-group-radio .form-check-input[disabled] + .list-group-item,
+.list-group-radio .form-check-input:disabled + .list-group-item {
+    pointer-events: none;
+    filter: none;
+    opacity: .5;
 }

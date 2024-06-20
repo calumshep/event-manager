@@ -16,7 +16,7 @@ class TicketTypeObserver
     {
         // Create product in Stripe
         try {
-            $ticket_type->stripe_id = StripeHelper::createNewPrice($ticket_type)->id;
+            $ticket_type->stripe_id = StripeHelper::createPrice($ticket_type)->id;
         } catch (ApiErrorException $e) {
             Log::error($e);
         }

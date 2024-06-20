@@ -21,10 +21,10 @@
         @csrf
         @method('PUT')
 
-        <fieldset @disabled(Route::is('account.show*'))>
+        <fieldset @disabled(Route::is('account.show*')) class="mb-3">
             <hr>
 
-            <div class="row pt-3 mb-3">
+            <div class="row pt-3">
                 <div class="col-lg-4">
                     <h2 class="h5">Your Details</h2>
                     <p>We need these to identify you, and to send necessary emails to you.</p>
@@ -37,7 +37,7 @@
                                name="first_name"
                                id="first_name"
                                class="form-control"
-                               value="{{ $user->first_name }}"
+                               value="{{ old('', $user->first_name) }}"
                                required>
                     </div>
 
@@ -47,7 +47,7 @@
                                name="last_name"
                                id="last_name"
                                class="form-control"
-                               value="{{ $user->last_name }}"
+                               value="{{ old('', $user->last_name) }}"
                                required>
                     </div>
 
@@ -57,10 +57,20 @@
                                name="email"
                                id="email"
                                class="form-control"
-                               value="{{ $user->email }}"
+                               value="{{ old('', $user->email) }}"
                                required>
                     </div>
+
+                    <div class="mb-3">
+                        <label for="phone_number">Phone Number</label>
+                        <input type="text"
+                               name="phone_number"
+                               id="phone_number"
+                               class="form-control"
+                               value="{{ old('', $user->phone_number) }}">
+                    </div>
                 </div>
+            </div>
         </fieldset>
 
         @if(Route::is('account.edit') && $user->id == auth()->user()->id)
@@ -126,13 +136,18 @@
                     &laquo; Cancel
                 </a>
 
-                <button type="reset" class="btn btn-outline-danger">
-                    <i class="fa-solid fa-close me-2"></i> Reset
-                </button>
+                <div>
+                    <button type="reset" class="btn btn-outline-danger">
+                        <i class="fa-solid fa-close me-2"></i>Reset
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-save me-2"></i>Save
+                    </button>
+                </div>
             @else
                 <div></div>
                 <a href="{{ route('account.edit', $user) }}" class="btn btn-primary">
-                    <i class="fa-solid fa-pencil me-2"></i> Edit
+                    <i class="fa-solid fa-pencil me-2"></i>Edit
                 </a>
             @endif
         </div>

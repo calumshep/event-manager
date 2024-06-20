@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Order::class);
             $table->foreignIdFor(TicketType::class);
 
-            $table->string('name');
+            $table->string('ticket_holder_name');
             $table->json('metadata');
 
             $table->timestamps();

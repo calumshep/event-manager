@@ -5,12 +5,7 @@
     <div class="text-center py-4">
         <h1>{{ config('app.name') }}</h1>
 
-        <p class="lead mb-4">
-            Events and tickets, done right...
-        </p>
-
-        <!--
-        <div class="input-group mb-3 w-75 mx-auto">
+        {{--<div class="input-group mb-3 w-75 mx-auto">
             <div class="form-floating">
                 <input type="search" class="form-control" name="search" id="search" placeholder="Alpine champs...">
                 <label for="search">Search events...</label>
@@ -20,68 +15,35 @@
                 <i class="fa-solid fa-magnifying-glass fa-xl mx-1"></i>
                 <span class="d-none">Search</span>
             </button>
-        </div>
-        -->
+        </div>--}}
     </div>
 
     <hr>
 
-    <!--<div class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-4">Recommended For You</h2>
-
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="card h-100 shadow">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                             preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"></rect>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
-                        <div class="card-body">
-                            <h2 class="card-title h3">Event Title</h2>
-                            <h3 class="card-subtitle fs-5 text-muted">Event Date</h3>
-                            <p class="card-text">
-                                Event Location
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
-
     <h2 class="h3 mb-3">Upcoming Events</h2>
 
     @forelse($events as $event)
-        <div class="d-flex align-items-start rounded shadow p-3 mb-3">
-            <img src="https://placehold.co/50" class="rounded" alt="placeholder">
+    {{-- <img src="https://placehold.co/50" class="rounded" alt="placeholder">--> --}}
 
-            <div class="ms-3 flex-fill">
-                <h5>
-                    <a class="text-decoration-none" href="{{ route('home.event', $event) }}">
-                        {{ $event->name }} &middot;
-                        <span class="text-muted fs-6">
+        <div class="card shadow mb-3" style="transform: rotate(0);">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md">
+                        <h5>
+                            {{ $event->name }} &middot;
+                            <span class="text-muted fs-6">
                         {{ $event->start->format('D j M Y') }} {{ isset($event->end) ? 'to ' . $event->end->format('D j M Y') : null }}
                     </span>
-                    </a>
-                </h5>
+                        </h5>
 
-                <p>
-                    {{ $event->short_desc }}
-                </p>
-
-                <div class="d-flex align-items-baseline justify-content-between">
-                    <div>
-                        <a href="#">GBSki</a> &middot;
-                        <a href="#"><i class="fa-brands fa-square-facebook fa-fw"></i></a>
+                        <p class="card-text">{{ $event->short_desc }}</p>
                     </div>
 
-                    <a href="{{ route('home.event', $event) }}" class="btn btn-primary">
-                        Enter &raquo;
-                    </a>
+                    <div class="col-md-auto mt-md-0 mt-3">
+                        <a href="{{ route('home.event', $event) }}" class="btn btn-primary stretched-link card-text">
+                            View &raquo;
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,7 +55,7 @@
 
     {{ $events->links() }}
 
-    <hr class="my-5">
+    {{--<hr class="my-5">
 
     <div class="row align-items-center mb-5">
         <div class="col-md-4">
@@ -127,6 +89,6 @@
                 @endauth
             </div>
         </div>
-    </div>
+    </div>--}}
 
 @endsection

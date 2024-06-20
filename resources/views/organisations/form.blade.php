@@ -1,18 +1,21 @@
-@extends('layout.app')
+@extends('layout.sidebar-form')
 
 @section('head')
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 @endsection
 
-@section('content')
+@section('title', $creating ? 'New Organisation' : $organisation->name)
 
-    <h1>{{ $creating ? "New" : null }} Organisation</h1>
+@unless($creating)
+    @section('sidebar')
+        @include('layout.org-nav')
+    @endsection
+@endunless
 
-    <p>
-        Required fields are marked with an asterisk (<span class="text-danger">*</span>).
-    </p>
+@section('form')
+    <p>Required fields are marked with an asterisk (<span class="text-danger">*</span>).</p>
 
-    @include('components.status')
+    <hr>
 
     <form method="POST"
           action="{{ $creating ? route('organisations.store') : route('organisations.update', $organisation) }}">
@@ -21,7 +24,6 @@
 
         <fieldset @disabled($readonly)>
             <!-- basics -->
-            <hr>
             <div class="row pt-3 mb-3">
                 <div class="col-lg-4">
                     <h2 class="h5">Basics</h2>
@@ -75,7 +77,7 @@
                                value="{{ old('description', $organisation->description) }}">
 
                         <div id="quill_editor">
-                            {!! $organisation ? $organisation->description : '' !!}
+                            {!! old('description', $organisation->description) !!}
                         </div>
                     </div>
                 </div>
@@ -85,8 +87,9 @@
         <hr>
 
         <div class="d-flex justify-content-between">
-            <a href="{{ (!$creating && !$readonly) ? route('organisations.show', $organisation) : route('organisations.index')
-             }}"
+            <a href="{{ (!$creating && !$readonly)
+                   ? route('organisations.show', $organisation)
+                   : route('organisations.index') }}"
                class="btn btn-secondary">
                 <i class="fa-solid fa-close me-2"></i>Cancel
             </a>
@@ -115,7 +118,9 @@
             </div>
         </div>
     </form>
+@endsection
 
+@section('modals')
     @if($readonly)
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -155,12 +160,11 @@
             </div>
         </div>
     @endif
-
 @endsection
 
 @section('scripts')
     @unless($readonly)
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
         <script>
             let editor = new Quill('#quill_editor', {
                 modules: {

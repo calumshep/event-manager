@@ -2,13 +2,16 @@
 
 @section('content')
 
+    @include('components.status')
+
     @include('components.event-detail-header')
 
     <p>
-        Specify how many of each ticket type you want to purchase. You can enter further details on the next page.
+        Specify how many {{ $event->isRace() ? 'entries' : 'of each ticket type' }} you want to purchase. You can enter
+        further details on the next page.
     </p>
 
-    <form method="POST" action="{{ route('events.tickets.checkout', $event) }}">
+    <form method="POST" action="{{ route('event.tickets.checkout', $event) }}">
         @csrf
 
         <div class="row row-cols-md-2 row-cols-1 g-4">
@@ -16,12 +19,23 @@
                 <div class="col">
                     <div class="card shadow">
                         <div class="card-body">
-                            <h3 class="h5 card-title">{{ $ticket->name }}</h3>
-                            <h4 class="h6 card-subtitle">
-                                {{ $ticket->time->format('D j M Y') }}
-                                &middot;
-                                £{{ number_format($ticket->price/100, 2) }}
-                            </h4>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <h3 class="h5 card-title">{{ $ticket->name }}</h3>
+                                    <h4 class="h6 card-subtitle">
+                                        {{ $ticket->time->format('D j M Y') }}
+                                        &middot;
+                                        £{{ number_format($ticket->price/100, 2) }}
+                                    </h4>
+                                </div>
+                                @if($ticket->capacity && $ticket->show_remaining)
+                                    <div class="col-sm-auto">
+                                        <span class="badge text-bg-primary">
+                                            {{ $ticket->remaining() }} / {{ $ticket->capacity }} tickets left
+                                        </span>
+                                    </div>
+                                @endif
+                            </div>
 
                             <hr>
                             <p>{!! $ticket->description !!}</p>
@@ -32,6 +46,7 @@
                                 <span class="input-group-text" id="quantity_{{ $ticket->id }}_label">Quantity</span>
                                 <input type="number"
                                        min="0"
+                                       @if($ticket->capacity) max="{{ $ticket->remaining() }}" @endif
                                        step="1"
                                        name="quantity_{{ $ticket->id }}"
                                        id="quantity_{{ $ticket->id }}"

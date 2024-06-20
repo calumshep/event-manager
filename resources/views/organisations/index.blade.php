@@ -19,31 +19,40 @@
         organisations.
     </p>
 
+    <hr>
+
     @include('components.status')
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-3">
-        @forelse($organisations as $organisation)
+        @forelse($organisations as $org)
             <div class="col">
                 <div class="card h-100 shadow">
-                    <div class="card-body">
-                        <h2 class="h4">{{ $organisation->name }}</h2>
-
-                        <p><strong>
-                                <a href="{{ $organisation->website }}">{{ $organisation->website }}</a>
-                        </strong></p>
-
-                        <div class="text-end">
-                            <a class="btn btn-primary" href="{{ route('organisations.show', $organisation) }}">
-                                View &raquo;
+                    <div class="card-body" style="transform: rotate(0);">
+                        <h2 class="h3 card-title">
+                            <a href="{{ route('organisations.show', $org) }}" class="stretched-link text-decoration-none">
+                                {{ $org->name }}
                             </a>
-                        </div>
+                        </h2>
+
+                        <p class="card-text text-truncate">{{ strip_tags($org->description) }}</p>
                     </div>
+
+                    <ul class="list-group list-group-flush">
+                        <a href="{{ route('organisations.show', $org) }}"
+                           class="list-group-item list-group-item-action list-group-item-primary">
+                            <i class="fa-solid fa-circle-info fa-fw me-2"></i>Details
+                        </a>
+
+                        <a href="{{ route('organisations.team.index', $org) }}"
+                           class="list-group-item list-group-item-action list-group-item-success">
+                            <i class="fa-solid fa-users-rectangle fa-fw me-2"></i>Team Members
+                        </a>
+                    </ul>
                 </div>
             </div>
         @empty
-            <p>
-                No organisations found. Perhaps you need to
-                <a href="{{ route('organisations.create') }}">create one</a>?
+            <p class="lead">
+                No organisations found. Maybe you want to <a href="{{ route('organisations.create') }}">create one</a>?
             </p>
         @endforelse
     </div>

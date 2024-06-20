@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class UpdateAccountRequest extends FormRequest
@@ -13,7 +14,7 @@ class UpdateAccountRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return (User::find($this->route('user')->id)->id == auth()->user()->id);
+        return ($this->route('user')->id === auth()->user()->id);
     }
 
     /**
@@ -24,11 +25,14 @@ class UpdateAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name'        => 'required|max:255',
-            'last_name'         => 'required|max:255',
-            'email'             => 'required|email',
-            'new_password'      => 'confirmed',
-            'current_password'  => ['sometimes', 'required', Password::defaults()],
+            'first_name'        => 'required|string|max:255',
+            'last_name'         => 'required|string|max:255',
+            'email'             =>
+                ['required', 'string', 'max:255', 'email',
+                Rule::unique('users')->ignore($this->route('user'))],
+            'phone_number'      => 'nullable|string|',
+            'new_password'      => ['nullable', 'confirmed', Password::defaults()],
+            'current_password'  => 'required',
         ];
     }
 }

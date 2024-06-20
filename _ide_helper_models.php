@@ -13,7 +13,7 @@
 
 namespace App\Models{
 /**
- * App\Models\Event
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -28,6 +28,8 @@ namespace App\Models{
  * @property int $organisation_id
  * @property string $stripe_id
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string $type
+ * @property string|null $special_requests
  * @property-read \App\Models\Organisation|null $organisation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $tickets
  * @property-read int|null $tickets_count
@@ -46,8 +48,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereOrganisationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereShortDesc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereSpecialRequests($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereStripeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event withTrashed()
@@ -58,12 +62,13 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Guest
+ * 
  *
  * @property int $id
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $phone_number
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
  * @property-read int|null $orders_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Cashier\Subscription> $subscriptions
@@ -76,6 +81,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Guest whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Guest whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Guest whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Guest wherePhoneNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Guest whereUpdatedAt($value)
  */
 	class Guest extends \Eloquent {}
@@ -83,7 +89,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\HelpArticle
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -109,7 +115,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\HelpCategory
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -134,17 +140,19 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Order
+ * 
  *
  * @property int $id
  * @property string $checkout_id
  * @property int $total_amount
- * @property int $paid
+ * @property bool $paid
  * @property int $orderable_id
  * @property string $orderable_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $special_requests
+ * @property string|null $order_requests
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $orderable
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TicketType> $tickets
  * @property-read int|null $tickets_count
@@ -157,9 +165,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderRequests($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereSpecialRequests($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order withTrashed()
@@ -170,23 +180,29 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\OrderTicket
+ * 
  *
  * @property int $id
  * @property int $order_id
  * @property int $ticket_type_id
- * @property string $name
+ * @property string|null $ticket_holder_name
  * @property array $metadata
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $first_name
+ * @property string|null $last_name
+ * @property-read \App\Models\Order|null $order
+ * @property-read \App\Models\TicketType|null $ticketType
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket query()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereMetadata($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereTicketHolderName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereTicketTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderTicket whereUpdatedAt($value)
  */
@@ -195,7 +211,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Organisation
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -207,6 +223,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Event> $events
  * @property-read int|null $events_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $team
+ * @property-read int|null $team_count
  * @property-read \App\Models\User|null $user
  * @method static \Database\Factories\OrganisationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Organisation newModelQuery()
@@ -229,7 +247,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\TicketType
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -238,10 +256,12 @@ namespace App\Models{
  * @property string $description
  * @property \Illuminate\Support\Carbon $time
  * @property int $price
+ * @property int|null $capacity
  * @property array|null $details
  * @property int $event_id
  * @property string $stripe_id
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property bool $show_remaining
  * @property-read \App\Models\Event|null $event
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
  * @property-read int|null $orders_count
@@ -250,6 +270,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereCapacity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereDescription($value)
@@ -258,6 +279,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereShowRemaining($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereStripeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TicketType whereUpdatedAt($value)
@@ -269,7 +291,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\User
+ * 
  *
  * @property int $id
  * @property string $first_name
@@ -284,12 +306,15 @@ namespace App\Models{
  * @property string|null $pm_type
  * @property string|null $pm_last_four
  * @property string|null $trial_ends_at
+ * @property string|null $phone_number
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Event> $events
  * @property-read int|null $events_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
  * @property-read int|null $orders_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Organisation> $orgMemberships
+ * @property-read int|null $org_memberships_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Organisation> $organisations
  * @property-read int|null $organisations_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
@@ -305,9 +330,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User onGenericTrial()
- * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions, $without = false)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null, $without = false)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
@@ -315,12 +340,15 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePhoneNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePmLastFour($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePmType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStripeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTrialEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User withoutPermission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|User withoutRole($roles, $guard = null)
  */
 	class User extends \Eloquent {}
 }
